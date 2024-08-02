@@ -192,7 +192,7 @@ TEST_CASE("dsl::digits<>")
     CHECK(utf16.status == test_result::success);
     CHECK(utf16.trace == test_trace().token("digits", "11"));
 
-    auto swar = LEXY_VERIFY(lexy::utf8_encoding{}, LEXY_CHAR8_STR("123456789123456789"));
+    auto swar = LEXY_VERIFY(lexy::utf8_encoding{}, u8"123456789123456789");
     CHECK(swar.status == test_result::success);
     CHECK(swar.trace == test_trace().token("digits", "123456789123456789"));
 }
@@ -230,7 +230,7 @@ TEST_CASE("dsl::digits<>.no_leading_zero()")
     CHECK(utf16.status == test_result::success);
     CHECK(utf16.trace == test_trace().token("digits", "11"));
 
-    auto swar = LEXY_VERIFY(lexy::utf8_encoding{}, LEXY_CHAR8_STR("123456789123456789"));
+    auto swar = LEXY_VERIFY(lexy::utf8_encoding{}, u8"123456789123456789");
     CHECK(swar.status == test_result::success);
     CHECK(swar.trace == test_trace().token("digits", "123456789123456789"));
 }
@@ -279,7 +279,7 @@ TEST_CASE("dsl::digits<>.sep()")
     CHECK(utf16.status == test_result::success);
     CHECK(utf16.trace == test_trace().token("digits", "11"));
 
-    auto swar = LEXY_VERIFY(lexy::utf8_encoding{}, LEXY_CHAR8_STR("123456789123456789"));
+    auto swar = LEXY_VERIFY(lexy::utf8_encoding{}, u8"123456789123456789");
     CHECK(swar.status == test_result::success);
     CHECK(swar.trace == test_trace().token("digits", "123456789123456789"));
 }
@@ -334,7 +334,7 @@ TEST_CASE("dsl::digits<>.sep().no_leading_zero")
     CHECK(utf16.status == test_result::success);
     CHECK(utf16.trace == test_trace().token("digits", "11"));
 
-    auto swar = LEXY_VERIFY(lexy::utf8_encoding{}, LEXY_CHAR8_STR("123456789123456789"));
+    auto swar = LEXY_VERIFY(lexy::utf8_encoding{}, u8"123456789123456789");
     CHECK(swar.status == test_result::success);
     CHECK(swar.trace == test_trace().token("digits", "123456789123456789"));
 }

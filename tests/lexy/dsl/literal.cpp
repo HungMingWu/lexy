@@ -152,12 +152,12 @@ TEST_CASE("dsl::lit")
         CHECK(lexy::is_token_rule<decltype(rule)>);
         CHECK(lexy::is_literal_rule<decltype(rule)>);
 
-        auto empty = LEXY_VERIFY(lexy::utf8_encoding{}, LEXY_CHAR8_STR(""));
+        auto empty = LEXY_VERIFY(lexy::utf8_encoding{}, u8"");
         CHECK(empty.status == test_result::fatal_error);
         CHECK(empty.trace
               == test_trace().expected_literal(0, "abcdefghijklmnopqrstuvwxyz", 0).cancel());
 
-        auto partial = LEXY_VERIFY(lexy::utf8_encoding{}, LEXY_CHAR8_STR("abcdefghij"));
+        auto partial = LEXY_VERIFY(lexy::utf8_encoding{}, u8"abcdefghij");
         CHECK(partial.status == test_result::fatal_error);
         CHECK(partial.trace
               == test_trace()
@@ -166,7 +166,7 @@ TEST_CASE("dsl::lit")
                      .cancel());
 
         auto partial_wrong
-            = LEXY_VERIFY(lexy::utf8_encoding{}, LEXY_CHAR8_STR("abcdefghijKLMNOPQRSTUVWXYZ"));
+            = LEXY_VERIFY(lexy::utf8_encoding{}, u8"abcdefghijKLMNOPQRSTUVWXYZ");
         CHECK(partial_wrong.status == test_result::fatal_error);
         CHECK(partial_wrong.trace
               == test_trace()
@@ -175,7 +175,7 @@ TEST_CASE("dsl::lit")
                      .cancel());
 
         auto success
-            = LEXY_VERIFY(lexy::utf8_encoding{}, LEXY_CHAR8_STR("abcdefghijklmnopqrstuvwxyz"));
+            = LEXY_VERIFY(lexy::utf8_encoding{}, u8"abcdefghijklmnopqrstuvwxyz");
         CHECK(success.status == test_result::success);
         CHECK(success.trace == test_trace().literal("abcdefghijklmnopqrstuvwxyz"));
     }
@@ -452,13 +452,13 @@ TEST_CASE("dsl::literal_set")
         CHECK(empty.status == test_result::fatal_error);
         CHECK(empty.trace == test_trace().error(0, 0, "expected literal set").cancel());
 
-        auto a_utf8 = LEXY_VERIFY(lexy::utf8_encoding{}, LEXY_CHAR8_STR("ä"));
+        auto a_utf8 = LEXY_VERIFY(lexy::utf8_encoding{}, u8"ä");
         CHECK(a_utf8.status == test_result::success);
         CHECK(a_utf8.trace == test_trace().literal("\\u00E4"));
-        auto o_utf8 = LEXY_VERIFY(lexy::utf8_encoding{}, LEXY_CHAR8_STR("ö"));
+        auto o_utf8 = LEXY_VERIFY(lexy::utf8_encoding{}, u8"ö");
         CHECK(o_utf8.status == test_result::success);
         CHECK(o_utf8.trace == test_trace().literal("\\u00F6"));
-        auto u_utf8 = LEXY_VERIFY(lexy::utf8_encoding{}, LEXY_CHAR8_STR("ü"));
+        auto u_utf8 = LEXY_VERIFY(lexy::utf8_encoding{}, u8"ü");
         CHECK(u_utf8.status == test_result::success);
         CHECK(u_utf8.trace == test_trace().literal("\\u00FC"));
 

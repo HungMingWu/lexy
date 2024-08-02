@@ -92,35 +92,6 @@ using type_or = std::conditional_t<std::is_void_v<T>, Fallback, T>;
 #    define LEXY_CONSTEXPR_DTOR
 #endif
 
-//=== char8_t ===//
-#ifndef LEXY_HAS_CHAR8_T
-#    if __cpp_char8_t
-#        define LEXY_HAS_CHAR8_T 1
-#    else
-#        define LEXY_HAS_CHAR8_T 0
-#    endif
-#endif
-
-#if LEXY_HAS_CHAR8_T
-
-#    define LEXY_CHAR_OF_u8 char8_t
-#    define LEXY_CHAR8_T char8_t
-#    define LEXY_CHAR8_STR(Str) u8##Str
-
-#else
-
-namespace lexy
-{
-using _char8_t = unsigned char;
-} // namespace lexy
-
-#    define LEXY_CHAR_OF_u8 char
-#    define LEXY_CHAR8_T ::lexy::_char8_t
-#    define LEXY_CHAR8_STR(Str)                                                                    \
-        LEXY_NTTP_STRING(::lexy::_detail::type_string, u8##Str)::c_str<LEXY_CHAR8_T>
-
-#endif
-
 //=== endianness ===//
 #ifndef LEXY_IS_LITTLE_ENDIAN
 #    if defined(__BYTE_ORDER__)

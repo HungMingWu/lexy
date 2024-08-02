@@ -83,8 +83,8 @@ struct ascii_encoding
 /// An encoding where the input is assumed to be valid UTF-8.
 struct utf8_encoding
 {
-    using char_type = LEXY_CHAR8_T;
-    using int_type  = LEXY_CHAR8_T;
+    using char_type = char8_t;
+    using int_type  = char8_t;
 
     template <typename OtherCharType>
     static constexpr bool is_secondary_char_type()
@@ -113,7 +113,7 @@ struct utf8_char_encoding
     template <typename OtherCharType>
     static constexpr bool is_secondary_char_type()
     {
-        return std::is_same_v<OtherCharType, LEXY_CHAR8_T>;
+        return std::is_same_v<OtherCharType, char8_t>;
     }
 
     static consteval int_type eof()
@@ -223,13 +223,11 @@ struct _deduce_encoding<char>
 #endif
 };
 
-#if LEXY_HAS_CHAR8_T
 template <>
-struct _deduce_encoding<LEXY_CHAR8_T>
+struct _deduce_encoding<char8_t>
 {
     using type = utf8_encoding;
 };
-#endif
 template <>
 struct _deduce_encoding<char16_t>
 {
@@ -303,15 +301,6 @@ consteval TargetCharT transcode_char(CharT c)
     {
         return c;
     }
-#if !LEXY_HAS_CHAR8_T
-    else if constexpr (std::is_same_v<CharT, char> && std::is_same_v<TargetCharT, LEXY_CHAR8_T>)
-    {
-        // If we don't have char8_t, `LEXY_LIT(u8"ä")` would have the type char, not LEXY_CHAR8_T
-        // (which is unsigned char). So we disable checking in that case, to allow such usage. Note
-        // that this prevents catching `LEXY_LIT("ä")`, but there is nothing we can do.
-        return static_cast<LEXY_CHAR8_T>(c);
-    }
-#endif
     else
     {
         LEXY_ASSERT(is_ascii(c), "character type of string literal didn't match, "

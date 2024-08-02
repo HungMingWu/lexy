@@ -39,7 +39,7 @@ lexy::buffer<lexy::utf8_encoding> random_buffer(std::size_t size, float unicode_
         {
             auto cp = random_unicode();
 
-            LEXY_CHAR8_T buffer[4];
+            char8_t buffer[4];
             auto cp_size = lexy::_detail::encode_code_point<lexy::utf8_encoding>(cp, buffer, 4);
             if (i + cp_size < size)
             {
@@ -49,7 +49,7 @@ lexy::buffer<lexy::utf8_encoding> random_buffer(std::size_t size, float unicode_
         }
         else
         {
-            builder.data()[i] = static_cast<LEXY_CHAR8_T>(random_ascii());
+            builder.data()[i] = static_cast<char8_t>(random_ascii());
             ++i;
         }
     }

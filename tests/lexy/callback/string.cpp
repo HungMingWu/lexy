@@ -13,17 +13,9 @@ TEST_CASE("_detail::encode_code_point")
 {
     // We test it indirectly by going through lexy::as_string for convenience.
     auto encode = [](auto encoding, lexy::code_point cp) {
-        if constexpr (std::is_same_v<decltype(encoding), lexy::utf8_encoding> && !LEXY_HAS_CHAR8_T)
-        {
-            using string_type = std::string;
-            return lexy::as_string<string_type, decltype(encoding)>(cp);
-        }
-        else
-        {
-            using char_type   = typename decltype(encoding)::char_type;
-            using string_type = std::basic_string<char_type>;
-            return lexy::as_string<string_type, decltype(encoding)>(cp);
-        }
+        using char_type   = typename decltype(encoding)::char_type;
+        using string_type = std::basic_string<char_type>;
+        return lexy::as_string<string_type, decltype(encoding)>(cp);
     };
 
     SUBCASE("ASCII")

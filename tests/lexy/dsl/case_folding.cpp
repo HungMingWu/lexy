@@ -80,36 +80,36 @@ TEST_CASE("dsl::unicode::simple_case_folding, UTF-32")
 TEST_CASE("dsl::unicode::simple_case_folding, UTF-8 and UTF-16")
 {
     constexpr auto rule
-        = dsl::unicode::simple_case_folding(dsl::_lit<LEXY_CHAR8_T, 'a', 'b', 0xC4, 0x87>{});
+        = dsl::unicode::simple_case_folding(dsl::_lit<char8_t, 'a', 'b', 0xC4, 0x87>{});
     CHECK(lexy::is_literal_rule<decltype(rule)>);
 
     auto callback = token_callback;
 
-    auto empty = LEXY_VERIFY(lexy::utf8_encoding{}, LEXY_CHAR8_STR(""));
+    auto empty = LEXY_VERIFY(lexy::utf8_encoding{}, u8"");
     CHECK(empty.status == test_result::fatal_error);
     CHECK(empty.trace == test_trace().expected_literal(0, "ab\\u0107", 0).cancel());
 
-    auto a = LEXY_VERIFY(lexy::utf8_encoding{}, LEXY_CHAR8_STR("a"));
+    auto a = LEXY_VERIFY(lexy::utf8_encoding{}, u8"a");
     CHECK(a.status == test_result::fatal_error);
     CHECK(a.trace == test_trace().error_token("a").expected_literal(0, "ab\\u0107", 1).cancel());
-    auto ab = LEXY_VERIFY(lexy::utf8_encoding{}, LEXY_CHAR8_STR("ab"));
+    auto ab = LEXY_VERIFY(lexy::utf8_encoding{}, u8"ab");
     CHECK(ab.status == test_result::fatal_error);
     CHECK(ab.trace == test_trace().error_token("ab").expected_literal(0, "ab\\u0107", 2).cancel());
-    auto abc = LEXY_VERIFY(lexy::utf8_encoding{}, LEXY_CHAR8_STR("abć"));
+    auto abc = LEXY_VERIFY(lexy::utf8_encoding{}, u8"abć");
     CHECK(abc.status == test_result::success);
     CHECK(abc.trace == test_trace().literal("ab\\u0107"));
-    auto abcd = LEXY_VERIFY(lexy::utf8_encoding{}, LEXY_CHAR8_STR("abćd"));
+    auto abcd = LEXY_VERIFY(lexy::utf8_encoding{}, u8"abćd");
     CHECK(abcd.status == test_result::success);
     CHECK(abcd.trace == test_trace().literal("ab\\u0107"));
 
-    auto AB = LEXY_VERIFY(lexy::utf8_encoding{}, LEXY_CHAR8_STR("AB"));
+    auto AB = LEXY_VERIFY(lexy::utf8_encoding{}, u8"AB");
     CHECK(AB.status == test_result::fatal_error);
     CHECK(AB.trace == test_trace().error_token("AB").expected_literal(0, "ab\\u0107", 2).cancel());
-    auto ABC = LEXY_VERIFY(lexy::utf8_encoding{}, LEXY_CHAR8_STR("ABĆ"));
+    auto ABC = LEXY_VERIFY(lexy::utf8_encoding{}, u8"ABĆ");
     CHECK(ABC.status == test_result::success);
     CHECK(ABC.trace == test_trace().literal("AB\\u0106"));
 
-    auto aBc = LEXY_VERIFY(lexy::utf8_encoding{}, LEXY_CHAR8_STR("aBć"));
+    auto aBc = LEXY_VERIFY(lexy::utf8_encoding{}, u8"aBć");
     CHECK(aBc.status == test_result::success);
     CHECK(aBc.trace == test_trace().literal("aB\\u0107"));
 

@@ -9,9 +9,9 @@ namespace dsl = lexy::dsl;
 //{
 struct plus
 {
-    const LEXY_CHAR8_T* pos;
+    const char8_t* pos;
 
-    constexpr plus(const LEXY_CHAR8_T* pos) : pos(pos) {}
+    constexpr plus(const char8_t* pos) : pos(pos) {}
 };
 
 struct production : lexy::expression_production

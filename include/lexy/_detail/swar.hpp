@@ -32,7 +32,7 @@ constexpr auto char_bit_size = sizeof(CharT) * CHAR_BIT;
 template <typename CharT>
 constexpr auto make_uchar(CharT c)
 {
-    if constexpr (std::is_same_v<CharT, LEXY_CHAR8_T>)
+    if constexpr (std::is_same_v<CharT, char8_t>)
         // Not all libstdc++ support char8_t and std::make_unsigned_t.
         return c;
     else

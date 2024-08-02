@@ -176,7 +176,7 @@ TEST_CASE("_detail::write_error")
 
     SUBCASE("escaped characters")
     {
-        auto input = lexy::zstring_input<lexy::utf8_encoding>(LEXY_CHAR8_STR("hel\u1234lo"));
+        auto input = lexy::zstring_input<lexy::utf8_encoding>(u8"hel\u1234lo");
 
         auto context = lexy::error_context(production{}, input, input.data());
         lexy::string_error<error_tag, lexy::utf8_encoding> error(input.data(), input.data() + 6);
@@ -188,7 +188,7 @@ TEST_CASE("_detail::write_error")
     }
     SUBCASE("split unicode code point")
     {
-        auto input = lexy::zstring_input<lexy::utf8_encoding>(LEXY_CHAR8_STR("hel\u1234lo"));
+        auto input = lexy::zstring_input<lexy::utf8_encoding>(u8"hel\u1234lo");
 
         auto context = lexy::error_context(production{}, input, input.data());
         lexy::string_error<error_tag, lexy::utf8_encoding> error(input.data(), input.data() + 5);

@@ -94,30 +94,30 @@ TEST_CASE("UTF-8 code point parsing")
 {
     auto parse     = [](auto str) { return parse_cp<lexy::utf8_encoding>(str); };
     auto parse_seq = [](auto... c) {
-        LEXY_CHAR8_T str[] = {LEXY_CHAR8_T(c)..., 0x0};
+        char8_t str[] = {char8_t(c)..., 0x0};
         return parse_cp<lexy::utf8_encoding>(str);
     };
 
     SUBCASE("basic")
     {
-        constexpr auto empty = parse(LEXY_CHAR8_STR(""));
+        constexpr auto empty = parse(u8"");
         CHECK(!empty);
         CHECK(empty.count == 0);
         CHECK(empty.ec == cp_error::eof);
 
-        constexpr auto a = parse(LEXY_CHAR8_STR("a"));
+        constexpr auto a = parse(u8"a");
         CHECK(a);
         CHECK(a.count == 1);
         CHECK(a.value == 'a');
-        constexpr auto umlaut = parse(LEXY_CHAR8_STR("ä"));
+        constexpr auto umlaut = parse(u8"ä");
         CHECK(umlaut);
         CHECK(umlaut.count == 2);
         CHECK(umlaut.value == 0xE4);
-        constexpr auto euro = parse(LEXY_CHAR8_STR("€"));
+        constexpr auto euro = parse(u8"€");
         CHECK(euro);
         CHECK(euro.count == 3);
         CHECK(euro.value == 0x20AC);
-        constexpr auto emojii = parse(LEXY_CHAR8_STR("🙂"));
+        constexpr auto emojii = parse(u8"🙂");
         CHECK(emojii);
         CHECK(emojii.count == 4);
         CHECK(emojii.value == 0x1F642);
@@ -209,7 +209,7 @@ TEST_CASE("UTF-8 code point parsing")
         {
             INFO(i);
 
-            const LEXY_CHAR8_T str[]  = {LEXY_CHAR8_T(i), LEXY_CHAR8_T(i), LEXY_CHAR8_T(i), '\0'};
+            const char8_t str[]  = {char8_t(i), char8_t(i), char8_t(i), '\0'};
             auto               result = parse(str);
             CHECK(result);
             CHECK(result.count == 1);

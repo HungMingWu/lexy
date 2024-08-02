@@ -47,10 +47,8 @@ struct integer_traits
             return UCHAR_MAX; // NOLINT
         else if constexpr (std::is_same_v<T, wchar_t>)
             return WCHAR_MAX; // NOLINT
-#if LEXY_HAS_CHAR8_T
         else if constexpr (std::is_same_v<T, char8_t>)
             return UCHAR_MAX; // NOLINT
-#endif
         else if constexpr (std::is_same_v<T, char16_t>)
             return UINT_LEAST16_MAX;
         else if constexpr (std::is_same_v<T, char32_t>)

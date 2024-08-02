@@ -935,7 +935,7 @@ TEST_CASE("dsl::code_unit_id")
 
     constexpr auto callback
         = lexy::callback<int>([](const char*) { return int(0); },
-                              [](const char*, LEXY_CHAR8_T c) { return int(c); });
+                              [](const char*, char8_t c) { return int(c); });
 
     SUBCASE("as rule")
     {

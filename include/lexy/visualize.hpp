@@ -98,7 +98,7 @@ constexpr OutIt write_str(OutIt out, const char* str)
     return out;
 }
 template <typename OutIt>
-constexpr OutIt write_str(OutIt out, const LEXY_CHAR8_T* str)
+constexpr OutIt write_str(OutIt out, const char8_t* str)
 {
     while (*str)
         *out++ = static_cast<char>(*str++);
@@ -495,10 +495,10 @@ OutputIt visualize_to(OutputIt out, const Tree& tree, visualization_options opts
 {
     struct label_t
     {
-        const LEXY_CHAR_OF_u8* space;
-        const LEXY_CHAR_OF_u8* line;
-        const LEXY_CHAR_OF_u8* end;
-        const LEXY_CHAR_OF_u8* branch;
+        const char8_t* space;
+        const char8_t* line;
+        const char8_t* end;
+        const char8_t* branch;
     };
     auto label = opts.is_set(visualize_use_unicode) ? label_t{u8"   ", u8"│  ", u8"└──", u8"├──"}
                                                     : label_t{u8"  ", u8"  ", u8"- ", u8"- "};
