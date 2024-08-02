@@ -154,7 +154,7 @@ constexpr auto list(Item, _tsep<Sep>)
 template <typename Item, typename Sep>
 constexpr auto list(Item, _isep<Sep>)
 {
-    static_assert(lexy::_detail::error<Item, Sep>,
+    static_assert(false,
                   "list() does not support `dsl::ignore_trailing_sep()`");
     return _lst<Item, void>{};
 }

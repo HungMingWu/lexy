@@ -78,7 +78,7 @@ struct integer_traits
             return ~__uint128_t{};
 #endif
         else
-            static_assert(_detail::error<T>,
+            static_assert(false,
                           "specialize integer_traits for your custom integer types");
     }();
     template <int Radix>

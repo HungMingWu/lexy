@@ -43,9 +43,6 @@
 
 namespace lexy::_detail
 {
-template <typename... T>
-constexpr bool error = false;
-
 template <typename T>
 std::add_rvalue_reference_t<T> declval();
 

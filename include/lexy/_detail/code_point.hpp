@@ -106,7 +106,7 @@ constexpr std::size_t encode_code_point(char32_t cp, typename Encoding::char_typ
     }
     else
     {
-        static_assert(lexy::_detail::error<Encoding>,
+        static_assert(false,
                       "cannot encode a code point in this encoding");
         (void)cp;
         (void)buffer;
@@ -328,7 +328,7 @@ constexpr cp_result<Reader> parse_code_point(Reader reader)
     }
     else
     {
-        static_assert(lexy::_detail::error<typename Reader::encoding>,
+        static_assert(false,
                       "no known code point for this encoding");
         return {};
     }

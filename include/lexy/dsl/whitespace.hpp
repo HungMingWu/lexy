@@ -56,7 +56,7 @@ public:
         template <typename Production>
         constexpr event_handler(Production)
         {
-            static_assert(_detail::error<Production>,
+            static_assert(false,
                           "whitespace rule must not contain `dsl::p` or `dsl::recurse`;"
                           "use `dsl::inline_` instead");
         }

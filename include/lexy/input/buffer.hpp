@@ -359,7 +359,7 @@ struct _make_buffer
                     *dest++ = static_cast<char_type>((memory[0] << 24) | (memory[1] << 16)
                                                      | (memory[2] << 8) | (memory[3] << 0));
                 else
-                    static_assert(_detail::error<Encoding>, "unhandled encoding/endianness");
+                    static_assert(false, "unhandled encoding/endianness");
             }
 
             return LEXY_MOV(builder).finish();

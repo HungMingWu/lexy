@@ -276,7 +276,7 @@ struct _sfinae_sink
         if constexpr (!is_sink_callback_for<Sink, Args&&...>)
             // We're attempting to call a sink of Production with the given arguments, but no such
             // overload exists.
-            static_assert(_detail::error<Production, Args...>,
+            static_assert(false,
                           "missing value sink callback overload for production");
         _sink(LEXY_FWD(args)...);
     }
@@ -368,7 +368,7 @@ public:
         {
             // We're attempting to call the callback of Production with the given arguments, but no
             // such overload exists.
-            static_assert(_detail::error<Production, Args...>,
+            static_assert(false,
                           "missing value callback overload for production");
         }
     }

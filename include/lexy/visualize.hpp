@@ -485,7 +485,7 @@ OutputIt visualize_to(OutputIt out, lexy::lexeme<Reader> lexeme,
     }
     else
     {
-        static_assert(lexy::_detail::error<encoding>, "unknown encoding");
+        static_assert(false, "unknown encoding");
         return out;
     }
 }

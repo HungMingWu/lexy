@@ -122,7 +122,7 @@ auto _compute_default_location_counting()
     else if constexpr (lexy::is_char_encoding<encoding>)
         return code_unit_location_counting{};
     else
-        static_assert(_detail::error<Input>,
+        static_assert(false,
                       "input encoding does not have a default location counting policy");
 }
 
