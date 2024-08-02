@@ -13,12 +13,12 @@ namespace lexyd::unicode
 {
 struct _nctrl : char_class_base<_nctrl>
 {
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "code-point.non-control";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         return ascii::_print::char_class_ascii();
     }
@@ -37,12 +37,12 @@ struct _nctrl : char_class_base<_nctrl>
 
 struct _control : char_class_base<_control>
 {
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "code-point.control";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         return ascii::_control::char_class_ascii();
     }
@@ -72,12 +72,12 @@ constexpr auto operator-(_nctrl)
 //=== whitespace ===//
 struct _blank : char_class_base<_blank>
 {
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "code-point.blank";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         return ascii::_blank::char_class_ascii();
     }
@@ -98,12 +98,12 @@ inline constexpr auto blank = _blank{};
 
 struct _newline : char_class_base<_newline>
 {
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "code-point.newline";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         return ascii::_newline::char_class_ascii();
     }
@@ -124,12 +124,12 @@ inline constexpr auto newline = _newline{};
 
 struct _other_space : char_class_base<_other_space>
 {
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "code-point.other-space";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         return ascii::_other_space::char_class_ascii();
     }
@@ -146,12 +146,12 @@ inline constexpr auto other_space = _other_space{};
 
 struct _space : char_class_base<_space>
 {
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "code-point.whitespace";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         return ascii::_space::char_class_ascii();
     }
@@ -172,12 +172,12 @@ inline constexpr auto space = _space{};
 //=== alpha ===//
 struct _lower : char_class_base<_lower>
 {
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "code-point.lowercase";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         return ascii::_lower::char_class_ascii();
     }
@@ -197,12 +197,12 @@ inline constexpr auto lower = _lower{};
 
 struct _upper : char_class_base<_upper>
 {
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "code-point.uppercase";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         return ascii::_upper::char_class_ascii();
     }
@@ -222,12 +222,12 @@ inline constexpr auto upper = _upper{};
 
 struct _alpha : char_class_base<_alpha>
 {
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "code-point.alphabetic";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         return ascii::_alpha::char_class_ascii();
     }
@@ -248,12 +248,12 @@ inline constexpr auto alpha = _alpha{};
 //=== digit ===//
 struct _digit : char_class_base<_digit>
 {
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "code-point.decimal-number";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         return ascii::_digit::char_class_ascii();
     }
@@ -273,12 +273,12 @@ inline constexpr auto digit = _digit{};
 
 struct _alnum : char_class_base<_alnum>
 {
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "code-point.alphabetic-decimal";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         return ascii::_alnum::char_class_ascii();
     }
@@ -300,12 +300,12 @@ inline constexpr auto alpha_digit = alnum;
 
 struct _word : char_class_base<_word>
 {
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "code-point.word";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         return ascii::_word::char_class_ascii();
     }
@@ -332,12 +332,12 @@ inline constexpr auto word = _word{};
 //=== categories ===//
 struct _graph : char_class_base<_graph>
 {
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "code-point.graph";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         return ascii::_graph::char_class_ascii();
     }
@@ -362,12 +362,12 @@ inline constexpr auto graph = _graph{};
 
 struct _print : char_class_base<_print>
 {
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "code-point.print";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         return ascii::_print::char_class_ascii();
     }
@@ -389,12 +389,12 @@ inline constexpr auto print = _print{};
 
 struct _char : char_class_base<_char>
 {
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "code-point.character";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         return ascii::_char::char_class_ascii();
     }
@@ -417,12 +417,12 @@ namespace lexyd::unicode
 {
 struct _xid_start : char_class_base<_xid_start>
 {
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "code-point.XID-start";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         return ascii::_alpha::char_class_ascii();
     }
@@ -442,12 +442,12 @@ inline constexpr auto xid_start = _xid_start{};
 
 struct _xid_start_underscore : char_class_base<_xid_start_underscore>
 {
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "code-point.XID-start-underscore";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         return ascii::_alphau::char_class_ascii();
     }
@@ -468,12 +468,12 @@ inline constexpr auto xid_start_underscore = _xid_start_underscore{};
 
 struct _xid_continue : char_class_base<_xid_continue>
 {
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "code-point.XID-continue";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         return ascii::_word::char_class_ascii();
     }

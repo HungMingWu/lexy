@@ -167,7 +167,7 @@ namespace grammar
     {
         struct unknown_entity
         {
-            static LEXY_CONSTEVAL auto name()
+            static consteval auto name()
             {
                 return "unknown entity";
             }
@@ -209,7 +209,7 @@ namespace grammar
     {
         struct tag_mismatch
         {
-            static LEXY_CONSTEVAL auto name()
+            static consteval auto name()
             {
                 return "closing tag doesn't match";
             }

@@ -142,7 +142,7 @@ struct ascii_set_matcher<CompressedAsciiSet, index_sequence<RangeIdx...>,
                          index_sequence<SingleIdx...>>
 {
     template <typename Encoding>
-    static LEXY_CONSTEVAL auto to_int_type(char c)
+    static consteval auto to_int_type(char c)
     {
         return Encoding::to_int_type(static_cast<typename Encoding::char_type>(c));
     }
@@ -278,11 +278,11 @@ struct char_class_base : token_base<Derived>, _char_class_base
             {                                                                                      \
                 return (Rule).char_class_unicode();                                                \
             }                                                                                      \
-            static LEXY_CONSTEVAL auto char_class_name()                                           \
+            static consteval auto char_class_name()                                           \
             {                                                                                      \
                 return Name;                                                                       \
             }                                                                                      \
-            static LEXY_CONSTEVAL auto char_class_ascii()                                          \
+            static consteval auto char_class_ascii()                                          \
             {                                                                                      \
                 return (Rule).char_class_ascii();                                                  \
             }                                                                                      \
@@ -305,12 +305,12 @@ struct _lcp;
 template <char32_t Cp>
 struct _ccp : char_class_base<_ccp<Cp>>
 {
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "code-point";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         lexy::_detail::ascii_set result;
         if constexpr (Cp <= 0x7F)
@@ -334,12 +334,12 @@ struct _cb : char_class_base<_cb<Byte>>
         return Byte <= 0x7F;
     }
 
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "byte";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         lexy::_detail::ascii_set result;
         if constexpr (Byte <= 0x7F)
@@ -398,12 +398,12 @@ struct _calt : char_class_base<_calt<Cs...>>
         return !non_unicode;
     }
 
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "union";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         lexy::_detail::ascii_set result;
         (result.insert(Cs::char_class_ascii()), ...);
@@ -455,12 +455,12 @@ struct _ccomp : char_class_base<_ccomp<C>>
         return C::char_class_unicode();
     }
 
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "complement";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         lexy::_detail::ascii_set result;
         result.insert(0x00, 0x7F);
@@ -504,12 +504,12 @@ struct _cminus : char_class_base<_cminus<Set, Minus>>
         return _calt<Set, Minus>::char_class_unicode();
     }
 
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "minus";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         auto result = Set::char_class_ascii();
         result.remove(Minus::char_class_ascii());
@@ -557,12 +557,12 @@ struct _cand : char_class_base<_cand<Cs...>>
         return _calt<Cs...>::char_class_unicode();
     }
 
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "intersection";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         lexy::_detail::ascii_set result;
         for (auto c = 0; c <= 0x7F; ++c)

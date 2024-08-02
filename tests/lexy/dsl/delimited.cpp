@@ -455,7 +455,7 @@ TEST_CASE("dsl::delimited(open, close)")
     {
         struct tag
         {
-            static LEXY_CONSTEVAL auto name()
+            static consteval auto name()
             {
                 return "error";
             }

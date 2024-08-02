@@ -12,7 +12,7 @@ namespace lexy
 {
 struct different_identifier
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "different identifier";
     }

@@ -23,7 +23,7 @@ namespace lexyd
 /// Operation that just parses the atomic rule.
 struct atom : _operation_base
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "atom";
     }
@@ -557,7 +557,7 @@ namespace lexy
 {
 struct max_operator_nesting_exceeded
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "maximum operator nesting level exceeded";
     }
@@ -565,7 +565,7 @@ struct max_operator_nesting_exceeded
 
 struct operator_chain_error
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "operator cannot be chained";
     }
@@ -573,7 +573,7 @@ struct operator_chain_error
 
 struct operator_group_error
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "operator cannot be mixed with previous operators";
     }

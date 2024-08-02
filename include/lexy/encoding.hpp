@@ -35,7 +35,7 @@ struct default_encoding
         return false;
     }
 
-    static LEXY_CONSTEVAL int_type eof()
+    static consteval int_type eof()
     {
         return -1;
     }
@@ -66,7 +66,7 @@ struct ascii_encoding
         return false;
     }
 
-    static LEXY_CONSTEVAL int_type eof()
+    static consteval int_type eof()
     {
         if constexpr (std::is_signed_v<char_type>)
             return int_type(-1);
@@ -92,7 +92,7 @@ struct utf8_encoding
         return std::is_same_v<OtherCharType, char>;
     }
 
-    static LEXY_CONSTEVAL int_type eof()
+    static consteval int_type eof()
     {
         // 0xFF is not part of valid UTF-8.
         return int_type(0xFF);
@@ -116,7 +116,7 @@ struct utf8_char_encoding
         return std::is_same_v<OtherCharType, LEXY_CHAR8_T>;
     }
 
-    static LEXY_CONSTEVAL int_type eof()
+    static consteval int_type eof()
     {
         // 0xFF is not part of valid UTF-8.
         return int_type(0xFF);
@@ -140,7 +140,7 @@ struct utf16_encoding
         return sizeof(wchar_t) == sizeof(char16_t) && std::is_same_v<OtherCharType, wchar_t>;
     }
 
-    static LEXY_CONSTEVAL int_type eof()
+    static consteval int_type eof()
     {
         // Every value of char16_t is valid UTF16.
         return int_type(-1);
@@ -164,7 +164,7 @@ struct utf32_encoding
         return sizeof(wchar_t) == sizeof(char32_t) && std::is_same_v<OtherCharType, wchar_t>;
     }
 
-    static LEXY_CONSTEVAL int_type eof()
+    static consteval int_type eof()
     {
         // The highest unicode code point is U+10'FFFF, so this is never a valid code point.
         return int_type(0xFFFF'FFFF);
@@ -188,7 +188,7 @@ struct byte_encoding
         return std::is_same_v<OtherCharType, char> || std::is_same_v<OtherCharType, std::byte>;
     }
 
-    static LEXY_CONSTEVAL int_type eof()
+    static consteval int_type eof()
     {
         return -1;
     }
@@ -297,7 +297,7 @@ constexpr bool is_ascii(CharT c)
 }
 
 template <typename TargetCharT, typename CharT>
-LEXY_CONSTEVAL TargetCharT transcode_char(CharT c)
+consteval TargetCharT transcode_char(CharT c)
 {
     if constexpr (std::is_same_v<CharT, TargetCharT>)
     {
@@ -323,7 +323,7 @@ LEXY_CONSTEVAL TargetCharT transcode_char(CharT c)
 }
 
 template <typename Encoding, typename CharT>
-LEXY_CONSTEVAL auto transcode_int(CharT c) -> typename Encoding::int_type
+consteval auto transcode_int(CharT c) -> typename Encoding::int_type
 {
     return Encoding::to_int_type(transcode_char<typename Encoding::char_type>(c));
 }

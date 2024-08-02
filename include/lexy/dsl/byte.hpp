@@ -77,7 +77,7 @@ struct _b : token_base<_b<N, Predicate>>
     {
         struct predicate
         {
-            static LEXY_CONSTEVAL auto name()
+            static consteval auto name()
             {
                 return "byte.range";
             }
@@ -96,7 +96,7 @@ struct _b : token_base<_b<N, Predicate>>
     {
         struct predicate
         {
-            static LEXY_CONSTEVAL auto name()
+            static consteval auto name()
             {
                 return "byte.set";
             }
@@ -114,7 +114,7 @@ struct _b : token_base<_b<N, Predicate>>
     {
         struct predicate
         {
-            static LEXY_CONSTEVAL auto name()
+            static consteval auto name()
             {
                 return "byte.ASCII";
             }
@@ -260,7 +260,7 @@ namespace lexy
 {
 struct mismatched_byte_count
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "mismatched byte count";
     }

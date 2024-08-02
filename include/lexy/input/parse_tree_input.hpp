@@ -53,7 +53,7 @@ public:
     using char_type     = typename char_encoding::char_type;
     using value_type    = Node;
 
-    static LEXY_CONSTEVAL auto eof()
+    static consteval auto eof()
     {
         return _parse_tree_eof{};
     }

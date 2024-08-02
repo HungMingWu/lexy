@@ -88,7 +88,7 @@ struct lit_trie
     std::size_t transition_from[max_transition_count];
     std::size_t transition_to[max_transition_count];
 
-    LEXY_CONSTEVAL lit_trie()
+    consteval lit_trie()
     : node_count(1), node_value{}, node_char_class{}, transition_char{}, transition_from{},
       transition_to{}
     {
@@ -97,7 +97,7 @@ struct lit_trie
     }
 
     template <typename CharT>
-    LEXY_CONSTEVAL std::size_t insert(std::size_t from, CharT _c)
+    consteval std::size_t insert(std::size_t from, CharT _c)
     {
         auto c = transcode_char<char_type>(_c);
 
@@ -125,12 +125,12 @@ struct lit_trie
     }
 
     template <typename CharT, CharT... C>
-    LEXY_CONSTEVAL std::size_t insert(std::size_t pos, type_string<CharT, C...>)
+    consteval std::size_t insert(std::size_t pos, type_string<CharT, C...>)
     {
         return ((pos = insert(pos, C)), ...);
     }
 
-    LEXY_CONSTEVAL auto node_transitions(std::size_t node) const
+    consteval auto node_transitions(std::size_t node) const
     {
         struct
         {
@@ -196,7 +196,7 @@ template <typename Reader>
 using lit_no_case_fold = Reader;
 
 template <typename Encoding, typename... Literals>
-LEXY_CONSTEVAL auto make_empty_trie()
+consteval auto make_empty_trie()
 {
     constexpr auto max_char_count = (0 + ... + Literals::lit_max_char_count);
 
@@ -344,7 +344,7 @@ struct _lit
     }
 
     template <typename Trie>
-    static LEXY_CONSTEVAL std::size_t lit_insert(Trie& trie, std::size_t pos, std::size_t)
+    static consteval std::size_t lit_insert(Trie& trie, std::size_t pos, std::size_t)
     {
         return ((pos = trie.insert(pos, C)), ...);
     }
@@ -430,7 +430,7 @@ struct _lcp : token_base<_lcp<Cp...>>, _lit_base
     }
 
     template <typename Trie>
-    static LEXY_CONSTEVAL std::size_t lit_insert(Trie& trie, std::size_t pos, std::size_t)
+    static consteval std::size_t lit_insert(Trie& trie, std::size_t pos, std::size_t)
     {
         using encoding = typename Trie::encoding;
 
@@ -493,7 +493,7 @@ class _symbol_table;
 
 struct expected_literal_set
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "expected literal set";
     }
@@ -520,7 +520,7 @@ struct _lset : token_base<_lset<Literals...>>, _lset_base
     using as_lset = _lset;
 
     template <typename Encoding>
-    static LEXY_CONSTEVAL auto _build_trie()
+    static consteval auto _build_trie()
     {
         auto result = lexy::_detail::make_empty_trie<Encoding, Literals...>();
 

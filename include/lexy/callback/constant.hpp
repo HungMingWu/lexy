@@ -23,7 +23,7 @@ struct _constant
 
 /// Creates a callback that produces the given value without accepting arguments.
 template <typename Arg>
-LEXY_CONSTEVAL auto constant(Arg&& value)
+consteval auto constant(Arg&& value)
 {
     return _constant<std::decay_t<Arg>>{LEXY_FWD(value)};
 }

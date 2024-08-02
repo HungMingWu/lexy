@@ -17,7 +17,7 @@ namespace lexy
 /// The reader ends before the closing delimiter was found.
 struct missing_delimiter
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "missing delimiter";
     }
@@ -355,7 +355,7 @@ namespace lexy
 {
 struct invalid_escape_sequence
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "invalid escape sequence";
     }

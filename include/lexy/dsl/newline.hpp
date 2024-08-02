@@ -12,7 +12,7 @@ namespace lexy
 {
 struct expected_newline
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "expected newline";
     }

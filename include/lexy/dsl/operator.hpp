@@ -50,7 +50,7 @@ struct op_lit_list
     static constexpr auto size = sizeof...(Literals);
 
     template <typename Encoding>
-    static LEXY_CONSTEVAL auto _build_trie()
+    static consteval auto _build_trie()
     {
         auto result = make_empty_trie<Encoding, Literals...>();
 

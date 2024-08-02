@@ -13,7 +13,7 @@ namespace lexy
 /// We've failed to match a lookahead.
 struct lookahead_failure
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "lookahead failure";
     }
@@ -23,7 +23,7 @@ struct lookahead_failure
 namespace lexyd
 {
 template <typename Encoding, typename... Needle, typename... End>
-LEXY_CONSTEVAL auto _build_look_trie(_lset<Needle...>, _lset<End...>)
+consteval auto _build_look_trie(_lset<Needle...>, _lset<End...>)
 {
     auto result     = lexy::_detail::make_empty_trie<Encoding, Needle..., End...>();
     auto char_class = std::size_t(0);

@@ -12,7 +12,7 @@ namespace lexy
 {
 struct exhausted_choice
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "exhausted choice";
     }

@@ -35,7 +35,7 @@ struct _cfl : token_base<_cfl<Literal, CaseFolding>>, _lit_base
     }
 
     template <typename Trie>
-    static LEXY_CONSTEVAL std::size_t lit_insert(Trie& trie, std::size_t pos,
+    static consteval std::size_t lit_insert(Trie& trie, std::size_t pos,
                                                  std::size_t char_class)
     {
         return Literal::lit_insert(trie, pos, char_class);

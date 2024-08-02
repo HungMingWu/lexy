@@ -21,12 +21,12 @@ struct _d;
 template <>
 struct _d<2> : char_class_base<_d<2>>
 {
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "digit.binary";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         lexy::_detail::ascii_set result;
         result.insert('0', '1');
@@ -56,12 +56,12 @@ using binary = _d<2>;
 template <>
 struct _d<8> : char_class_base<_d<8>>
 {
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "digit.octal";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         lexy::_detail::ascii_set result;
         result.insert('0', '7');
@@ -91,12 +91,12 @@ using octal = _d<8>;
 template <>
 struct _d<10> : char_class_base<_d<10>>
 {
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "digit.decimal";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         lexy::_detail::ascii_set result;
         result.insert('0', '9');
@@ -125,12 +125,12 @@ using decimal = _d<10>;
 
 struct hex_lower : char_class_base<hex_lower>
 {
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "digit.hex-lower";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         lexy::_detail::ascii_set result;
         result.insert('0', '9');
@@ -161,12 +161,12 @@ struct hex_lower : char_class_base<hex_lower>
 
 struct hex_upper : char_class_base<hex_upper>
 {
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "digit.hex-upper";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         lexy::_detail::ascii_set result;
         result.insert('0', '9');
@@ -198,12 +198,12 @@ struct hex_upper : char_class_base<hex_upper>
 template <>
 struct _d<16> : char_class_base<_d<16>>
 {
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "digit.hex";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         lexy::_detail::ascii_set result;
         result.insert('0', '9');
@@ -242,12 +242,12 @@ namespace lexyd
 {
 struct _zero : char_class_base<_zero>
 {
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         return "digit.zero";
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         lexy::_detail::ascii_set result;
         result.insert('0');
@@ -281,7 +281,7 @@ namespace lexy
 {
 struct forbidden_leading_zero
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "forbidden leading zero";
     }

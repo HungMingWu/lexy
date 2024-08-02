@@ -11,7 +11,7 @@ namespace lexy
 {
 struct duplicate_flag
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "duplicate flag";
     }

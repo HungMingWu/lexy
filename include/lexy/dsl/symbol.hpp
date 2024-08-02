@@ -37,17 +37,17 @@ public:
     };
 
     //=== modifiers ===//
-    LEXY_CONSTEVAL _symbol_table() : _data{} {}
+    consteval _symbol_table() : _data{} {}
 
     template <typename CaseFoldingDSL>
-    LEXY_CONSTEVAL auto case_folding(CaseFoldingDSL) const
+    consteval auto case_folding(CaseFoldingDSL) const
     {
         return _symbol_table<T, CaseFoldingDSL::template case_folding,
                              Strings...>(_detail::make_index_sequence<size()>{}, *this);
     }
 
     template <typename SymbolString, typename... Args>
-    LEXY_CONSTEVAL auto map(Args&&... args) const
+    consteval auto map(Args&&... args) const
     {
         using next_table = _symbol_table<T, CaseFolding, Strings..., SymbolString>;
         if constexpr (empty())
@@ -58,7 +58,7 @@ public:
 
 #if LEXY_HAS_NTTP
     template <_detail::string_literal SymbolString, typename... Args>
-    LEXY_CONSTEVAL auto map(Args&&... args) const
+    consteval auto map(Args&&... args) const
     {
         return map<_detail::to_type_string<_detail::type_string, SymbolString>>(LEXY_FWD(args)...);
     }
@@ -69,14 +69,14 @@ public:
 #    else
     template <auto C, typename... Args>
 #    endif
-    LEXY_CONSTEVAL auto map(Args&&... args) const
+    consteval auto map(Args&&... args) const
     {
         return map<_detail::type_string<LEXY_DECAY_DECLTYPE(C), C>>(LEXY_FWD(args)...);
     }
 #endif
 
     template <typename CharT, CharT... C, typename... Args>
-    LEXY_CONSTEVAL auto map(lexyd::_lit<CharT, C...>, Args&&... args) const
+    consteval auto map(lexyd::_lit<CharT, C...>, Args&&... args) const
     {
         return map<_detail::type_string<CharT, C...>>(LEXY_FWD(args)...);
     }
@@ -209,7 +209,7 @@ private:
     static constexpr auto _max_char_count = (0 + ... + Strings::size);
 
     template <typename Encoding>
-    static LEXY_CONSTEVAL auto _build_trie()
+    static consteval auto _build_trie()
     {
         lexy::_detail::lit_trie<Encoding, CaseFolding, _max_char_count> result;
 
@@ -248,7 +248,7 @@ namespace lexy
 {
 struct unknown_symbol
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "unknown symbol";
     }

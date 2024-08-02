@@ -39,17 +39,17 @@ struct string_literal
 
     using char_type = CharT;
 
-    LEXY_CONSTEVAL string_literal(const CharT* str) : data{}
+    consteval string_literal(const CharT* str) : data{}
     {
         for (auto i = 0u; i != N; ++i)
             data[i] = str[i];
     }
-    LEXY_CONSTEVAL string_literal(CharT c) : data{}
+    consteval string_literal(CharT c) : data{}
     {
         data[0] = c;
     }
 
-    static LEXY_CONSTEVAL auto size()
+    static consteval auto size()
     {
         return N;
     }

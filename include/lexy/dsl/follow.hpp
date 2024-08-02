@@ -12,7 +12,7 @@ namespace lexy
 {
 struct follow_restriction
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "follow restriction";
     }
@@ -37,7 +37,7 @@ struct _nf : token_base<_nf<Literal, CharClass>>, _lit_base
     }
 
     template <typename Trie>
-    static LEXY_CONSTEVAL std::size_t lit_insert(Trie& trie, std::size_t pos,
+    static consteval std::size_t lit_insert(Trie& trie, std::size_t pos,
                                                  std::size_t char_class)
     {
         auto end                  = Literal::lit_insert(trie, pos, char_class);

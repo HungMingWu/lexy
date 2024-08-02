@@ -15,7 +15,7 @@ struct _scp;
 template <>
 struct _scp<void>
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "scanner control production";
     }

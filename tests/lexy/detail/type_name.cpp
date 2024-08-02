@@ -33,7 +33,7 @@ TEST_CASE("_detail::type_name")
     {
         struct type
         {
-            static LEXY_CONSTEVAL const char* name()
+            static consteval const char* name()
             {
                 return "some type";
             }

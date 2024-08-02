@@ -163,7 +163,7 @@ namespace lexy
 {
 struct expected_token_end
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "expected token end";
     }
@@ -175,12 +175,12 @@ namespace lexyd
 template <auto Kind>
 struct _tn : _n<_tn<Kind>>
 {
-    static LEXY_CONSTEVAL auto node_kind()
+    static consteval auto node_kind()
     {
         return Kind;
     }
 
-    static LEXY_CONSTEVAL auto node_kind_name()
+    static consteval auto node_kind_name()
     {
         using lexy::token_kind_name;
         return token_kind_name(Kind);
@@ -210,7 +210,7 @@ namespace lexy
 {
 struct expected_production_end
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "expected production end";
     }
@@ -224,12 +224,12 @@ struct _pn : _n<_pn<Production>>
 {
     static_assert(lexy::is_production<Production>);
 
-    static LEXY_CONSTEVAL auto node_kind()
+    static consteval auto node_kind()
     {
         return Production{};
     }
 
-    static LEXY_CONSTEVAL auto node_kind_name()
+    static consteval auto node_kind_name()
     {
         return lexy::production_name<Production>();
     }

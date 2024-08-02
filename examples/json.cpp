@@ -210,7 +210,7 @@ namespace grammar
     {
         struct invalid_char
         {
-            static LEXY_CONSTEVAL auto name()
+            static consteval auto name()
             {
                 return "invalid character in string literal";
             }
@@ -307,7 +307,7 @@ namespace grammar
 
         struct expected_json_value
         {
-            static LEXY_CONSTEVAL auto name()
+            static consteval auto name()
             {
                 return "expected json value";
             }

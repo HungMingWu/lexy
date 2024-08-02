@@ -131,7 +131,7 @@ namespace lexy
 {
 struct max_recursion_depth_exceeded
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "maximum recursion depth exceeded";
     }

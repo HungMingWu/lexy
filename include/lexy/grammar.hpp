@@ -169,7 +169,7 @@ template <typename Production>
 constexpr bool is_transparent_production = std::is_base_of_v<transparent_production, Production>;
 
 template <typename Production>
-LEXY_CONSTEVAL const char* production_name()
+consteval const char* production_name()
 {
     return _detail::type_name<Production>();
 }
@@ -178,7 +178,7 @@ template <typename Production>
 using _detect_max_recursion_depth = decltype(Production::max_recursion_depth);
 
 template <typename EntryProduction>
-LEXY_CONSTEVAL std::size_t max_recursion_depth()
+consteval std::size_t max_recursion_depth()
 {
     if constexpr (_detail::is_detected<_detect_max_recursion_depth, EntryProduction>)
         return EntryProduction::max_recursion_depth;

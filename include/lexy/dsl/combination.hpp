@@ -15,7 +15,7 @@ namespace lexy
 {
 struct combination_duplicate
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "combination duplicate";
     }

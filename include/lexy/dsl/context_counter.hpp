@@ -13,7 +13,7 @@ namespace lexy
 {
 struct unequal_counts
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "unequal counts";
     }

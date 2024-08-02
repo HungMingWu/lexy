@@ -12,7 +12,7 @@ namespace lexy
 {
 struct missing_token
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "missing token";
     }

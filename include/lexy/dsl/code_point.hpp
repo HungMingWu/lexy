@@ -13,7 +13,7 @@ namespace lexyd
 template <typename Predicate>
 struct _cp : char_class_base<_cp<Predicate>>
 {
-    static LEXY_CONSTEVAL auto char_class_name()
+    static consteval auto char_class_name()
     {
         if constexpr (std::is_void_v<Predicate>)
             return "code-point";
@@ -21,7 +21,7 @@ struct _cp : char_class_base<_cp<Predicate>>
             return lexy::_detail::type_name<Predicate>();
     }
 
-    static LEXY_CONSTEVAL auto char_class_ascii()
+    static consteval auto char_class_ascii()
     {
         if constexpr (std::is_void_v<Predicate>)
         {
@@ -60,7 +60,7 @@ struct _cp : char_class_base<_cp<Predicate>>
     {
         struct predicate
         {
-            static LEXY_CONSTEVAL auto name()
+            static consteval auto name()
             {
                 return "code-point.range";
             }
@@ -79,7 +79,7 @@ struct _cp : char_class_base<_cp<Predicate>>
     {
         struct predicate
         {
-            static LEXY_CONSTEVAL auto name()
+            static consteval auto name()
             {
                 return "code-point.set";
             }
@@ -97,7 +97,7 @@ struct _cp : char_class_base<_cp<Predicate>>
     {
         struct predicate
         {
-            static LEXY_CONSTEVAL auto name()
+            static consteval auto name()
             {
                 return "code-point.ASCII";
             }
@@ -114,7 +114,7 @@ struct _cp : char_class_base<_cp<Predicate>>
     {
         struct predicate
         {
-            static LEXY_CONSTEVAL auto name()
+            static consteval auto name()
             {
                 return "code-point.BMP";
             }
@@ -131,7 +131,7 @@ struct _cp : char_class_base<_cp<Predicate>>
     {
         struct predicate
         {
-            static LEXY_CONSTEVAL auto name()
+            static consteval auto name()
             {
                 return "code-point.non-character";
             }
@@ -150,7 +150,7 @@ struct _cp : char_class_base<_cp<Predicate>>
     {
         struct predicate
         {
-            static LEXY_CONSTEVAL auto name()
+            static consteval auto name()
             {
                 return lexy::_detail::general_category_name(Category);
             }
@@ -179,7 +179,7 @@ struct _cp : char_class_base<_cp<Predicate>>
               const lexy::code_point::_gc_group<Cats...>& GcGroup>
     struct _group_pred<GcGroup>
     {
-        static LEXY_CONSTEVAL auto name()
+        static consteval auto name()
         {
             return GcGroup.name;
         }

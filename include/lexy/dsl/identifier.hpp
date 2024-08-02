@@ -16,7 +16,7 @@ namespace lexy
 /// Error when we matched a reserved.
 struct reserved_identifier
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "reserved identifier";
     }
@@ -333,7 +333,7 @@ struct _kw : token_base<_kw<Id, CharT, C...>>, _lit_base
     }
 
     template <typename Trie>
-    static LEXY_CONSTEVAL std::size_t lit_insert(Trie& trie, std::size_t pos,
+    static consteval std::size_t lit_insert(Trie& trie, std::size_t pos,
                                                  std::size_t char_class)
     {
         auto end                  = ((pos = trie.insert(pos, C)), ...);

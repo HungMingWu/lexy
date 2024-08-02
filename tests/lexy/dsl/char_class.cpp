@@ -111,7 +111,7 @@ TEST_CASE("character class .kind and .error")
 {
     struct my_error
     {
-        static LEXY_CONSTEVAL auto name()
+        static consteval auto name()
         {
             return "my_error";
         }

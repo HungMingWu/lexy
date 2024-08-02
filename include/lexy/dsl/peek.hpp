@@ -12,7 +12,7 @@ namespace lexy
 /// We've failed to match a peek.
 struct peek_failure
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "peek failure";
     }
@@ -21,7 +21,7 @@ struct peek_failure
 /// We've failed to match a peek not.
 struct unexpected
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "unexpected";
     }

@@ -11,7 +11,7 @@ namespace lexy
 {
 struct expected_eof
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "expected EOF";
     }

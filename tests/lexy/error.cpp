@@ -11,7 +11,7 @@ namespace
 {
 struct production
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "production";
     }

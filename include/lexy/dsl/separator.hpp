@@ -12,7 +12,7 @@ namespace lexy
 {
 struct unexpected_trailing_separator
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "unexpected trailing separator";
     }

@@ -212,7 +212,7 @@ namespace lexy
 {
 struct integer_overflow
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "integer overflow";
     }
@@ -518,7 +518,7 @@ namespace lexy
 {
 struct invalid_code_point
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "invalid code point";
     }
@@ -542,7 +542,7 @@ namespace lexy
 {
 struct invalid_code_unit
 {
-    static LEXY_CONSTEVAL auto name()
+    static consteval auto name()
     {
         return "invalid code unit";
     }

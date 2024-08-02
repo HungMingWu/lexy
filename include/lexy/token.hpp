@@ -21,14 +21,14 @@ struct _tk_map
     TokenKind _data[sizeof...(Tokens)];
 
     template <std::size_t... Idx>
-    LEXY_CONSTEVAL explicit _tk_map(lexy::_detail::index_sequence<Idx...>, const TokenKind* data,
+    consteval explicit _tk_map(lexy::_detail::index_sequence<Idx...>, const TokenKind* data,
                                     TokenKind new_kind)
     // Add new kind at the end.
     : _data{data[Idx]..., new_kind}
     {}
 
     template <TokenKind Kind, typename Token>
-    LEXY_CONSTEVAL auto map(Token) const
+    consteval auto map(Token) const
     {
         static_assert(lexy::is_token_rule<Token>, "cannot map non-token to token kind");
         return _tk_map<TokenKind, Tokens..., Token>(lexy::_detail::index_sequence_for<Tokens...>{},
@@ -36,7 +36,7 @@ struct _tk_map
     }
 
     template <typename Token>
-    LEXY_CONSTEVAL auto lookup(Token) const
+    consteval auto lookup(Token) const
     {
         constexpr auto idx = [] {
             // There is an easier way to do it via fold expressions but clang 6 generates a bogus
@@ -61,13 +61,13 @@ struct _tk_map
 struct _tk_map_empty
 {
     template <typename Token>
-    static LEXY_CONSTEVAL auto lookup(Token)
+    static consteval auto lookup(Token)
     {
         return unknown_token_kind;
     }
 
     template <auto TokenKind, typename Token>
-    LEXY_CONSTEVAL auto map(Token) const
+    consteval auto map(Token) const
     {
         static_assert(lexy::is_token_rule<Token>, "cannot map non-token to token kind");
         return _tk_map<LEXY_DECAY_DECLTYPE(TokenKind), Token>(lexy::_detail::index_sequence_for<>{},

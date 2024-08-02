@@ -80,24 +80,6 @@ using type_or = std::conditional_t<std::is_void_v<T>, Fallback, T>;
 #    define LEXY_NTTP_PARAM const auto&
 #endif
 
-//=== consteval ===//
-#ifndef LEXY_HAS_CONSTEVAL
-#    if defined(_MSC_VER) && !defined(__clang__)
-//       Currently can't handle returning strings from consteval, check back later.
-#        define LEXY_HAS_CONSTEVAL 0
-#    elif __cpp_consteval
-#        define LEXY_HAS_CONSTEVAL 1
-#    else
-#        define LEXY_HAS_CONSTEVAL 0
-#    endif
-#endif
-
-#if LEXY_HAS_CONSTEVAL
-#    define LEXY_CONSTEVAL consteval
-#else
-#    define LEXY_CONSTEVAL constexpr
-#endif
-
 //=== constexpr ===//
 #ifndef LEXY_HAS_CONSTEXPR_DTOR
 #    if __cpp_constexpr_dynamic_alloc
