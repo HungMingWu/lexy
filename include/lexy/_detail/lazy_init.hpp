@@ -47,20 +47,20 @@ struct _lazy_init_storage_non_trivial
     constexpr _lazy_init_storage_non_trivial() noexcept : _init(false), _empty() {}
 
     template <typename... Args>
-    LEXY_CONSTEXPR_DTOR void _construct(Args&&... args)
+    constexpr void _construct(Args&&... args)
     {
         _detail::construct_at(&_value, LEXY_FWD(args)...);
         _init = true;
     }
 
     // Cannot add noexcept due to https://github.com/llvm/llvm-project/issues/59854.
-    LEXY_CONSTEXPR_DTOR ~_lazy_init_storage_non_trivial() /* noexcept */
+    constexpr ~_lazy_init_storage_non_trivial() /* noexcept */
     {
         if (_init)
             _value.~T();
     }
 
-    LEXY_CONSTEXPR_DTOR _lazy_init_storage_non_trivial(
+    constexpr _lazy_init_storage_non_trivial(
         _lazy_init_storage_non_trivial&& other) noexcept
     : _init(other._init), _empty()
     {
@@ -68,7 +68,7 @@ struct _lazy_init_storage_non_trivial
             _detail::construct_at(&_value, LEXY_MOV(other._value));
     }
 
-    LEXY_CONSTEXPR_DTOR _lazy_init_storage_non_trivial& operator=(
+    constexpr _lazy_init_storage_non_trivial& operator=(
         _lazy_init_storage_non_trivial&& other) noexcept
     {
         if (_init && other._init)

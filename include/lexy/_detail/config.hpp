@@ -77,21 +77,6 @@ using type_or = std::conditional_t<std::is_void_v<T>, Fallback, T>;
 #    define LEXY_NTTP_PARAM const auto&
 #endif
 
-//=== constexpr ===//
-#ifndef LEXY_HAS_CONSTEXPR_DTOR
-#    if __cpp_constexpr_dynamic_alloc
-#        define LEXY_HAS_CONSTEXPR_DTOR 1
-#    else
-#        define LEXY_HAS_CONSTEXPR_DTOR 0
-#    endif
-#endif
-
-#if LEXY_HAS_CONSTEXPR_DTOR
-#    define LEXY_CONSTEXPR_DTOR constexpr
-#else
-#    define LEXY_CONSTEXPR_DTOR
-#endif
-
 //=== endianness ===//
 #ifndef LEXY_IS_LITTLE_ENDIAN
 #    if defined(__BYTE_ORDER__)
