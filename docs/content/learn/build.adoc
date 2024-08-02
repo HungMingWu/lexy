@@ -5,8 +5,8 @@ title: Building lexy and integrating it in your own projects
 :toclevels: 1
 
 The library uses CMake (3.8 or higher) as its build system.
-It requires a compiler that supports {cpp}17, but works best with {cpp}20.
-It is tested with GCC 7 and higher, clang 6 and higher, the latest MSVC and clang-cl.
+It requires a compiler that supports {cpp}23.
+It is tested with GCC 13 and higher, clang 17 and higher, the latest MSVC and clang-cl.
 Other compilers may work as well.
 
 == Basic integration
@@ -52,10 +52,6 @@ target_link_libraries(lexy_example PRIVATE foonathan::lexy)
 
 lexy can be customized by two CMake flags set at build time:
 
-`LEXY_FORCE_CPP17`::
-  If this option is `ON`, linking against `foonathan::lexy::core` (and transitively also `foonathan::lexy`) sets the flag to enable {cpp}17 for all compilers.
-  If this option is `OFF`, linking enables {cpp}20 for compilers that support it and {cpp}17 otherwise.
-  It is `OFF` by default.
 `LEXY_USER_CONFIG_HEADER`::
   This setting defines the file path to the user config header file (see below).
 

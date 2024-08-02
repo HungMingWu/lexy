@@ -6,7 +6,7 @@ image:https://github.com/foonathan/lexy/workflows/Main%20CI/badge.svg[Build Stat
 image:https://img.shields.io/badge/try_it_online-blue[Playground,link=https://lexy.foonathan.net/playground]
 endif::[]
 
-lexy is a parser combinator library for {cpp}17 and onwards.
+lexy is a parser combinator library for {cpp}23 and onwards.
 It allows you to write a parser by specifying it in a convenient {cpp} DSL,
 which gives you all the flexibility and control of a handwritten parser without any of the manual work.
 
