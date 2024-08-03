@@ -27,7 +27,7 @@ struct _construct
 
     constexpr T operator()(T&& t) const
     {
-        return LEXY_MOV(t);
+        return std::move(t);
     }
     constexpr T operator()(const T& t) const
     {
@@ -63,7 +63,7 @@ struct _new
 
     constexpr PtrT operator()(T&& t) const
     {
-        auto ptr = new T(LEXY_MOV(t));
+        auto ptr = new T(std::move(t));
         return PtrT(ptr);
     }
     constexpr PtrT operator()(const T& t) const

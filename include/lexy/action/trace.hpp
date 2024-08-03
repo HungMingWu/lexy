@@ -419,7 +419,7 @@ public:
     template <typename>
     constexpr OutputIt get_result(bool) &&
     {
-        return LEXY_MOV(_writer).finish();
+        return std::move(_writer).finish();
     }
 
 private:

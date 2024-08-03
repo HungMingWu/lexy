@@ -22,6 +22,6 @@ TEST_CASE("forward")
     sink_void();
     sink_void(lexy::nullopt{});
     sink_void();
-    LEXY_MOV(sink_void).finish();
+    std::move(sink_void).finish();
 }
 

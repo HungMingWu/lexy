@@ -32,7 +32,7 @@ public:
         {
             LEXY_PRECONDITION(handler._depth == 0);
 
-            handler._builder.emplace(LEXY_MOV(*handler._tree), _validate.get_info());
+            handler._builder.emplace(std::move(*handler._tree), _validate.get_info());
         }
         void on(_pth& handler, parse_events::grammar_finish, Reader& reader)
         {
@@ -42,7 +42,7 @@ public:
             lexy::try_match_token(dsl::any, reader);
             auto end = reader.position();
 
-            *handler._tree = LEXY_MOV(*handler._builder).finish({begin, end});
+            *handler._tree = std::move(*handler._builder).finish({begin, end});
         }
         void on(_pth& handler, parse_events::grammar_cancel, Reader&)
         {
@@ -66,7 +66,7 @@ public:
                 if (handler._builder->current_child_count() == 0)
                     handler._builder->token(lexy::position_token_kind, _validate.production_begin(),
                                             _validate.production_begin());
-                handler._builder->finish_production(LEXY_MOV(_marker));
+                handler._builder->finish_production(std::move(_marker));
             }
 
             _validate.on(handler._validate, ev, pos);
@@ -79,7 +79,7 @@ public:
                 // Cancelling the production removes all nodes from the tree.
                 // To ensure that the parse tree remains lossless, we add everything consumed by it
                 // as an error token.
-                handler._builder->cancel_production(LEXY_MOV(_marker));
+                handler._builder->cancel_production(std::move(_marker));
                 handler._builder->token(lexy::error_token_kind, _validate.production_begin(), pos);
             }
 
@@ -103,7 +103,7 @@ public:
         void on(_pth& handler, lexy::parse_events::operation_chain_finish, Marker&& marker,
                 iterator)
         {
-            handler._builder->finish_container(LEXY_MOV(marker));
+            handler._builder->finish_container(std::move(marker));
         }
 
         template <typename TokenKind>
@@ -136,7 +136,7 @@ public:
     constexpr auto get_result(bool rule_parse_result) &&
     {
         LEXY_PRECONDITION(_depth == 0);
-        return LEXY_MOV(_validate).template get_result<T>(rule_parse_result);
+        return std::move(_validate).template get_result<T>(rule_parse_result);
     }
 
 private:

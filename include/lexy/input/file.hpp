@@ -65,7 +65,7 @@ public:
     lexy::buffer<Encoding, MemoryResource>&& buffer() && noexcept
     {
         LEXY_PRECONDITION(*this);
-        return LEXY_MOV(_buffer);
+        return std::move(_buffer);
     }
 
     file_error error() const noexcept
@@ -78,7 +78,7 @@ public:
     // Pretend these two don't exist.
     explicit read_file_result(file_error                               ec,
                               lexy::buffer<Encoding, MemoryResource>&& buffer) noexcept
-    : _buffer(LEXY_MOV(buffer)), _ec(ec)
+    : _buffer(std::move(buffer)), _ec(ec)
     {}
     explicit read_file_result(file_error ec, MemoryResource* resource) noexcept
     : _buffer(resource), _ec(ec)
@@ -119,7 +119,7 @@ auto read_file(const char*     path,
 {
     _read_file_user_data<Encoding, Endian, MemoryResource> user_data(resource);
     auto error = _detail::read_file(path, user_data.callback(), &user_data);
-    return read_file_result(error, LEXY_MOV(user_data.buffer));
+    return read_file_result(error, std::move(user_data.buffer));
 }
 
 /// Reads stdin into a buffer.
@@ -130,7 +130,7 @@ auto read_stdin(MemoryResource* resource = _detail::get_memory_resource<MemoryRe
 {
     _read_file_user_data<Encoding, Endian, MemoryResource> user_data(resource);
     auto error = _detail::read_stdin(user_data.callback(), &user_data);
-    return read_file_result(error, LEXY_MOV(user_data.buffer));
+    return read_file_result(error, std::move(user_data.buffer));
 }
 } // namespace lexy
 

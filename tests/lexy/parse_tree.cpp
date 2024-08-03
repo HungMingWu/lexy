@@ -78,7 +78,7 @@ TEST_CASE("parse_tree::builder")
             builder.token(token_kind::b, input.data() + 1, input.data() + 2);
             builder.token(token_kind::c, input.data() + 2, input.data() + 3);
 
-            return LEXY_MOV(builder).finish(input.data() + 3);
+            return std::move(builder).finish(input.data() + 3);
         }();
         CHECK(!tree.empty());
         CHECK(tree.size() == 4);
@@ -100,7 +100,7 @@ TEST_CASE("parse_tree::builder")
             builder.token(token_kind::a, input.data(), input.data() + 1);
             builder.token(token_kind::b, input.data() + 1, input.data() + 2);
 
-            return LEXY_MOV(builder).finish({input.data() + 2, input.data() + 3});
+            return std::move(builder).finish({input.data() + 2, input.data() + 3});
         }();
         CHECK(!tree.empty());
         CHECK(tree.size() == 3);
@@ -120,9 +120,9 @@ TEST_CASE("parse_tree::builder")
             parse_tree::builder builder(root_p{});
 
             auto child = builder.start_production(child_p{});
-            builder.finish_production(LEXY_MOV(child));
+            builder.finish_production(std::move(child));
 
-            return LEXY_MOV(builder).finish(nullptr);
+            return std::move(builder).finish(nullptr);
         }();
         CHECK(!tree.empty());
         CHECK(tree.size() == 2);
@@ -143,9 +143,9 @@ TEST_CASE("parse_tree::builder")
             builder.token(token_kind::a, input.data(), input.data() + 1);
             builder.token(token_kind::b, input.data() + 1, input.data() + 2);
             builder.token(token_kind::c, input.data() + 2, input.data() + 3);
-            builder.finish_production(LEXY_MOV(child));
+            builder.finish_production(std::move(child));
 
-            return LEXY_MOV(builder).finish(input.data() + 3);
+            return std::move(builder).finish(input.data() + 3);
         }();
         CHECK(!tree.empty());
         CHECK(tree.size() == 5);
@@ -171,12 +171,12 @@ TEST_CASE("parse_tree::builder")
 
             auto grand_child = builder.start_production(child_p{});
             builder.token(token_kind::b, input.data() + 1, input.data() + 2);
-            builder.finish_production(LEXY_MOV(grand_child));
+            builder.finish_production(std::move(grand_child));
 
             builder.token(token_kind::c, input.data() + 2, input.data() + 3);
-            builder.finish_production(LEXY_MOV(child));
+            builder.finish_production(std::move(child));
 
-            return LEXY_MOV(builder).finish(input.data() + 3);
+            return std::move(builder).finish(input.data() + 3);
         }();
         CHECK(!tree.empty());
         CHECK(tree.size() == 6);
@@ -204,12 +204,12 @@ TEST_CASE("parse_tree::builder")
 
             auto grand_child = builder.start_container();
             builder.token(token_kind::b, input.data() + 1, input.data() + 2);
-            builder.finish_container(LEXY_MOV(grand_child));
+            builder.finish_container(std::move(grand_child));
 
             builder.token(token_kind::c, input.data() + 2, input.data() + 3);
-            builder.finish_production(LEXY_MOV(child));
+            builder.finish_production(std::move(child));
 
-            return LEXY_MOV(builder).finish(input.data() + 3);
+            return std::move(builder).finish(input.data() + 3);
         }();
         CHECK(!tree.empty());
         CHECK(tree.size() == 5);
@@ -236,12 +236,12 @@ TEST_CASE("parse_tree::builder")
             auto grand_child = builder.start_container();
             builder.token(token_kind::b, input.data() + 1, input.data() + 2);
             builder.set_container_production(child_p{});
-            builder.finish_container(LEXY_MOV(grand_child));
+            builder.finish_container(std::move(grand_child));
 
             builder.token(token_kind::c, input.data() + 2, input.data() + 3);
-            builder.finish_production(LEXY_MOV(child));
+            builder.finish_production(std::move(child));
 
-            return LEXY_MOV(builder).finish(input.data() + 3);
+            return std::move(builder).finish(input.data() + 3);
         }();
         CHECK(!tree.empty());
         CHECK(tree.size() == 6);
@@ -265,9 +265,9 @@ TEST_CASE("parse_tree::builder")
             parse_tree::builder builder(root_p{});
 
             auto child = builder.start_container();
-            builder.finish_container(LEXY_MOV(child));
+            builder.finish_container(std::move(child));
 
-            return LEXY_MOV(builder).finish(nullptr);
+            return std::move(builder).finish(nullptr);
         }();
         CHECK(!tree.empty());
         CHECK(tree.size() == 1);
@@ -287,9 +287,9 @@ TEST_CASE("parse_tree::builder")
             builder.token(token_kind::a, input.data(), input.data() + 1);
             builder.token(token_kind::b, input.data() + 1, input.data() + 2);
             builder.token(token_kind::c, input.data() + 2, input.data() + 3);
-            builder.finish_container(LEXY_MOV(child));
+            builder.finish_container(std::move(child));
 
-            return LEXY_MOV(builder).finish(input.data() + 3);
+            return std::move(builder).finish(input.data() + 3);
         }();
         CHECK(!tree.empty());
         CHECK(tree.size() == 4);
@@ -313,12 +313,12 @@ TEST_CASE("parse_tree::builder")
 
             auto grand_child = builder.start_production(child_p{});
             builder.token(token_kind::b, input.data() + 1, input.data() + 2);
-            builder.finish_production(LEXY_MOV(grand_child));
+            builder.finish_production(std::move(grand_child));
 
             builder.token(token_kind::c, input.data() + 2, input.data() + 3);
-            builder.finish_container(LEXY_MOV(child));
+            builder.finish_container(std::move(child));
 
-            return LEXY_MOV(builder).finish(input.data() + 3);
+            return std::move(builder).finish(input.data() + 3);
         }();
         CHECK(!tree.empty());
         CHECK(tree.size() == 5);
@@ -344,12 +344,12 @@ TEST_CASE("parse_tree::builder")
 
             auto grand_child = builder.start_container();
             builder.token(token_kind::b, input.data() + 1, input.data() + 2);
-            builder.finish_container(LEXY_MOV(grand_child));
+            builder.finish_container(std::move(grand_child));
 
             builder.token(token_kind::c, input.data() + 2, input.data() + 3);
-            builder.finish_container(LEXY_MOV(child));
+            builder.finish_container(std::move(child));
 
-            return LEXY_MOV(builder).finish(input.data() + 3);
+            return std::move(builder).finish(input.data() + 3);
         }();
         CHECK(!tree.empty());
         CHECK(tree.size() == 4);
@@ -374,12 +374,12 @@ TEST_CASE("parse_tree::builder")
             auto grand_child = builder.start_container();
             builder.token(token_kind::b, input.data() + 1, input.data() + 2);
             builder.set_container_production(child_p{});
-            builder.finish_container(LEXY_MOV(grand_child));
+            builder.finish_container(std::move(grand_child));
 
             builder.token(token_kind::c, input.data() + 2, input.data() + 3);
-            builder.finish_container(LEXY_MOV(child));
+            builder.finish_container(std::move(child));
 
-            return LEXY_MOV(builder).finish(input.data() + 3);
+            return std::move(builder).finish(input.data() + 3);
         }();
         CHECK(!tree.empty());
         CHECK(tree.size() == 5);
@@ -402,9 +402,9 @@ TEST_CASE("parse_tree::builder")
 
             auto child = builder.start_container();
             builder.set_container_production(child_p{});
-            builder.finish_container(LEXY_MOV(child));
+            builder.finish_container(std::move(child));
 
-            return LEXY_MOV(builder).finish(nullptr);
+            return std::move(builder).finish(nullptr);
         }();
         CHECK(!tree.empty());
         CHECK(tree.size() == 2);
@@ -426,9 +426,9 @@ TEST_CASE("parse_tree::builder")
             builder.token(token_kind::b, input.data() + 1, input.data() + 2);
             builder.token(token_kind::c, input.data() + 2, input.data() + 3);
             builder.set_container_production(child_p{});
-            builder.finish_container(LEXY_MOV(child));
+            builder.finish_container(std::move(child));
 
-            return LEXY_MOV(builder).finish(input.data() + 3);
+            return std::move(builder).finish(input.data() + 3);
         }();
         CHECK(!tree.empty());
         CHECK(tree.size() == 5);
@@ -454,13 +454,13 @@ TEST_CASE("parse_tree::builder")
 
             auto grand_child = builder.start_production(child_p{});
             builder.token(token_kind::b, input.data() + 1, input.data() + 2);
-            builder.finish_production(LEXY_MOV(grand_child));
+            builder.finish_production(std::move(grand_child));
 
             builder.token(token_kind::c, input.data() + 2, input.data() + 3);
             builder.set_container_production(child_p{});
-            builder.finish_container(LEXY_MOV(child));
+            builder.finish_container(std::move(child));
 
-            return LEXY_MOV(builder).finish(input.data() + 3);
+            return std::move(builder).finish(input.data() + 3);
         }();
         CHECK(!tree.empty());
         CHECK(tree.size() == 6);
@@ -488,13 +488,13 @@ TEST_CASE("parse_tree::builder")
 
             auto grand_child = builder.start_container();
             builder.token(token_kind::b, input.data() + 1, input.data() + 2);
-            builder.finish_container(LEXY_MOV(grand_child));
+            builder.finish_container(std::move(grand_child));
 
             builder.token(token_kind::c, input.data() + 2, input.data() + 3);
             builder.set_container_production(child_p{});
-            builder.finish_container(LEXY_MOV(child));
+            builder.finish_container(std::move(child));
 
-            return LEXY_MOV(builder).finish(input.data() + 3);
+            return std::move(builder).finish(input.data() + 3);
         }();
         CHECK(!tree.empty());
         CHECK(tree.size() == 5);
@@ -521,13 +521,13 @@ TEST_CASE("parse_tree::builder")
             auto grand_child = builder.start_container();
             builder.token(token_kind::b, input.data() + 1, input.data() + 2);
             builder.set_container_production(child_p{});
-            builder.finish_container(LEXY_MOV(grand_child));
+            builder.finish_container(std::move(grand_child));
 
             builder.token(token_kind::c, input.data() + 2, input.data() + 3);
             builder.set_container_production(child_p{});
-            builder.finish_container(LEXY_MOV(child));
+            builder.finish_container(std::move(child));
 
-            return LEXY_MOV(builder).finish(input.data() + 3);
+            return std::move(builder).finish(input.data() + 3);
         }();
         CHECK(!tree.empty());
         CHECK(tree.size() == 6);
@@ -556,9 +556,9 @@ TEST_CASE("parse_tree::builder")
             builder.token(token_kind::b, input.data() + 1, input.data() + 2);
             builder.set_container_production(child_p{});
             builder.token(token_kind::c, input.data() + 2, input.data() + 3);
-            builder.finish_container(LEXY_MOV(child));
+            builder.finish_container(std::move(child));
 
-            return LEXY_MOV(builder).finish(input.data() + 3);
+            return std::move(builder).finish(input.data() + 3);
         }();
         CHECK(!tree.empty());
         CHECK(tree.size() == 5);
@@ -591,25 +591,25 @@ TEST_CASE("parse_tree::builder")
                     auto m = builder.start_container();
                     builder.token(token_kind::a, input.data(), input.data() + input.size());
                     builder.set_container_production(child_p{});
-                    builder.finish_container(LEXY_MOV(m));
+                    builder.finish_container(std::move(m));
                 }
                 else if (i % 4 == 1)
                 {
                     auto m         = builder.start_production(child_p{});
                     auto container = builder.start_container();
                     builder.token(token_kind::a, input.data(), input.data() + input.size());
-                    builder.finish_container(LEXY_MOV(container));
-                    builder.finish_production(LEXY_MOV(m));
+                    builder.finish_container(std::move(container));
+                    builder.finish_production(std::move(m));
                 }
                 else
                 {
                     auto m = builder.start_production(child_p{});
                     builder.token(token_kind::a, input.data(), input.data() + input.size());
-                    builder.finish_production(LEXY_MOV(m));
+                    builder.finish_production(std::move(m));
                 }
             }
 
-            return LEXY_MOV(builder).finish(input.data() + input.size());
+            return std::move(builder).finish(input.data() + input.size());
         }(); // root -> (p_1 -> token), ..., (p_many_count -> token)
         CHECK(!tree.empty());
         CHECK(tree.size() == 2 * many_count + 1);
@@ -635,20 +635,20 @@ TEST_CASE("parse_tree::builder")
             for (auto i = 0u; i != many_count; ++i)
             {
                 auto m = builder.start_production(child_p{});
-                markers.push_back(LEXY_MOV(m));
+                markers.push_back(std::move(m));
                 m = builder.start_container();
-                markers.push_back(LEXY_MOV(m));
+                markers.push_back(std::move(m));
             }
             builder.token(token_kind::a, input.data(), input.data() + input.size());
             for (auto i = 0u; i != many_count; ++i)
             {
-                builder.finish_container(LEXY_MOV(markers.back()));
+                builder.finish_container(std::move(markers.back()));
                 markers.pop_back();
-                builder.finish_production(LEXY_MOV(markers.back()));
+                builder.finish_production(std::move(markers.back()));
                 markers.pop_back();
             }
 
-            return LEXY_MOV(builder).finish(input.data() + input.size());
+            return std::move(builder).finish(input.data() + input.size());
         }(); // root -> p_1 -> ... p_many_count -> token
         CHECK(!tree.empty());
         CHECK(tree.size() == many_count + 2);
@@ -675,21 +675,21 @@ TEST_CASE("parse_tree::builder")
             for (auto i = 0u; i != many_count; ++i)
             {
                 auto m = builder.start_production(child_p{});
-                markers.push_back(LEXY_MOV(m));
+                markers.push_back(std::move(m));
                 m = builder.start_container();
-                markers.push_back(LEXY_MOV(m));
+                markers.push_back(std::move(m));
                 builder.token(token_kind::a, input.data(), input.data() + input.size());
             }
             builder.token(token_kind::b, input.data(), input.data() + input.size());
             for (auto i = 0u; i != many_count; ++i)
             {
-                builder.finish_container(LEXY_MOV(markers.back()));
+                builder.finish_container(std::move(markers.back()));
                 markers.pop_back();
-                builder.finish_production(LEXY_MOV(markers.back()));
+                builder.finish_production(std::move(markers.back()));
                 markers.pop_back();
             }
 
-            return LEXY_MOV(builder).finish(input.data() + input.size());
+            return std::move(builder).finish(input.data() + input.size());
         }();
         //  root
         // child_p
@@ -730,8 +730,8 @@ TEST_CASE("parse_tree::builder")
                 builder.set_container_production(child_p{});
             }
 
-            builder.finish_container(LEXY_MOV(m));
-            return LEXY_MOV(builder).finish(input.data() + input.size());
+            builder.finish_container(std::move(m));
+            return std::move(builder).finish(input.data() + input.size());
         }();
         //      root
         //     child_p
@@ -828,15 +828,15 @@ TEST_CASE("parse_tree::node")
         builder.token(token_kind::b, input.data() + 3, input.data() + 4);
         builder.token(token_kind::c, input.data() + 4, input.data() + 7);
         builder.token(token_kind::b, input.data() + 7, input.data() + 8);
-        builder.finish_production(LEXY_MOV(child));
+        builder.finish_production(std::move(child));
 
         builder.token(token_kind::a, input.data() + 8, input.data() + 11);
 
         child = builder.start_production(child_p{});
         builder.token(lexy::eof_token_kind, input.data() + 11, input.data() + 11);
-        builder.finish_production(LEXY_MOV(child));
+        builder.finish_production(std::move(child));
 
-        return LEXY_MOV(builder).finish(input.data() + 11);
+        return std::move(builder).finish(input.data() + 11);
     }();
     CHECK(!tree.empty());
 
@@ -933,11 +933,11 @@ TEST_CASE("parse_tree::node::sibling_range")
 
         auto child = builder.start_production(child_p{});
         builder.token(token_kind::b, input.data() + 3, input.data() + 4);
-        builder.finish_production(LEXY_MOV(child));
+        builder.finish_production(std::move(child));
 
         builder.token(token_kind::a, input.data() + 8, input.data() + 11);
 
-        return LEXY_MOV(builder).finish(input.data() + 11);
+        return std::move(builder).finish(input.data() + 11);
     }();
     CHECK(!tree.empty());
 
@@ -1041,14 +1041,14 @@ TEST_CASE("parse_tree::traverse_range")
         builder.token(token_kind::b, input.data() + 3, input.data() + 4);
         builder.token(token_kind::c, input.data() + 4, input.data() + 7);
         builder.token(token_kind::b, input.data() + 7, input.data() + 8);
-        builder.finish_production(LEXY_MOV(child));
+        builder.finish_production(std::move(child));
 
         builder.token(token_kind::a, input.data() + 8, input.data() + 11);
 
         child = builder.start_production(child_p{});
-        builder.finish_production(LEXY_MOV(child));
+        builder.finish_production(std::move(child));
 
-        return LEXY_MOV(builder).finish(input.data() + 11);
+        return std::move(builder).finish(input.data() + 11);
     }();
     CHECK(!tree.empty());
 

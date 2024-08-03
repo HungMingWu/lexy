@@ -48,11 +48,11 @@ TEST_CASE("parse_tree_input")
         builder.token(token_kind::b, input.data() + 3, input.data() + 4);
         builder.token(token_kind::c, input.data() + 4, input.data() + 7);
         builder.token(token_kind::b, input.data() + 7, input.data() + 8);
-        builder.finish_production(LEXY_MOV(child));
+        builder.finish_production(std::move(child));
 
         builder.token(token_kind::a, input.data() + 8, input.data() + 11);
 
-        return LEXY_MOV(builder).finish(input.data() + 11);
+        return std::move(builder).finish(input.data() + 11);
     }();
     CHECK(!tree.empty());
 
@@ -115,7 +115,7 @@ TEST_CASE("dsl::eof on parse_tree_input")
         b.token(token_kind::a, str, str + 1);
         b.token(token_kind::b, str, str + 2);
         b.token(token_kind::c, str, str + 2);
-        return LEXY_MOV(b).finish(str + 3);
+        return std::move(b).finish(str + 3);
     }());
     CHECK(result.status == test_result::success);
     CHECK(result.trace == test_trace().token("any", "abc").token("EOF", ""));
@@ -132,7 +132,7 @@ TEST_CASE("dsl::any on parse_tree_input")
         b.token(token_kind::a, str, str + 1);
         b.token(token_kind::b, str + 1, str + 2);
         b.token(token_kind::c, str + 2, str + 3);
-        return LEXY_MOV(b).finish(str + 3);
+        return std::move(b).finish(str + 3);
     }());
     CHECK(result.status == test_result::success);
     CHECK(result.trace == test_trace().token("any", "abc"));
@@ -149,7 +149,7 @@ TEST_CASE("dsl::until on parse_tree_input")
         b.token(token_kind::a, str, str + 1);
         b.token(token_kind::b, str + 1, str + 2);
         b.token(token_kind::c, str + 2, str + 3);
-        return LEXY_MOV(b).finish(str + 3);
+        return std::move(b).finish(str + 3);
     }());
     CHECK(result.status == test_result::success);
     CHECK(result.trace == test_trace().token("any", "ab"));
@@ -167,7 +167,7 @@ TEST_CASE("dsl::capture on parse_tree_input")
         auto                str = "abc";
         parse_tree::builder b(root_p{});
         b.token(token_kind::a, str, str + 3);
-        return LEXY_MOV(b).finish(str + 3);
+        return std::move(b).finish(str + 3);
     }());
     CHECK(result.status == test_result::success);
     CHECK(result.value == 3);

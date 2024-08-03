@@ -73,7 +73,7 @@ using _fn_as_base = std::conditional_t<std::is_class_v<Fn>, Fn, _fn_holder<Fn>>;
 template <typename... Fns>
 struct _overloaded : _fn_as_base<Fns>...
 {
-    constexpr explicit _overloaded(Fns... fns) : _fn_as_base<Fns>(LEXY_MOV(fns))... {}
+    constexpr explicit _overloaded(Fns... fns) : _fn_as_base<Fns>(std::move(fns))... {}
 
     using _fn_as_base<Fns>::operator()...;
 };

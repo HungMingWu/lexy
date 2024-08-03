@@ -65,14 +65,14 @@ struct _lazy_init_storage_non_trivial
     : _init(other._init), _empty()
     {
         if (_init)
-            _detail::construct_at(&_value, LEXY_MOV(other._value));
+            _detail::construct_at(&_value, std::move(other._value));
     }
 
     constexpr _lazy_init_storage_non_trivial& operator=(
         _lazy_init_storage_non_trivial&& other) noexcept
     {
         if (_init && other._init)
-            _value = LEXY_MOV(other._value);
+            _value = std::move(other._value);
         else if (_init && !other._init)
         {
             _value.~T();
@@ -80,7 +80,7 @@ struct _lazy_init_storage_non_trivial
         }
         else if (!_init && other._init)
         {
-            _detail::construct_at(&_value, LEXY_MOV(other._value));
+            _detail::construct_at(&_value, std::move(other._value));
             _init = true;
         }
         else
@@ -148,12 +148,12 @@ public:
     constexpr T&& operator*() && noexcept
     {
         LEXY_PRECONDITION(*this);
-        return LEXY_MOV(this->_value);
+        return std::move(this->_value);
     }
     constexpr const T&& operator*() const&& noexcept
     {
         LEXY_PRECONDITION(*this);
-        return LEXY_MOV(this->_value);
+        return std::move(this->_value);
     }
 
     constexpr T* operator->() noexcept

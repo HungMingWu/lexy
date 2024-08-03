@@ -266,13 +266,13 @@ struct _del : rule_base
             // We're done, finish the sink and then the closing delimiter.
             if constexpr (std::is_same_v<typename decltype(sink)::return_type, void>)
             {
-                LEXY_MOV(sink).finish();
+                std::move(sink).finish();
                 return close.template finish<NextParser>(context, reader, LEXY_FWD(args)...);
             }
             else
             {
                 return close.template finish<NextParser>(context, reader, LEXY_FWD(args)...,
-                                                         LEXY_MOV(sink).finish());
+                                                         std::move(sink).finish());
             }
         }
     };

@@ -13,7 +13,7 @@ struct _callback : _overloaded<Fns...>
 {
     using return_type = ReturnType;
 
-    constexpr explicit _callback(Fns... fns) : _overloaded<Fns...>(LEXY_MOV(fns)...) {}
+    constexpr explicit _callback(Fns... fns) : _overloaded<Fns...>(std::move(fns)...) {}
 };
 
 template <typename ReturnType, typename... Fns>
@@ -34,7 +34,7 @@ struct _callback_with_state : _overloaded<Fns...>
         }
     };
 
-    constexpr explicit _callback_with_state(Fns... fns) : _overloaded<Fns...>(LEXY_MOV(fns)...) {}
+    constexpr explicit _callback_with_state(Fns... fns) : _overloaded<Fns...>(std::move(fns)...) {}
 
     template <typename State>
     constexpr auto operator[](State& state) const
@@ -89,7 +89,7 @@ struct _cb_from_sink
     {
         auto cb = _sink.sink();
         (cb(LEXY_FWD(args)), ...);
-        return LEXY_MOV(cb).finish();
+        return std::move(cb).finish();
     }
 };
 

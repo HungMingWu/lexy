@@ -49,7 +49,7 @@ TEST_CASE("as_aggregate")
             sink(member_str{}, "hello");
             sink(member_f{}, 3.14f);
             sink(member_i{}, 42);
-            return LEXY_MOV(sink).finish();
+            return std::move(sink).finish();
         }();
         CHECK(result.i == 42);
         CHECK(result.f == 3.14f);

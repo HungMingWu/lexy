@@ -29,7 +29,7 @@ using test_tree               = lexy_ext::parse_tree_desc<>;
         constexpr auto                        input = lexy_test::_get_input(__VA_ARGS__);          \
         lexy::parse_tree_for<decltype(input)> tree;                                                \
         lexy::parse_as_tree<prod>(tree, input, error_callback);                                    \
-        return op_result<decltype(tree)>{LEXY_VERIFY_P(prod, __VA_ARGS__), LEXY_MOV(tree)};        \
+        return op_result<decltype(tree)>{LEXY_VERIFY_P(prod, __VA_ARGS__), std::move(tree)};        \
     }()
 
 namespace

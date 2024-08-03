@@ -253,7 +253,7 @@ namespace grammar
                   },
                   [](auto name, auto&& children) {
                       return std::make_unique<ast::xml_element>(lexy::as_string<std::string>(name),
-                                                                LEXY_MOV(children));
+                                                                std::move(children));
                   });
     };
 

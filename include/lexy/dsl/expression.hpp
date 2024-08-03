@@ -284,7 +284,7 @@ struct _expr : rule_base
 
                     // We need to pass the initial lhs to the sink.
                     if constexpr (!value_type_void)
-                        sink(*LEXY_MOV(context.value));
+                        sink(*std::move(context.value));
                     context.value = {};
 
                     // As well as the operator we've already got.
@@ -301,7 +301,7 @@ struct _expr : rule_base
                         }
 
                         if constexpr (!value_type_void)
-                            sink(*LEXY_MOV(context.value));
+                            sink(*std::move(context.value));
                         context.value = {};
 
                         using op_rule = op_of<Operation>;
@@ -325,12 +325,12 @@ struct _expr : rule_base
                     // We store the final value of the sink no matter the parse result.
                     if constexpr (value_type_void)
                     {
-                        LEXY_MOV(sink).finish();
+                        std::move(sink).finish();
                         context.value.emplace();
                     }
                     else
                     {
-                        context.value.emplace(LEXY_MOV(sink).finish());
+                        context.value.emplace(std::move(sink).finish());
                     }
 
                     // If we've failed at any point, propagate failure now.
@@ -342,7 +342,7 @@ struct _expr : rule_base
                     if (!_parse<binding_power.rhs>(context, reader, state))
                         return false;
 
-                    auto value    = LEXY_MOV(context.value);
+                    auto value    = std::move(context.value);
                     context.value = {};
 
                     if constexpr (value_type_void)
@@ -350,29 +350,29 @@ struct _expr : rule_base
                                                      LEXY_FWD(op_args)...);
                     else
                         context.value.emplace_result(context.value_callback(), LEXY_FWD(op_args)...,
-                                                     *LEXY_MOV(value));
+                                                     *std::move(value));
                 }
                 else if constexpr (binding_power.is_infix())
                 {
-                    auto lhs      = LEXY_MOV(context.value);
+                    auto lhs      = std::move(context.value);
                     context.value = {};
 
                     if (!_parse<binding_power.rhs>(context, reader, state))
                     {
                         // Put it back, so we can properly recover.
-                        context.value = LEXY_MOV(lhs);
+                        context.value = std::move(lhs);
                         return false;
                     }
 
-                    auto rhs      = LEXY_MOV(context.value);
+                    auto rhs      = std::move(context.value);
                     context.value = {};
 
                     if constexpr (value_type_void)
                         context.value.emplace_result(context.value_callback(),
                                                      LEXY_FWD(op_args)...);
                     else
-                        context.value.emplace_result(context.value_callback(), *LEXY_MOV(lhs),
-                                                     LEXY_FWD(op_args)..., *LEXY_MOV(rhs));
+                        context.value.emplace_result(context.value_callback(), *std::move(lhs),
+                                                     LEXY_FWD(op_args)..., *std::move(rhs));
 
                     if constexpr (std::is_base_of_v<infix_op_single, Operation>)
                     {
@@ -390,14 +390,14 @@ struct _expr : rule_base
                 }
                 else if constexpr (binding_power.is_postfix())
                 {
-                    auto value    = LEXY_MOV(context.value);
+                    auto value    = std::move(context.value);
                     context.value = {};
 
                     if constexpr (value_type_void)
                         context.value.emplace_result(context.value_callback(),
                                                      LEXY_FWD(op_args)...);
                     else
-                        context.value.emplace_result(context.value_callback(), *LEXY_MOV(value),
+                        context.value.emplace_result(context.value_callback(), *std::move(value),
                                                      LEXY_FWD(op_args)...);
                 }
 
@@ -477,7 +477,7 @@ struct _expr : rule_base
 
             auto start_event = context.on(_ev::operation_chain_start{}, op.cur.position());
             auto result      = op_list::template apply<_continuation>(context, reader, op, state);
-            context.on(_ev::operation_chain_finish{}, LEXY_MOV(start_event), reader.position());
+            context.on(_ev::operation_chain_finish{}, std::move(start_event), reader.position());
             return result;
         }
     }
@@ -498,7 +498,7 @@ struct _expr : rule_base
             auto start_event = context.on(_ev::operation_chain_start{}, reader.position());
             if (!_parse_lhs<MinBindingPower>(context, reader, state))
             {
-                context.on(_ev::operation_chain_finish{}, LEXY_MOV(start_event), reader.position());
+                context.on(_ev::operation_chain_finish{}, std::move(start_event), reader.position());
                 return false;
             }
 
@@ -517,7 +517,7 @@ struct _expr : rule_base
                     break;
             }
 
-            context.on(_ev::operation_chain_finish{}, LEXY_MOV(start_event), reader.position());
+            context.on(_ev::operation_chain_finish{}, std::move(start_event), reader.position());
             return result;
         }
 

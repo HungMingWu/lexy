@@ -142,7 +142,7 @@ public:
     //=== constructors ===//
     constexpr parse_tree_input() noexcept : _root(nullptr) {}
 
-    constexpr explicit parse_tree_input(Node root) noexcept : _root(LEXY_MOV(root)) {}
+    constexpr explicit parse_tree_input(Node root) noexcept : _root(std::move(root)) {}
 
     template <typename ParseTree, typename = std::enable_if_t<std::is_same_v<
                                       Node, LEXY_DECAY_DECLTYPE(LEXY_DECLVAL(ParseTree).root())>>>

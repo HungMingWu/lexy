@@ -19,7 +19,7 @@ TEST_CASE("fold")
         sink_cb(1);
         sink_cb(2);
         sink_cb(2.72f);
-        CHECK(LEXY_MOV(sink_cb).finish() == 6);
+        CHECK(std::move(sink_cb).finish() == 6);
     }
     SUBCASE("initial callback")
     {
@@ -27,7 +27,7 @@ TEST_CASE("fold")
             = lexy::fold<int>([] { return 42; }, [](int lhs, int rhs) { return lhs + rhs; });
 
         auto sink_cb = cb.sink();
-        CHECK(LEXY_MOV(sink_cb).finish() == 42);
+        CHECK(std::move(sink_cb).finish() == 42);
     }
 }
 
@@ -39,7 +39,7 @@ TEST_CASE("fold_inplace")
     sink_cb(1);
     sink_cb(2);
     sink_cb(3.14f);
-    CHECK(LEXY_MOV(sink_cb).finish() == 6);
+    CHECK(std::move(sink_cb).finish() == 6);
 }
 
 TEST_CASE("count")
@@ -50,6 +50,6 @@ TEST_CASE("count")
     sink_cb(1);
     sink_cb(nullptr, 'h');
     sink_cb(3.14f, 42);
-    CHECK(LEXY_MOV(sink_cb).finish() == 3);
+    CHECK(std::move(sink_cb).finish() == 3);
 }
 

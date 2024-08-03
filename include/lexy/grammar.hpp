@@ -268,7 +268,7 @@ struct _sfinae_sink
 
     using return_type = typename Sink::return_type;
 
-    inline constexpr _sfinae_sink(Production, Sink&& sink) : _sink(LEXY_MOV(sink)) {}
+    inline constexpr _sfinae_sink(Production, Sink&& sink) : _sink(std::move(sink)) {}
 
     template <typename... Args>
     inline constexpr void operator()(Args&&... args)
@@ -283,7 +283,7 @@ struct _sfinae_sink
 
     inline constexpr auto finish() &&
     {
-        return LEXY_MOV(_sink).finish();
+        return std::move(_sink).finish();
     }
 };
 

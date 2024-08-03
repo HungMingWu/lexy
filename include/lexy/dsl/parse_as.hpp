@@ -85,19 +85,19 @@ struct _pas : _copy_base<Rule>
         LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
         {
             auto handler = _make_pas_handler(context.control_block->parse_handler);
-            lexy::_detail::parse_context_control_block cb(LEXY_MOV(handler), context.control_block);
+            lexy::_detail::parse_context_control_block cb(std::move(handler), context.control_block);
             using context_type
                 = lexy::_pc<decltype(handler), typename Context::state_type,
                             typename Context::production, typename Context::whitespace_production>;
             context_type sub_context(&cb);
-            sub_context.handler = LEXY_MOV(context).handler;
+            sub_context.handler = std::move(context).handler;
 
             lexy::_detail::lazy_init<T> value;
             auto                        result
                 = rule_parser.template finish<_pas_final_parser>(sub_context, reader, value);
 
             context.control_block->copy_vars_from(&cb);
-            context.handler = LEXY_MOV(sub_context).handler;
+            context.handler = std::move(sub_context).handler;
 
             if (!result)
                 return false;
@@ -105,9 +105,9 @@ struct _pas : _copy_base<Rule>
                 // NOLINTNEXTLINE: clang-tidy wrongly thinks the branch is repeated.
                 return NextParser::parse(context, reader, LEXY_FWD(args)...);
             else if constexpr (Front)
-                return NextParser::parse(context, reader, *LEXY_MOV(value), LEXY_FWD(args)...);
+                return NextParser::parse(context, reader, *std::move(value), LEXY_FWD(args)...);
             else
-                return NextParser::parse(context, reader, LEXY_FWD(args)..., *LEXY_MOV(value));
+                return NextParser::parse(context, reader, LEXY_FWD(args)..., *std::move(value));
         }
     };
 
@@ -118,19 +118,19 @@ struct _pas : _copy_base<Rule>
         LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             auto handler = _make_pas_handler(context.control_block->parse_handler);
-            lexy::_detail::parse_context_control_block cb(LEXY_MOV(handler), context.control_block);
+            lexy::_detail::parse_context_control_block cb(std::move(handler), context.control_block);
             using context_type
                 = lexy::_pc<decltype(handler), typename Context::state_type,
                             typename Context::production, typename Context::whitespace_production>;
             context_type sub_context(&cb);
-            sub_context.handler = LEXY_MOV(context).handler;
+            sub_context.handler = std::move(context).handler;
 
             lexy::_detail::lazy_init<T> value;
             auto                        result
                 = lexy::parser_for<Rule, _pas_final_parser>::parse(sub_context, reader, value);
 
             context.control_block->copy_vars_from(&cb);
-            context.handler = LEXY_MOV(sub_context).handler;
+            context.handler = std::move(sub_context).handler;
 
             if (!result)
                 return false;
@@ -138,9 +138,9 @@ struct _pas : _copy_base<Rule>
                 // NOLINTNEXTLINE: clang-tidy wrongly thinks the branch is repeated.
                 return NextParser::parse(context, reader, LEXY_FWD(args)...);
             else if constexpr (Front)
-                return NextParser::parse(context, reader, *LEXY_MOV(value), LEXY_FWD(args)...);
+                return NextParser::parse(context, reader, *std::move(value), LEXY_FWD(args)...);
             else
-                return NextParser::parse(context, reader, LEXY_FWD(args)..., *LEXY_MOV(value));
+                return NextParser::parse(context, reader, LEXY_FWD(args)..., *std::move(value));
         }
     };
 };

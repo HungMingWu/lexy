@@ -48,7 +48,7 @@ template <typename T>
 class any_holder : public any_base
 {
 public:
-    constexpr explicit any_holder(T&& obj) : _obj(LEXY_MOV(obj)) {}
+    constexpr explicit any_holder(T&& obj) : _obj(std::move(obj)) {}
 
     constexpr T& get() noexcept
     {

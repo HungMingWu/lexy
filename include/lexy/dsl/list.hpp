@@ -431,13 +431,13 @@ struct _lstt : rule_base
             // At this point, we just need to finish parsing the terminator.
             if constexpr (std::is_same_v<typename decltype(sink)::return_type, void>)
             {
-                LEXY_MOV(sink).finish();
+                std::move(sink).finish();
                 return term.template finish<NextParser>(context, reader, LEXY_FWD(args)...);
             }
             else
             {
                 return term.template finish<NextParser>(context, reader, LEXY_FWD(args)...,
-                                                        LEXY_MOV(sink).finish());
+                                                        std::move(sink).finish());
             }
         }
     };

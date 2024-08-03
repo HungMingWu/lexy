@@ -53,7 +53,7 @@ namespace ast
     {
         std::string name;
 
-        explicit expr_name(std::string n) : name(LEXY_MOV(n)) {}
+        explicit expr_name(std::string n) : name(std::move(n)) {}
 
         int evaluate(environment& env) const override
         {
@@ -72,7 +72,7 @@ namespace ast
         } op;
         expr_ptr rhs;
 
-        explicit expr_unary_arithmetic(op_t op, expr_ptr e) : op(op), rhs(LEXY_MOV(e)) {}
+        explicit expr_unary_arithmetic(op_t op, expr_ptr e) : op(op), rhs(std::move(e)) {}
 
         int evaluate(environment& env) const override
         {
@@ -104,7 +104,7 @@ namespace ast
         expr_ptr lhs, rhs;
 
         explicit expr_binary_arithmetic(expr_ptr lhs, op_t op, expr_ptr rhs)
-        : op(op), lhs(LEXY_MOV(lhs)), rhs(LEXY_MOV(rhs))
+        : op(op), lhs(std::move(lhs)), rhs(std::move(rhs))
         {}
 
         int evaluate(environment& env) const override
@@ -173,7 +173,7 @@ namespace ast
         expr_ptr condition, then, else_;
 
         explicit expr_if(expr_ptr condition, expr_ptr then, expr_ptr else_)
-        : condition(LEXY_MOV(condition)), then(LEXY_MOV(then)), else_(LEXY_MOV(else_))
+        : condition(std::move(condition)), then(std::move(then)), else_(std::move(else_))
         {}
 
         int evaluate(environment& env) const override
@@ -191,7 +191,7 @@ namespace ast
         expr_ptr    argument;
 
         explicit expr_call(std::string function, expr_ptr argument)
-        : function(LEXY_MOV(function)), argument(LEXY_MOV(argument))
+        : function(std::move(function)), argument(std::move(argument))
         {}
 
         int evaluate(environment& env) const override
@@ -213,7 +213,7 @@ namespace ast
         expr_ptr lhs, rhs;
 
         explicit expr_assignment(expr_ptr lhs, expr_ptr rhs)
-        : lhs(LEXY_MOV(lhs)), rhs(LEXY_MOV(rhs))
+        : lhs(std::move(lhs)), rhs(std::move(rhs))
         {}
 
         int evaluate(environment& env) const override
@@ -404,7 +404,7 @@ namespace grammar
             // We need a sink as the comparison expression generates a list.
             lexy::fold_inplace<std::unique_ptr<ast::expr_comparison>>(
                 [] { return std::make_unique<ast::expr_comparison>(); },
-                [](auto& node, ast::expr_ptr opr) { node->operands.push_back(LEXY_MOV(opr)); },
+                [](auto& node, ast::expr_ptr opr) { node->operands.push_back(std::move(opr)); },
                 [](auto& node, ast::expr_comparison::op_t op) { node->ops.push_back(op); })
             // The result of the list feeds into a callback that handles all other cases.
             >> lexy::callback(
@@ -457,7 +457,7 @@ int main()
         auto result = lexy::parse<grammar::stmt>(input, lexy_ext::report_error);
         if (result.has_value() && !result.value().empty())
         {
-            auto exprs = LEXY_MOV(result).value();
+            auto exprs = std::move(result).value();
             for (auto i = 0u; i < exprs.size() - 1; ++i)
                 exprs[i]->evaluate(environment);
 

@@ -26,11 +26,11 @@ struct production : lexy::scan_production<int>
                 if (!scanner.discard(dsl::ascii::character))
                 {
                     // We've failed to recover.
-                    LEXY_MOV(recovery).cancel();
+                    std::move(recovery).cancel();
                     return lexy::scan_failed;
                 }
             }
-            LEXY_MOV(recovery).finish();
+            std::move(recovery).finish();
         }
 
         return integer.value();

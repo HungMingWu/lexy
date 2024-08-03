@@ -218,7 +218,7 @@ namespace grammar
                 scanner.error(too_many_pieces{}, scanner.begin(), scanner.position());
 
             // And return our result.
-            return LEXY_MOV(builder).finish();
+            return std::move(builder).finish();
         }
     };
 

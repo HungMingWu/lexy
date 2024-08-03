@@ -6,6 +6,7 @@
 
 #include <cstddef>
 #include <type_traits>
+#include <utility>
 
 #if defined(LEXY_USER_CONFIG_HEADER)
 #    include LEXY_USER_CONFIG_HEADER
@@ -26,7 +27,6 @@
 #endif
 
 //=== utility traits===//
-#define LEXY_MOV(...) static_cast<std::remove_reference_t<decltype(__VA_ARGS__)>&&>(__VA_ARGS__)
 #define LEXY_FWD(...) static_cast<decltype(__VA_ARGS__)>(__VA_ARGS__)
 
 #define LEXY_DECLVAL(...) lexy::_detail::declval<__VA_ARGS__>()
@@ -49,9 +49,9 @@ std::add_rvalue_reference_t<T> declval();
 template <typename T>
 constexpr void swap(T& lhs, T& rhs)
 {
-    T tmp = LEXY_MOV(lhs);
-    lhs   = LEXY_MOV(rhs);
-    rhs   = LEXY_MOV(tmp);
+    T tmp = std::move(lhs);
+    lhs   = std::move(rhs);
+    rhs   = std::move(tmp);
 }
 
 template <typename T, typename U>

@@ -203,12 +203,12 @@ struct sink_finish_parser
     {
         if constexpr (std::is_same_v<typename Sink::return_type, void>)
         {
-            LEXY_MOV(sink).finish();
+            std::move(sink).finish();
             return NextParser::parse(context, reader, LEXY_FWD(args)...);
         }
         else
         {
-            return NextParser::parse(context, reader, LEXY_FWD(args)..., LEXY_MOV(sink).finish());
+            return NextParser::parse(context, reader, LEXY_FWD(args)..., std::move(sink).finish());
         }
     }
 };

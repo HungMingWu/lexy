@@ -90,7 +90,7 @@ TEST_CASE("production_value_callback")
         sink(0);
         sink(1);
         sink(2);
-        CHECK(LEXY_MOV(sink).finish() == 3);
+        CHECK(std::move(sink).finish() == 3);
 
         CHECK(cb(std::size_t(3)) == 3);
     }
@@ -103,7 +103,7 @@ TEST_CASE("production_value_callback")
         sink(0);
         sink(1);
         sink(2);
-        CHECK(LEXY_MOV(sink).finish() == std::vector<int>{0, 1, 2});
+        CHECK(std::move(sink).finish() == std::vector<int>{0, 1, 2});
 
         CHECK(cb(std::vector<int>{0, 1, 2}) == std::vector<int>{0, 1, 2});
         CHECK(cb(0, 1, 2) == std::vector<int>{0, 1, 2});
@@ -129,7 +129,7 @@ TEST_CASE("production_value_callback")
         sink(0);
         sink(1);
         sink(2);
-        CHECK(LEXY_MOV(sink).finish() == std::vector<int>{0, 1, 2});
+        CHECK(std::move(sink).finish() == std::vector<int>{0, 1, 2});
     }
 
     SUBCASE("parse state overrides callback")
@@ -182,7 +182,7 @@ TEST_CASE("production_value_callback")
         sink(0);
         sink(1);
         sink(2);
-        CHECK(LEXY_MOV(sink).finish() == std::vector<int>{0, 1, 2});
+        CHECK(std::move(sink).finish() == std::vector<int>{0, 1, 2});
     }
 
     SUBCASE("lexy::noop") // special case of returning void
@@ -194,7 +194,7 @@ TEST_CASE("production_value_callback")
         sink(0);
         sink(1);
         sink(2);
-        LEXY_MOV(sink).finish();
+        std::move(sink).finish();
 
         cb();
         cb(1, 2, 3);

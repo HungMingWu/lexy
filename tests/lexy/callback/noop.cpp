@@ -17,7 +17,7 @@ TEST_CASE("noop")
         auto sink = lexy::noop.sink();
         sink(1, 2, 3);
         sink(1, 2, 3);
-        LEXY_MOV(sink).finish();
+        std::move(sink).finish();
     }
 }
 

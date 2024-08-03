@@ -21,7 +21,7 @@ auto get_data(const char* file_name)
     auto result = lexy::read_file<lexy::utf8_encoding>(path.c_str());
     if (!result)
         throw std::runtime_error("unable to read data file");
-    return LEXY_MOV(result).buffer();
+    return std::move(result).buffer();
 }
 
 const char* output_prefix()

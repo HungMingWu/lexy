@@ -57,7 +57,7 @@ public:
     }
     constexpr decltype(auto) value() && noexcept
     {
-        return LEXY_MOV(*_value);
+        return std::move(*_value);
     }
 
     //=== error ===//
@@ -72,13 +72,13 @@ public:
     }
     constexpr auto&& errors() && noexcept
     {
-        return LEXY_MOV(_impl).errors();
+        return std::move(_impl).errors();
     }
 
 private:
-    constexpr explicit parse_result(_impl_t&& impl) noexcept : _impl(LEXY_MOV(impl)), _value() {}
+    constexpr explicit parse_result(_impl_t&& impl) noexcept : _impl(std::move(impl)), _value() {}
     template <typename U>
-    constexpr explicit parse_result(_impl_t&& impl, U&& v) noexcept : _impl(LEXY_MOV(impl))
+    constexpr explicit parse_result(_impl_t&& impl, U&& v) noexcept : _impl(std::move(impl))
     {
         LEXY_PRECONDITION(impl.is_success() || impl.is_recovered_error());
         _value.emplace(LEXY_FWD(v));
@@ -122,14 +122,14 @@ public:
     constexpr auto get_result(bool rule_parse_result, T&& result) &&
     {
         using validate_result = lexy::validate_result<typename Result::error_callback>;
-        return Result(LEXY_MOV(_validate).template get_result<validate_result>(rule_parse_result),
-                      LEXY_MOV(result));
+        return Result(std::move(_validate).template get_result<validate_result>(rule_parse_result),
+                      std::move(result));
     }
     template <typename Result>
     constexpr auto get_result(bool rule_parse_result) &&
     {
         using validate_result = lexy::validate_result<typename Result::error_callback>;
-        return Result(LEXY_MOV(_validate).template get_result<validate_result>(rule_parse_result));
+        return Result(std::move(_validate).template get_result<validate_result>(rule_parse_result));
     }
 
 private:

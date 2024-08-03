@@ -41,7 +41,7 @@ struct _err : unconditional_branch_base
                                                                                 ->parse_state,
                                                                             reader);
                 end = reader.position();
-                reader.reset(LEXY_MOV(backtrack));
+                reader.reset(std::move(backtrack));
             }
 
             auto err = lexy::error<Reader, Tag>(begin, end);

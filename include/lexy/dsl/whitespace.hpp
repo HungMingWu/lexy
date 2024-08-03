@@ -150,7 +150,7 @@ constexpr auto skip_whitespace(ws_handler<Handler>&& handler, Reader& reader)
         using production = ws_production<WhitespaceRule>;
 
         // Parse the production using a special handler that only forwards errors.
-        auto result = lexy::do_action<production, ws_result>(LEXY_MOV(handler),
+        auto result = lexy::do_action<production, ws_result>(std::move(handler),
                                                              lexy::no_parse_state, reader);
 
         handler.real_on(lexy::parse_events::token{},

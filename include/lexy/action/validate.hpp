@@ -89,12 +89,12 @@ public:
     }
     constexpr auto&& errors() && noexcept
     {
-        return LEXY_MOV(_error);
+        return std::move(_error);
     }
 
 private:
     constexpr explicit validate_result(bool did_recover, error_type&& error)
-    : _error(LEXY_MOV(error)), _status()
+    : _error(std::move(error)), _status()
     {
         if (error_count() == 0u)
             _status = _status_success;
@@ -257,7 +257,7 @@ public:
     constexpr auto get_result(bool rule_parse_result) &&
     {
         using sink_t = _error_sink_t<typename Result::error_callback>;
-        return Result(rule_parse_result, LEXY_MOV(_cb.sink->template get<sink_t>()).finish());
+        return Result(rule_parse_result, std::move(_cb.sink->template get<sink_t>()).finish());
     }
 
 private:

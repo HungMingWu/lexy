@@ -17,7 +17,7 @@ struct _fwd
 
     constexpr T operator()(T&& t) const
     {
-        return LEXY_MOV(t);
+        return std::move(t);
     }
     constexpr T operator()(const T& t) const
     {

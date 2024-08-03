@@ -177,7 +177,7 @@ public:
 
     private:
         explicit iterator(Predicate&& pred, Iterator cur, Sentinel end) noexcept
-        : _cur(cur), _end(end), _predicate(LEXY_MOV(pred))
+        : _cur(cur), _end(end), _predicate(std::move(pred))
         {
             // Advancing until initial token is found.
             while (_cur != _end && !_predicate(*_cur))
@@ -192,7 +192,7 @@ public:
     };
 
     explicit _filtered_node_range(Predicate&& pred, Iterator begin, Sentinel end) noexcept
-    : _begin(LEXY_MOV(pred), begin, end)
+    : _begin(std::move(pred), begin, end)
     {}
 
     bool empty() const noexcept
@@ -235,7 +235,7 @@ auto children(const lexy::parse_tree<Reader, TokenKind, MemoryResource>&,
         return _filtered_node_range([](auto n) { return n.kind() == Predicate{}; },
                                     node.children().begin(), node.children().end());
     else
-        return _filtered_node_range(LEXY_MOV(predicate), node.children().begin(),
+        return _filtered_node_range(std::move(predicate), node.children().begin(),
                                     node.children().end());
 }
 

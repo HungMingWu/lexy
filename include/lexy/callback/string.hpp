@@ -30,7 +30,7 @@ struct _as_string
     {
         if constexpr (std::is_void_v<CaseFoldingDSL>)
         {
-            return LEXY_MOV(str);
+            return std::move(str);
         }
         else if constexpr (CaseFoldingDSL::template is_inplace<Encoding>)
         {
@@ -49,13 +49,13 @@ struct _as_string
                 *ptr = static_cast<_char_type>(cur);
             }
 
-            return LEXY_MOV(str);
+            return std::move(str);
         }
         else
         {
             // We store the existing string somewhere else and clear it.
             // Then we can read the case folded string and append each code unit.
-            auto original = LEXY_MOV(str);
+            auto original = std::move(str);
             str           = String();
             str.reserve(original.size());
 
@@ -71,7 +71,7 @@ struct _as_string
                 reader.bump();
             }
 
-            return LEXY_MOV(str);
+            return std::move(str);
         }
     }
 
@@ -87,7 +87,7 @@ struct _as_string
     }
     constexpr String&& operator()(String&& str) const
     {
-        return _case_folding(LEXY_MOV(str));
+        return _case_folding(std::move(str));
     }
 
     template <typename Iterator>
@@ -156,7 +156,7 @@ struct _as_string
 
         constexpr void operator()(String&& str)
         {
-            _result.append(LEXY_MOV(str));
+            _result.append(std::move(str));
         }
 
         template <typename Str = String, typename Iterator>
@@ -183,7 +183,7 @@ struct _as_string
 
         constexpr String&& finish() &&
         {
-            return _case_folding(LEXY_MOV(_result));
+            return _case_folding(std::move(_result));
         }
     };
 

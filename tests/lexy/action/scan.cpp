@@ -277,7 +277,7 @@ TEST_CASE("lexy::scan")
 
         SUBCASE("finish")
         {
-            LEXY_MOV(recovery).finish();
+            std::move(recovery).finish();
             CHECK(scanner);
             check_position(scanner, false, input.data() + 4);
 
@@ -287,7 +287,7 @@ TEST_CASE("lexy::scan")
         }
         SUBCASE("cancel")
         {
-            LEXY_MOV(recovery).cancel();
+            std::move(recovery).cancel();
             CHECK(!scanner);
             check_position(scanner, false, input.data() + 4);
 
@@ -342,7 +342,7 @@ TEST_CASE("lexy::scan")
         CHECK(!scanner);
         check_position(scanner, false, input.data());
 
-        auto result = LEXY_MOV(scanner).finish();
+        auto result = std::move(scanner).finish();
         CHECK(result.error_count() == 3);
     }
     SUBCASE("fatal error")
@@ -356,7 +356,7 @@ TEST_CASE("lexy::scan")
         CHECK(!scanner);
         check_position(scanner, false, input.data());
 
-        auto result = LEXY_MOV(scanner).finish();
+        auto result = std::move(scanner).finish();
         CHECK(result.error_count() == 1);
     }
 

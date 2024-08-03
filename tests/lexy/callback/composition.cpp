@@ -60,7 +60,7 @@ TEST_CASE("callback compose")
         s(1);
         s(2);
         s(3);
-        auto result = composed(LEXY_MOV(s).finish());
+        auto result = composed(std::move(s).finish());
         CHECK(result == "6");
     }
     SUBCASE("sink and two callback")
@@ -75,7 +75,7 @@ TEST_CASE("callback compose")
         s(1);
         s(2);
         s(3);
-        auto result = composed(LEXY_MOV(s).finish());
+        auto result = composed(std::move(s).finish());
         CHECK(result == 1);
     }
     SUBCASE("sink and two callback with state")
@@ -95,7 +95,7 @@ TEST_CASE("callback compose")
         s(2);
         s(3);
         auto state  = 2;
-        auto result = composed[state](LEXY_MOV(s).finish());
+        auto result = composed[state](std::move(s).finish());
         CHECK(result == 2);
     }
 }

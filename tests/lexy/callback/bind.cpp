@@ -98,7 +98,7 @@ TEST_CASE("bind a callback")
         CHECK(bound(42) == 42);
 
         int i = 11;
-        CHECK(bound(LEXY_MOV(i)) == 11);
+        CHECK(bound(std::move(i)) == 11);
     }
 }
 
@@ -122,7 +122,7 @@ TEST_CASE("bind_sink")
         auto cb    = bound.sink(state);
         cb(11);
         cb(42);
-        CHECK(LEXY_MOV(cb).finish() == 2 * 11 + 3 + 2 * 42 + 3);
+        CHECK(std::move(cb).finish() == 2 * 11 + 3 + 2 * 42 + 3);
     }
 
     SUBCASE("bound without state")
@@ -132,7 +132,7 @@ TEST_CASE("bind_sink")
         auto cb = bound.sink();
         cb(11);
         cb(42);
-        CHECK(LEXY_MOV(cb).finish() == 2 * 11 + 3 + 2 * 42 + 3);
+        CHECK(std::move(cb).finish() == 2 * 11 + 3 + 2 * 42 + 3);
     }
 
     SUBCASE("bound passes nullopt to underlying sink")

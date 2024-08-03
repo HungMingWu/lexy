@@ -60,7 +60,7 @@ TEST_CASE("dsl::tnode")
     auto empty = LEXY_VERIFY_RUNTIME([] {
         parse_tree::builder b(root_p{});
         b.token(lexy::eof_token_kind, nullptr, nullptr);
-        return LEXY_MOV(b).finish(nullptr);
+        return std::move(b).finish(nullptr);
     }());
     CHECK(empty.status == test_result::fatal_error);
     CHECK(empty.trace == test_trace().expected_char_class(0, "a").cancel());
@@ -69,7 +69,7 @@ TEST_CASE("dsl::tnode")
         auto                str = "abc";
         parse_tree::builder b(root_p{});
         b.token(token_kind::a, str, str + 3);
-        return LEXY_MOV(b).finish(str + 3);
+        return std::move(b).finish(str + 3);
     }());
     CHECK(a.status == test_result::success);
     CHECK(a.trace == test_trace().token("a", "abc"));
@@ -80,7 +80,7 @@ TEST_CASE("dsl::tnode")
         b.token(token_kind::a, str, str + 1);
         b.token(token_kind::b, str + 1, str + 2);
         b.token(token_kind::c, str + 2, str + 3);
-        return LEXY_MOV(b).finish(str + 3);
+        return std::move(b).finish(str + 3);
     }());
     CHECK(abc.status == test_result::success);
     CHECK(abc.trace == test_trace().token("a", "a"));
@@ -100,7 +100,7 @@ TEST_CASE("dsl::tnode(rule)")
         auto empty = LEXY_VERIFY_RUNTIME([] {
             parse_tree::builder b(root_p{});
             b.token(lexy::eof_token_kind, nullptr, nullptr);
-            return LEXY_MOV(b).finish(nullptr);
+            return std::move(b).finish(nullptr);
         }());
         CHECK(empty.status == test_result::fatal_error);
         CHECK(empty.trace == test_trace().expected_char_class(0, "a").cancel());
@@ -109,7 +109,7 @@ TEST_CASE("dsl::tnode(rule)")
             auto                str = "abc";
             parse_tree::builder b(root_p{});
             b.token(token_kind::b, str, str + 3);
-            return LEXY_MOV(b).finish(str + 3);
+            return std::move(b).finish(str + 3);
         }());
         CHECK(b.status == test_result::fatal_error);
         CHECK(b.trace == test_trace().expected_char_class(0, "a").cancel());
@@ -118,7 +118,7 @@ TEST_CASE("dsl::tnode(rule)")
             auto                str = "abc";
             parse_tree::builder b(root_p{});
             b.token(token_kind::a, str, str + 3);
-            return LEXY_MOV(b).finish(str + 3);
+            return std::move(b).finish(str + 3);
         }());
         CHECK(a_abc.status == test_result::success);
         CHECK(a_abc.trace == test_trace().token("literal", "abc"));
@@ -127,7 +127,7 @@ TEST_CASE("dsl::tnode(rule)")
             auto                str = "abcd";
             parse_tree::builder b(root_p{});
             b.token(token_kind::a, str, str + 4);
-            return LEXY_MOV(b).finish(str + 4);
+            return std::move(b).finish(str + 4);
         }());
         CHECK(a_abcd.status == test_result::recovered_error);
         CHECK(a_abcd.trace
@@ -140,7 +140,7 @@ TEST_CASE("dsl::tnode(rule)")
             auto                str = "ab";
             parse_tree::builder b(root_p{});
             b.token(token_kind::a, str, str + 2);
-            return LEXY_MOV(b).finish(str + 2);
+            return std::move(b).finish(str + 2);
         }());
         CHECK(a_ab.status == test_result::fatal_error);
         CHECK(a_ab.trace == test_trace().error_token("ab").expected_literal(0, "abc", 2).cancel());
@@ -157,7 +157,7 @@ TEST_CASE("dsl::pnode")
     auto empty = LEXY_VERIFY_RUNTIME([] {
         parse_tree::builder b(root_p{});
         b.token(lexy::eof_token_kind, nullptr, nullptr);
-        return LEXY_MOV(b).finish(nullptr);
+        return std::move(b).finish(nullptr);
     }());
     CHECK(empty.status == test_result::fatal_error);
     CHECK(empty.trace == test_trace().expected_char_class(0, "child_p").cancel());
@@ -168,9 +168,9 @@ TEST_CASE("dsl::pnode")
 
         auto m = b.start_production(child_p{});
         b.token(token_kind::a, str, str + 3);
-        b.finish_production(LEXY_MOV(m));
+        b.finish_production(std::move(m));
 
-        return LEXY_MOV(b).finish(str + 3);
+        return std::move(b).finish(str + 3);
     }());
     CHECK(child.status == test_result::success);
     CHECK(child.trace == test_trace().token("token", "abc"));
@@ -181,11 +181,11 @@ TEST_CASE("dsl::pnode")
 
         auto m = b.start_production(child_p{});
         b.token(token_kind::a, str, str + 3);
-        b.finish_production(LEXY_MOV(m));
+        b.finish_production(std::move(m));
 
         b.token(token_kind::b, str + 3, str + 4);
 
-        return LEXY_MOV(b).finish(str + 4);
+        return std::move(b).finish(str + 4);
     }());
     CHECK(child_b.status == test_result::success);
     CHECK(child_b.trace == test_trace().token("token", "abc"));
@@ -205,7 +205,7 @@ TEST_CASE("dsl::pnode(rule)")
         auto empty = LEXY_VERIFY_RUNTIME([] {
             parse_tree::builder b(root_p{});
             b.token(lexy::eof_token_kind, nullptr, nullptr);
-            return LEXY_MOV(b).finish(nullptr);
+            return std::move(b).finish(nullptr);
         }());
         CHECK(empty.status == test_result::fatal_error);
         CHECK(empty.trace == test_trace().expected_char_class(0, "child_p").cancel());
@@ -216,9 +216,9 @@ TEST_CASE("dsl::pnode(rule)")
 
             auto m = b.start_production(root_p{});
             b.token(token_kind::a, str, str + 3);
-            b.finish_production(LEXY_MOV(m));
+            b.finish_production(std::move(m));
 
-            return LEXY_MOV(b).finish(str + 3);
+            return std::move(b).finish(str + 3);
         }());
         CHECK(root.status == test_result::fatal_error);
         CHECK(root.trace == test_trace().expected_char_class(0, "child_p").cancel());
@@ -229,9 +229,9 @@ TEST_CASE("dsl::pnode(rule)")
 
             auto m = b.start_production(child_p{});
             b.token(token_kind::a, str, str + 3);
-            b.finish_production(LEXY_MOV(m));
+            b.finish_production(std::move(m));
 
-            return LEXY_MOV(b).finish(str + 3);
+            return std::move(b).finish(str + 3);
         }());
         CHECK(child_a.status == test_result::success);
         CHECK(child_a.trace == test_trace().token("a", "abc"));
@@ -243,9 +243,9 @@ TEST_CASE("dsl::pnode(rule)")
             auto m = b.start_production(child_p{});
             b.token(token_kind::a, str, str + 2);
             b.token(token_kind::b, str + 2, str + 3);
-            b.finish_production(LEXY_MOV(m));
+            b.finish_production(std::move(m));
 
-            return LEXY_MOV(b).finish(str + 3);
+            return std::move(b).finish(str + 3);
         }());
         CHECK(child_ab.status == test_result::recovered_error);
         // clang-format off
@@ -261,9 +261,9 @@ TEST_CASE("dsl::pnode(rule)")
 
             auto m = b.start_production(child_p{});
             b.token(token_kind::b, str, str + 3);
-            b.finish_production(LEXY_MOV(m));
+            b.finish_production(std::move(m));
 
-            return LEXY_MOV(b).finish(str + 3);
+            return std::move(b).finish(str + 3);
         }());
         CHECK(child_b.status == test_result::fatal_error);
         CHECK(child_b.trace
@@ -276,7 +276,7 @@ TEST_CASE("dsl::pnode(rule)")
         auto empty = LEXY_VERIFY_RUNTIME([] {
             parse_tree::builder b(root_p{});
             b.token(lexy::eof_token_kind, nullptr, nullptr);
-            return LEXY_MOV(b).finish(nullptr);
+            return std::move(b).finish(nullptr);
         }());
         CHECK(empty.status == test_result::success);
         CHECK(empty.trace == test_trace());
@@ -287,9 +287,9 @@ TEST_CASE("dsl::pnode(rule)")
 
             auto m = b.start_production(root_p{});
             b.token(token_kind::a, str, str + 3);
-            b.finish_production(LEXY_MOV(m));
+            b.finish_production(std::move(m));
 
-            return LEXY_MOV(b).finish(str + 3);
+            return std::move(b).finish(str + 3);
         }());
         CHECK(root.status == test_result::success);
         CHECK(root.trace == test_trace());
@@ -300,9 +300,9 @@ TEST_CASE("dsl::pnode(rule)")
 
             auto m = b.start_production(child_p{});
             b.token(token_kind::a, str, str + 3);
-            b.finish_production(LEXY_MOV(m));
+            b.finish_production(std::move(m));
 
-            return LEXY_MOV(b).finish(str + 3);
+            return std::move(b).finish(str + 3);
         }());
         CHECK(child_a.status == test_result::success);
         CHECK(child_a.trace == test_trace().token("a", "abc"));
@@ -314,9 +314,9 @@ TEST_CASE("dsl::pnode(rule)")
             auto m = b.start_production(child_p{});
             b.token(token_kind::a, str, str + 2);
             b.token(token_kind::b, str + 2, str + 3);
-            b.finish_production(LEXY_MOV(m));
+            b.finish_production(std::move(m));
 
-            return LEXY_MOV(b).finish(str + 3);
+            return std::move(b).finish(str + 3);
         }());
         CHECK(child_ab.status == test_result::recovered_error);
         // clang-format off
@@ -332,9 +332,9 @@ TEST_CASE("dsl::pnode(rule)")
 
             auto m = b.start_production(child_p{});
             b.token(token_kind::b, str, str + 3);
-            b.finish_production(LEXY_MOV(m));
+            b.finish_production(std::move(m));
 
-            return LEXY_MOV(b).finish(str + 3);
+            return std::move(b).finish(str + 3);
         }());
         CHECK(child_b.status == test_result::fatal_error);
         CHECK(child_b.trace

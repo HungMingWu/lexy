@@ -152,7 +152,7 @@ TEST_CASE("as_string")
             sink(lexy::code_point('a'));
             sink(lexy::code_point(0x00E4));
 
-            return LEXY_MOV(sink).finish();
+            return std::move(sink).finish();
         }();
         CHECK(from_sink == "aAbCAbCAbChia\u00E4");
 
@@ -167,7 +167,7 @@ TEST_CASE("as_string")
             sink(lexy::code_point('a'));
             sink(lexy::code_point(0x00E4));
 
-            return LEXY_MOV(sink).finish();
+            return std::move(sink).finish();
         }();
         CHECK(from_alloc_sink == "aAbCAbCAbChia\u00E4");
     }
@@ -213,7 +213,7 @@ TEST_CASE("as_string")
             sink(lexy::code_point('a'));
             sink(lexy::code_point(0x00C4));
 
-            return LEXY_MOV(sink).finish();
+            return std::move(sink).finish();
         }();
         CHECK(from_sink == "aabcabcabchia\u00C4");
     }
@@ -259,7 +259,7 @@ TEST_CASE("as_string")
             sink(lexy::code_point('a'));
             sink(lexy::code_point(0x00C4));
 
-            return LEXY_MOV(sink).finish();
+            return std::move(sink).finish();
         }();
         CHECK(from_sink == "aabcabcabchia\u00E4");
     }

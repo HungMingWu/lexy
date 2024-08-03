@@ -46,7 +46,7 @@ struct _list_sink
 
     constexpr Container&& finish() &&
     {
-        return LEXY_MOV(_result);
+        return std::move(_result);
     }
 };
 
@@ -65,7 +65,7 @@ struct _list_alloc
 
         constexpr Container operator()(Container&& container) const
         {
-            return LEXY_MOV(container);
+            return std::move(container);
         }
         constexpr Container operator()(nullopt&&) const
         {
@@ -105,7 +105,7 @@ struct _list
 
     constexpr Container operator()(Container&& container) const
     {
-        return LEXY_MOV(container);
+        return std::move(container);
     }
     constexpr Container operator()(nullopt&&) const
     {
@@ -186,7 +186,7 @@ struct _collection_sink
 
     constexpr Container&& finish() &&
     {
-        return LEXY_MOV(_result);
+        return std::move(_result);
     }
 };
 
@@ -205,7 +205,7 @@ struct _collection_alloc
 
         constexpr Container operator()(Container&& container) const
         {
-            return LEXY_MOV(container);
+            return std::move(container);
         }
         constexpr Container operator()(nullopt&&) const
         {
@@ -245,7 +245,7 @@ struct _collection
 
     constexpr Container operator()(Container&& container) const
     {
-        return LEXY_MOV(container);
+        return std::move(container);
     }
     constexpr Container operator()(nullopt&&) const
     {
@@ -319,7 +319,7 @@ struct _concat
     constexpr Container _call(Container&& head, Tail&&... tail) const
     {
         if constexpr (sizeof...(Tail) == 0)
-            return LEXY_MOV(head);
+            return std::move(head);
         else
         {
             if constexpr (_has_reserve<Container>)
@@ -331,17 +331,17 @@ struct _concat
             auto append = [&head](Container&& container) {
                 if constexpr (_has_append<Container>)
                 {
-                    head.append(LEXY_MOV(container));
+                    head.append(std::move(container));
                 }
                 else
                 {
                     for (auto& elem : container)
-                        head.push_back(LEXY_MOV(elem));
+                        head.push_back(std::move(elem));
                 }
             };
-            (append(LEXY_MOV(tail)), ...);
+            (append(std::move(tail)), ...);
 
-            return LEXY_MOV(head);
+            return std::move(head);
         }
     }
 
@@ -363,11 +363,11 @@ struct _concat
             {
                 // We assign until we have items.
                 // That way we get the existing allocator.
-                _result = LEXY_MOV(container);
+                _result = std::move(container);
             }
             else if constexpr (_has_append<Container>)
             {
-                _result.append(LEXY_MOV(container));
+                _result.append(std::move(container));
             }
             else
             {
@@ -387,13 +387,13 @@ struct _concat
                 }
 
                 for (auto& elem : container)
-                    _result.push_back(LEXY_MOV(elem));
+                    _result.push_back(std::move(elem));
             }
         }
 
         constexpr Container&& finish() &&
         {
-            return LEXY_MOV(_result);
+            return std::move(_result);
         }
     };
 
@@ -414,10 +414,10 @@ template <typename Container, typename Callback>
 class _collect_sink
 {
 public:
-    constexpr explicit _collect_sink(Callback callback) : _callback(LEXY_MOV(callback)) {}
+    constexpr explicit _collect_sink(Callback callback) : _callback(std::move(callback)) {}
     template <typename C = Container>
     constexpr explicit _collect_sink(Callback callback, const typename C::allocator_type& allocator)
-    : _result(allocator), _callback(LEXY_MOV(callback))
+    : _result(allocator), _callback(std::move(callback))
     {}
 
     using return_type = Container;
@@ -431,7 +431,7 @@ public:
 
     constexpr auto finish() &&
     {
-        return LEXY_MOV(_result);
+        return std::move(_result);
     }
 
 private:
@@ -442,7 +442,7 @@ template <typename Callback>
 class _collect_sink<void, Callback>
 {
 public:
-    constexpr explicit _collect_sink(Callback callback) : _count(0), _callback(LEXY_MOV(callback))
+    constexpr explicit _collect_sink(Callback callback) : _count(0), _callback(std::move(callback))
     {}
 
     using return_type = std::size_t;
@@ -469,7 +469,7 @@ template <typename Container, typename Callback>
 class _collect
 {
 public:
-    constexpr explicit _collect(Callback callback) : _callback(LEXY_MOV(callback)) {}
+    constexpr explicit _collect(Callback callback) : _callback(std::move(callback)) {}
 
     constexpr auto sink() const
     {

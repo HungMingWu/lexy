@@ -543,7 +543,7 @@ public:
     };
 
     //=== root node ===//
-    explicit builder(parse_tree&& tree, production_info production) : _result(LEXY_MOV(tree))
+    explicit builder(parse_tree&& tree, production_info production) : _result(std::move(tree))
     {
         // Empty the initial parse tree.
         _result._buffer.reset();
@@ -563,11 +563,11 @@ public:
     [[deprecated("Pass the remaining input, or `input.end()` if there is none.")]] parse_tree&&
         finish() &&
     {
-        return LEXY_MOV(*this).finish(lexy::lexeme<Reader>());
+        return std::move(*this).finish(lexy::lexeme<Reader>());
     }
     parse_tree&& finish(typename Reader::iterator end) &&
     {
-        return LEXY_MOV(*this).finish({end, end});
+        return std::move(*this).finish({end, end});
     }
     parse_tree&& finish(lexy::lexeme<Reader> remaining_input) &&
     {
@@ -583,7 +583,7 @@ public:
                                                                            remaining_input.end());
         _result._root->set_sibling(node);
 
-        return LEXY_MOV(_result);
+        return std::move(_result);
     }
 
     //=== production nodes ===//
@@ -604,7 +604,7 @@ public:
         // Note: don't append the node yet, we might still backtrack.
 
         // Subsequent insertions are to the new node, so update marker and return old one.
-        auto old = LEXY_MOV(_cur);
+        auto old = std::move(_cur);
         _cur     = marker(node, old.cur_depth + 1, node);
         return old;
     }
@@ -621,7 +621,7 @@ public:
 
         // Insert the production node into the parent and continue with it.
         m.insert(_cur.prod);
-        _cur = LEXY_MOV(m);
+        _cur = std::move(m);
     }
 
     void cancel_production(marker&& m)
@@ -633,7 +633,7 @@ public:
 
         _result._buffer.unwind(_cur.unwind_pos);
         // Continue with parent.
-        _cur = LEXY_MOV(m);
+        _cur = std::move(m);
     }
 
     //=== container nodes ===//
@@ -651,7 +651,7 @@ public:
         }
 
         // Create a new container marker and activate it.
-        auto old = LEXY_MOV(_cur);
+        auto old = std::move(_cur);
         _cur     = marker(unwind_pos, old.cur_depth);
         return old;
     }
@@ -707,7 +707,7 @@ public:
         _cur.update_size_depth(size, m.local_max_depth);
 
         // Continue with the parent.
-        _cur = LEXY_MOV(m);
+        _cur = std::move(m);
     }
 
     void cancel_container(marker&& m)
@@ -717,7 +717,7 @@ public:
         // Deallocate everything we've inserted.
         _result._buffer.unwind(_cur.unwind_pos);
         // Continue with parent.
-        _cur = LEXY_MOV(m);
+        _cur = std::move(m);
     }
 
     //=== token nodes ===//

@@ -47,7 +47,7 @@ namespace _detail
         T value;
 
         explicit constexpr parse_context_var(T&& value)
-        : parse_context_var_base(&type_id), value(LEXY_MOV(value))
+        : parse_context_var_base(&type_id), value(std::move(value))
         {}
 
         template <typename ControlBlock>
@@ -78,7 +78,7 @@ namespace _detail
 
         constexpr parse_context_control_block(Handler&& handler, State* state,
                                               std::size_t max_depth)
-        : parse_handler(LEXY_MOV(handler)), parse_state(state), //
+        : parse_handler(std::move(handler)), parse_state(state), //
           vars(nullptr),                                        //
           cur_depth(0), max_depth(static_cast<int>(max_depth)), enable_whitespace_skipping(true)
         {}
@@ -86,7 +86,7 @@ namespace _detail
         template <typename OtherHandler>
         constexpr parse_context_control_block(Handler&& handler,
                                               parse_context_control_block<OtherHandler, State>* cb)
-        : parse_handler(LEXY_MOV(handler)), parse_state(cb->parse_state), //
+        : parse_handler(std::move(handler)), parse_state(cb->parse_state), //
           vars(cb->vars), cur_depth(cb->cur_depth), max_depth(cb->max_depth),
           enable_whitespace_skipping(cb->enable_whitespace_skipping)
         {}
@@ -188,7 +188,7 @@ struct context_finish_parser
             return continuation::parse(context, reader, LEXY_FWD(args)...);
         else
             return continuation::parse(context, reader, LEXY_FWD(args)...,
-                                       LEXY_MOV(*sub_context.value));
+                                       std::move(*sub_context.value));
     }
 };
 } // namespace lexy::_detail
@@ -229,7 +229,7 @@ constexpr auto do_action(Handler&& handler, State* state, Reader& reader)
 {
     static_assert(!std::is_reference_v<Handler>, "need to move handler in");
 
-    _detail::parse_context_control_block control_block(LEXY_MOV(handler), state,
+    _detail::parse_context_control_block control_block(std::move(handler), state,
                                                        max_recursion_depth<Production>());
     _pc<Handler, State, Production>      context(&control_block);
 
@@ -237,12 +237,12 @@ constexpr auto do_action(Handler&& handler, State* state, Reader& reader)
 
     using value_type = typename decltype(context)::value_type;
     if constexpr (std::is_void_v<value_type>)
-        return LEXY_MOV(control_block.parse_handler).template get_result<Result<void>>(rule_result);
+        return std::move(control_block.parse_handler).template get_result<Result<void>>(rule_result);
     else if (context.value)
-        return LEXY_MOV(control_block.parse_handler)
-            .template get_result<Result<value_type>>(rule_result, LEXY_MOV(*context.value));
+        return std::move(control_block.parse_handler)
+            .template get_result<Result<value_type>>(rule_result, std::move(*context.value));
     else
-        return LEXY_MOV(control_block.parse_handler)
+        return std::move(control_block.parse_handler)
             .template get_result<Result<value_type>>(rule_result);
 }
 } // namespace lexy

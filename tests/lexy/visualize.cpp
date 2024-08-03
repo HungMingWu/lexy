@@ -198,16 +198,16 @@ TEST_CASE("visualize parse_tree")
         builder.token(token_kind::b, input.data() + 3, input.data() + 4);
         builder.token(token_kind::c, input.data() + 4, input.data() + 10);
         builder.token(token_kind::b, input.data() + 10, input.data() + 11);
-        builder.finish_production(LEXY_MOV(sub_child));
-        builder.finish_production(LEXY_MOV(child));
+        builder.finish_production(std::move(sub_child));
+        builder.finish_production(std::move(child));
 
         child = builder.start_production(child_p{});
         builder.token(token_kind::a, input.data() + 11, input.data() + 14);
-        builder.finish_production(LEXY_MOV(child));
+        builder.finish_production(std::move(child));
 
         builder.token(lexy::eof_token_kind, input.data() + 14, input.data() + 14);
 
-        return LEXY_MOV(builder).finish(input.data() + 14);
+        return std::move(builder).finish(input.data() + 14);
     }();
     CHECK(!tree.empty());
 

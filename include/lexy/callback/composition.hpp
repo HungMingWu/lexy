@@ -44,7 +44,7 @@ struct _compose_cb
     LEXY_EMPTY_MEMBER Second _second;
 
     constexpr explicit _compose_cb(First&& first, Second&& second)
-    : _first(LEXY_MOV(first)), _second(LEXY_MOV(second))
+    : _first(std::move(first)), _second(std::move(second))
     {}
 
     using return_type = typename Second::return_type;
@@ -56,7 +56,7 @@ struct _compose_cb
     {
         auto first  = _compose_state<First, State>{_first, state};
         auto second = _compose_state<Second, State>{_second, state};
-        return lexy::_compose_cb(LEXY_MOV(first), LEXY_MOV(second));
+        return lexy::_compose_cb(std::move(first), std::move(second));
     }
 
     template <typename... Args>
@@ -99,20 +99,20 @@ template <typename First, typename Second, typename = _detect_callback<First>,
           typename = _detect_callback<Second>>
 constexpr auto operator|(First first, Second second)
 {
-    return _compose_cb(LEXY_MOV(first), LEXY_MOV(second));
+    return _compose_cb(std::move(first), std::move(second));
 }
 template <typename S, typename Cb, typename Second>
 constexpr auto operator|(_compose_s<S, Cb> composed, Second second)
 {
-    auto cb = LEXY_MOV(composed._callback) | LEXY_MOV(second);
-    return _compose_s<S, decltype(cb)>{LEXY_MOV(composed._sink), LEXY_MOV(cb)};
+    auto cb = std::move(composed._callback) | std::move(second);
+    return _compose_s<S, decltype(cb)>{std::move(composed._sink), std::move(cb)};
 }
 
 /// Composes a sink with a callback.
 template <typename Sink, typename Callback, typename = _detect_callback<Callback>>
 constexpr auto operator>>(Sink sink, Callback cb)
 {
-    return _compose_s<Sink, Callback>{LEXY_MOV(sink), LEXY_MOV(cb)};
+    return _compose_s<Sink, Callback>{std::move(sink), std::move(cb)};
 }
 } // namespace lexy
 

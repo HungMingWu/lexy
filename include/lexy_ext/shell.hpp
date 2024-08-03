@@ -153,7 +153,7 @@ public:
     using prompt_type = Prompt;
 
     shell() = default;
-    explicit shell(Prompt prompt) : _prompt(LEXY_MOV(prompt)) {}
+    explicit shell(Prompt prompt) : _prompt(std::move(prompt)) {}
 
     /// Whether or not the shell is still open.
     bool is_open() const noexcept
@@ -261,7 +261,7 @@ public:
 
         ~writer() noexcept
         {
-            LEXY_MOV(_writer).done();
+            std::move(_writer).done();
         }
 
         auto output_iterator()
@@ -339,7 +339,7 @@ public:
 
     private:
         explicit writer(typename Prompt::write_message_callback&& writer)
-        : _writer(LEXY_MOV(writer))
+        : _writer(std::move(writer))
         {}
 
         LEXY_EMPTY_MEMBER typename Prompt::write_message_callback _writer;
@@ -385,7 +385,7 @@ private:
             // Check whether we've read the entire line.
             if (_buffer.write_data()[-1] == '\n')
             {
-                LEXY_MOV(reader).done();
+                std::move(reader).done();
                 return true;
             }
             else if (read < buffer_size)

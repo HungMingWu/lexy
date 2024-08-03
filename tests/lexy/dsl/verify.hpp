@@ -536,14 +536,14 @@ public:
     {
         if (rule_parse_result)
             return test_result{_had_error ? test_result::recovered_error : test_result::success,
-                               result, LEXY_MOV(_trace)};
+                               result, std::move(_trace)};
         else
-            return test_result{test_result::fatal_error, -1, LEXY_MOV(_trace)};
+            return test_result{test_result::fatal_error, -1, std::move(_trace)};
     }
     template <typename T>
     constexpr auto get_result(bool rule_parse_result) &&
     {
-        return LEXY_MOV(*this).template get_result<T>(rule_parse_result, -1);
+        return std::move(*this).template get_result<T>(rule_parse_result, -1);
     }
 
     constexpr iterator begin() const
@@ -587,7 +587,7 @@ test_result verify(const Input& input, Callback cb)
         test_handler<Input, Callback> handler(input, cb);
         auto                          reader = input.reader();
         return lexy::do_action<
-            Production, test_action<Input, Callback>::template result_type>(LEXY_MOV(handler),
+            Production, test_action<Input, Callback>::template result_type>(std::move(handler),
                                                                             &handler, reader);
     }();
 
@@ -600,7 +600,7 @@ test_result verify(const Input& input, Callback cb)
             auto                                     reader = buffer.reader();
             return lexy::do_action<
                 Production,
-                test_action<decltype(buffer), Callback>::template result_type>(LEXY_MOV(handler),
+                test_action<decltype(buffer), Callback>::template result_type>(std::move(handler),
                                                                                &handler, reader);
         }();
 

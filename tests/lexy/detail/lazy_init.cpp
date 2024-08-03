@@ -82,12 +82,12 @@ TEST_CASE("_detail::lazy_init")
 
         SUBCASE("move constructor from empty")
         {
-            auto copy = LEXY_MOV(empty);
+            auto copy = std::move(empty);
             CHECK(!copy);
         }
         SUBCASE("move constructor from emplaced")
         {
-            auto copy = LEXY_MOV(emplaced);
+            auto copy = std::move(emplaced);
             CHECK(copy);
             CHECK(*copy == "aaaaa");
             CHECK(copy->size() == 5);
@@ -97,14 +97,14 @@ TEST_CASE("_detail::lazy_init")
         {
             lazy_init assigned;
 
-            assigned = LEXY_MOV(empty);
+            assigned = std::move(empty);
             CHECK(!assigned);
         }
         SUBCASE("move assignment from emplaced to empty")
         {
             lazy_init assigned;
 
-            assigned = LEXY_MOV(emplaced);
+            assigned = std::move(emplaced);
             CHECK(assigned);
             CHECK(*assigned == "aaaaa");
             CHECK(assigned->size() == 5);
@@ -114,7 +114,7 @@ TEST_CASE("_detail::lazy_init")
             lazy_init assigned;
             assigned.emplace(3u, 'b');
 
-            assigned = LEXY_MOV(empty);
+            assigned = std::move(empty);
             CHECK(!assigned);
         }
         SUBCASE("move assignment from emplaced to emplaced")
@@ -122,7 +122,7 @@ TEST_CASE("_detail::lazy_init")
             lazy_init assigned;
             assigned.emplace(3u, 'b');
 
-            assigned = LEXY_MOV(emplaced);
+            assigned = std::move(emplaced);
             CHECK(assigned);
             CHECK(*assigned == "aaaaa");
             CHECK(assigned->size() == 5);

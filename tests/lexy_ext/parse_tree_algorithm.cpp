@@ -39,14 +39,14 @@ TEST_CASE("tokens()")
         builder.token(token_kind::b, input.data() + 3, input.data() + 4);
         builder.token(token_kind::c, input.data() + 4, input.data() + 7);
         builder.token(token_kind::b, input.data() + 7, input.data() + 8);
-        builder.finish_production(LEXY_MOV(child));
+        builder.finish_production(std::move(child));
 
         builder.token(token_kind::a, input.data() + 8, input.data() + 11);
 
         child = builder.start_production(child_p{});
-        builder.finish_production(LEXY_MOV(child));
+        builder.finish_production(std::move(child));
 
-        return LEXY_MOV(builder).finish(input.data() + 11);
+        return std::move(builder).finish(input.data() + 11);
     }();
     CHECK(!tree.empty());
 
@@ -108,14 +108,14 @@ TEST_CASE("find_covering_node()")
         builder.token(token_kind::b, input.data() + 3, input.data() + 4);
         builder.token(token_kind::c, input.data() + 4, input.data() + 7);
         builder.token(token_kind::b, input.data() + 7, input.data() + 8);
-        builder.finish_production(LEXY_MOV(child));
+        builder.finish_production(std::move(child));
 
         builder.token(token_kind::a, input.data() + 8, input.data() + 11);
 
         child = builder.start_production(child_p{});
-        builder.finish_production(LEXY_MOV(child));
+        builder.finish_production(std::move(child));
 
-        return LEXY_MOV(builder).finish(input.data() + 11);
+        return std::move(builder).finish(input.data() + 11);
     }();
     CHECK(!tree.empty());
 
@@ -142,14 +142,14 @@ TEST_CASE("children()")
         builder.token(token_kind::b, input.data() + 3, input.data() + 4);
         builder.token(token_kind::c, input.data() + 4, input.data() + 7);
         builder.token(token_kind::b, input.data() + 7, input.data() + 8);
-        builder.finish_production(LEXY_MOV(child));
+        builder.finish_production(std::move(child));
 
         builder.token(token_kind::a, input.data() + 8, input.data() + 11);
 
         child = builder.start_production(child_p{});
-        builder.finish_production(LEXY_MOV(child));
+        builder.finish_production(std::move(child));
 
-        return LEXY_MOV(builder).finish(input.data() + 11);
+        return std::move(builder).finish(input.data() + 11);
     }();
     CHECK(!tree.empty());
 
@@ -213,14 +213,14 @@ TEST_CASE("child()")
         builder.token(token_kind::b, input.data() + 3, input.data() + 4);
         builder.token(token_kind::c, input.data() + 4, input.data() + 7);
         builder.token(token_kind::b, input.data() + 7, input.data() + 8);
-        builder.finish_production(LEXY_MOV(child));
+        builder.finish_production(std::move(child));
 
         builder.token(token_kind::a, input.data() + 8, input.data() + 11);
 
         child = builder.start_production(child_p{});
-        builder.finish_production(LEXY_MOV(child));
+        builder.finish_production(std::move(child));
 
-        return LEXY_MOV(builder).finish(input.data() + 11);
+        return std::move(builder).finish(input.data() + 11);
     }();
     CHECK(!tree.empty());
 
@@ -263,24 +263,24 @@ TEST_CASE("node_position()")
 
         auto child2 = builder.start_production(child_p{});
         builder.token(lexy::position_token_kind, input.data() + 2, input.data() + 2);
-        builder.finish_production(LEXY_MOV(child2));
+        builder.finish_production(std::move(child2));
 
         child2 = builder.start_production(child_p{});
         builder.token(token_kind::b, input.data() + 3, input.data() + 4);
         builder.token(token_kind::c, input.data() + 4, input.data() + 7);
         builder.token(token_kind::b, input.data() + 7, input.data() + 8);
-        builder.finish_production(LEXY_MOV(child2));
+        builder.finish_production(std::move(child2));
 
-        builder.finish_production(LEXY_MOV(child));
+        builder.finish_production(std::move(child));
 
         builder.token(token_kind::a, input.data() + 8, input.data() + 11);
 
         child  = builder.start_production(child_p{});
         child2 = builder.start_production(child_p{});
-        builder.finish_production(LEXY_MOV(child2));
-        builder.finish_production(LEXY_MOV(child));
+        builder.finish_production(std::move(child2));
+        builder.finish_production(std::move(child));
 
-        return LEXY_MOV(builder).finish(input.data() + 11);
+        return std::move(builder).finish(input.data() + 11);
     }();
     CHECK(!tree.empty());
 

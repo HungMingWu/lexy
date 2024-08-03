@@ -71,7 +71,7 @@ TEST_CASE("as_list")
         cb(std::string("b"));
         cb(1, 'c');
 
-        std::vector<std::string> result = LEXY_MOV(cb).finish();
+        std::vector<std::string> result = std::move(cb).finish();
         CHECK(result == std::vector<std::string>{"a", "b", "c"});
     }
     SUBCASE("sink allocator")
@@ -82,7 +82,7 @@ TEST_CASE("as_list")
         cb(std::string("b"));
         cb(1, 'c');
 
-        auto result = LEXY_MOV(cb).finish();
+        auto result = std::move(cb).finish();
         CHECK(result == decltype(result)({"a", "b", "c"}, 42));
     }
     SUBCASE("sink state allocator")
@@ -95,7 +95,7 @@ TEST_CASE("as_list")
         cb(std::string("b"));
         cb(1, 'c');
 
-        auto result = LEXY_MOV(cb).finish();
+        auto result = std::move(cb).finish();
         CHECK(result == decltype(result)({"a", "b", "c"}, 42));
     }
 }
@@ -140,7 +140,7 @@ TEST_CASE("as_collection")
         cb(std::string("b"));
         cb(1, 'c');
 
-        std::set<std::string> result = LEXY_MOV(cb).finish();
+        std::set<std::string> result = std::move(cb).finish();
         CHECK(result == std::set<std::string>{"a", "b", "c"});
     }
     SUBCASE("sink allocator")
@@ -152,7 +152,7 @@ TEST_CASE("as_collection")
         cb(std::string("b"));
         cb(1, 'c');
 
-        auto result = LEXY_MOV(cb).finish();
+        auto result = std::move(cb).finish();
         CHECK(result == decltype(result)({"a", "b", "c"}, 42));
     }
     SUBCASE("sink state allocator")
@@ -166,7 +166,7 @@ TEST_CASE("as_collection")
         cb(std::string("b"));
         cb(1, 'c');
 
-        auto result = LEXY_MOV(cb).finish();
+        auto result = std::move(cb).finish();
         CHECK(result == decltype(result)({"a", "b", "c"}, 42));
     }
 }
@@ -188,7 +188,7 @@ TEST_CASE("concat")
         sink("");
         sink("abc");
         sink("def");
-        CHECK(LEXY_MOV(sink).finish() == "abcdef");
+        CHECK(std::move(sink).finish() == "abcdef");
     }
     SUBCASE("vector")
     {
@@ -206,7 +206,7 @@ TEST_CASE("concat")
         sink(std::vector<int>{});
         sink(std::vector{1, 2, 3});
         sink(std::vector{4, 5, 6});
-        CHECK(LEXY_MOV(sink).finish() == std::vector{1, 2, 3, 4, 5, 6});
+        CHECK(std::move(sink).finish() == std::vector{1, 2, 3, 4, 5, 6});
     }
 }
 
@@ -225,7 +225,7 @@ TEST_CASE("collect")
         cb(2);
         cb(3);
 
-        std::size_t count = LEXY_MOV(cb).finish();
+        std::size_t count = std::move(cb).finish();
         CHECK(count == 3);
         CHECK(sum == 6);
     }
@@ -241,7 +241,7 @@ TEST_CASE("collect")
         cb(2);
         cb(3);
 
-        std::vector<int> result = LEXY_MOV(cb).finish();
+        std::vector<int> result = std::move(cb).finish();
         CHECK(result == std::vector<int>{2, 4, 6});
     }
     SUBCASE("non-void with allocator")
@@ -255,7 +255,7 @@ TEST_CASE("collect")
         cb(2);
         cb(3);
 
-        auto result = LEXY_MOV(cb).finish();
+        auto result = std::move(cb).finish();
         CHECK(result == decltype(result)({2, 4, 6}, 42));
     }
 }

@@ -128,7 +128,7 @@ public:
 
         buffer finish() && noexcept
         {
-            return LEXY_MOV(_buffer);
+            return std::move(_buffer);
         }
 
     private:
@@ -363,7 +363,7 @@ struct _make_buffer
                     static_assert(false, "unhandled encoding/endianness");
             }
 
-            return LEXY_MOV(builder).finish();
+            return std::move(builder).finish();
         }
     }
 };
@@ -488,7 +488,7 @@ constexpr auto make_buffer_from_input(const Input&    input,
             for (auto cur = begin; cur != end; ++cur)
                 *dest++ = *cur; // NOLINT: clang-analyzer thinks this might access zero memory for
                                 // some reason?!
-            return LEXY_MOV(builder).finish();
+            return std::move(builder).finish();
         }
     }
 }

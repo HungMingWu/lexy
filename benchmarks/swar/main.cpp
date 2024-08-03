@@ -53,7 +53,7 @@ lexy::buffer<lexy::utf8_encoding> random_buffer(std::size_t size, float unicode_
             ++i;
         }
     }
-    return LEXY_MOV(builder).finish();
+    return std::move(builder).finish();
 }
 lexy::buffer<lexy::utf8_encoding> repeat_buffer_padded(std::size_t size, const char* str)
 {
@@ -75,7 +75,7 @@ lexy::buffer<lexy::utf8_encoding> repeat_buffer_padded(std::size_t size, const c
             i += std::strlen(str);
         }
     }
-    return LEXY_MOV(builder).finish();
+    return std::move(builder).finish();
 }
 
 std::size_t bm_any(ankerl::nanobench::Bench& b);

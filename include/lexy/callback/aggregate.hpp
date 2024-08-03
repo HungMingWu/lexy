@@ -23,7 +23,7 @@ struct _as_aggregate
     }
     constexpr T operator()(T&& result) const
     {
-        return LEXY_MOV(result);
+        return std::move(result);
     }
 
     template <typename Fn, typename Value, typename... Tail>
@@ -31,13 +31,13 @@ struct _as_aggregate
     {
         T result{};
         Fn{}(result, LEXY_FWD(value));
-        return (*this)(LEXY_MOV(result), LEXY_FWD(tail)...);
+        return (*this)(std::move(result), LEXY_FWD(tail)...);
     }
     template <typename Fn, typename Value, typename... Tail>
     constexpr T operator()(T&& result, lexy::member<Fn>, Value&& value, Tail&&... tail) const
     {
         Fn{}(result, LEXY_FWD(value));
-        return (*this)(LEXY_MOV(result), LEXY_FWD(tail)...);
+        return (*this)(std::move(result), LEXY_FWD(tail)...);
     }
 
     struct _sink
@@ -54,7 +54,7 @@ struct _as_aggregate
 
         constexpr auto&& finish() &&
         {
-            return LEXY_MOV(_result);
+            return std::move(_result);
         }
     };
     constexpr auto sink() const

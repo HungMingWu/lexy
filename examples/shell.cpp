@@ -71,7 +71,7 @@ namespace shell
     class cmd_echo : public cmd_base
     {
     public:
-        explicit cmd_echo(std::string msg) : _msg(LEXY_MOV(msg)) {}
+        explicit cmd_echo(std::string msg) : _msg(std::move(msg)) {}
 
         bool execute(interpreter& intp) const override
         {
@@ -88,7 +88,7 @@ namespace shell
     {
     public:
         explicit cmd_set(std::string name, std::string value)
-        : _name(LEXY_MOV(name)), _value(LEXY_MOV(value))
+        : _name(std::move(name)), _value(std::move(value))
         {}
 
         bool execute(interpreter& intp) const override

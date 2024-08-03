@@ -43,7 +43,7 @@ using _subgrammar_for = _subgrammar<Production, typename Action::handler, typena
     {                                                                                              \
         lexy::_pc<Handler, State, Production> context(control_block);                              \
         auto                                  success = ::lexy::_do_action(context, reader);       \
-        value                                         = LEXY_MOV(context.value);                   \
+        value                                         = std::move(context.value);                   \
         return success;                                                                            \
     }
 
@@ -95,7 +95,7 @@ struct _subg : rule_base
             if constexpr (std::is_void_v<value_type>)
                 return NextParser::parse(context, reader, LEXY_FWD(args)...);
             else
-                return NextParser::parse(context, reader, LEXY_FWD(args)..., *LEXY_MOV(value));
+                return NextParser::parse(context, reader, LEXY_FWD(args)..., *std::move(value));
         }
     };
 };

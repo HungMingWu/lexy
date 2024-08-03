@@ -52,7 +52,7 @@ public:
     template <typename U = T, typename = std::enable_if_t<std::is_constructible_v<T, U>>>
     constexpr scan_result(U&& value)
     {
-        _value.emplace(LEXY_MOV(value));
+        _value.emplace(std::move(value));
     }
 
     constexpr explicit operator bool() const noexcept
@@ -70,7 +70,7 @@ public:
     }
     constexpr decltype(auto) value() && noexcept
     {
-        return LEXY_MOV(*_value);
+        return std::move(*_value);
     }
 
     template <typename U = T>
@@ -81,11 +81,11 @@ public:
     template <typename U = T>
     constexpr decltype(auto) value_or(U&& fallback) && noexcept
     {
-        return _value ? LEXY_MOV(*_value) : LEXY_FWD(fallback);
+        return _value ? std::move(*_value) : LEXY_FWD(fallback);
     }
 
 private:
-    constexpr explicit scan_result(_detail::lazy_init<T>&& value) : _value(LEXY_MOV(value)) {}
+    constexpr explicit scan_result(_detail::lazy_init<T>&& value) : _value(std::move(value)) {}
 
     _detail::lazy_init<T> _value;
 
@@ -116,7 +116,7 @@ public:
     }
 
 private:
-    constexpr explicit scan_result(_detail::lazy_init<void>&& value) : _value(LEXY_MOV(value)) {}
+    constexpr explicit scan_result(_detail::lazy_init<void>&& value) : _value(std::move(value)) {}
 
     _detail::lazy_init<void> _value;
 
@@ -149,7 +149,7 @@ struct scan_final_parser
     template <typename Context, typename Reader, typename T>
     LEXY_PARSER_FUNC static bool parse(Context&, Reader&, lazy_init<T>* dest, T&& value)
     {
-        dest->emplace(LEXY_MOV(value));
+        dest->emplace(std::move(value));
         return true;
     }
 
@@ -488,7 +488,7 @@ struct _scan : rule_base
             if constexpr (std::is_void_v<typename decltype(result)::value_type>)
                 return NextParser::parse(context, reader);
             else
-                return NextParser::parse(context, reader, LEXY_MOV(result).value());
+                return NextParser::parse(context, reader, std::move(result).value());
         }
 
         template <typename Context, typename Reader, typename... Args>

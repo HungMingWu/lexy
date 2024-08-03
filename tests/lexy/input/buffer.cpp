@@ -54,7 +54,7 @@ TEST_CASE("buffer")
 
         lexy::buffer<>::builder builder(3);
         std::memcpy(builder.data(), str, builder.size());
-        verify(LEXY_MOV(builder).finish());
+        verify(std::move(builder).finish());
     }
 #if LEXY_HAS_RESOURCE
     SUBCASE("constructor, default encoding, custom resource")
@@ -72,7 +72,7 @@ TEST_CASE("buffer")
 
         decltype(ptr_size)::builder builder(3, std::pmr::new_delete_resource());
         std::memcpy(builder.data(), str, builder.size());
-        verify(LEXY_MOV(builder).finish());
+        verify(std::move(builder).finish());
     }
 #endif
     SUBCASE("constructor, custom encoding, default resource")
@@ -114,7 +114,7 @@ TEST_CASE("buffer")
 
         lexy::buffer<lexy::byte_encoding>::builder builder(3);
         std::memcpy(builder.data(), str, builder.size());
-        verify(LEXY_MOV(builder).finish());
+        verify(std::move(builder).finish());
     }
 #if LEXY_HAS_RESOURCE
     SUBCASE("constructor, custom encoding, custom resource")
@@ -157,7 +157,7 @@ TEST_CASE("buffer")
 
         buffer_type::builder builder(3, std::pmr::new_delete_resource());
         std::memcpy(builder.data(), str, builder.size());
-        verify(LEXY_MOV(builder).finish());
+        verify(std::move(builder).finish());
     }
 #endif
 
@@ -176,7 +176,7 @@ TEST_CASE("buffer")
     {
         lexy::buffer original(str, str + 3);
 
-        lexy::buffer move(LEXY_MOV(original));
+        lexy::buffer move(std::move(original));
         verify(move);
         CHECK(original.size() == 0);
     }
@@ -195,7 +195,7 @@ TEST_CASE("buffer")
 
         lexy::buffer buffer{};
         CHECK(buffer.size() == 0);
-        buffer = LEXY_MOV(other);
+        buffer = std::move(other);
         verify(buffer);
         CHECK(other.size() == 0);
     }
@@ -206,7 +206,7 @@ TEST_CASE("buffer")
         verify(buffer);
 
         auto data = buffer.data();
-        auto ptr  = LEXY_MOV(buffer).release();
+        auto ptr  = std::move(buffer).release();
         CHECK(ptr == data);
 
         buffer = decltype(buffer)::adopt(ptr, 3);
