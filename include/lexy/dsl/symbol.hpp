@@ -51,16 +51,16 @@ public:
     {
         using next_table = _symbol_table<T, CaseFolding, Strings..., SymbolString>;
         if constexpr (empty())
-            return next_table(_detail::make_index_sequence<0>{}, nullptr, LEXY_FWD(args)...);
+            return next_table(_detail::make_index_sequence<0>{}, nullptr, std::forward<Args>(args)...);
         else
-            return next_table(_detail::make_index_sequence<size()>{}, _data, LEXY_FWD(args)...);
+            return next_table(_detail::make_index_sequence<size()>{}, _data, std::forward<Args>(args)...);
     }
 
 #if LEXY_HAS_NTTP
     template <_detail::string_literal SymbolString, typename... Args>
     consteval auto map(Args&&... args) const
     {
-        return map<_detail::to_type_string<_detail::type_string, SymbolString>>(LEXY_FWD(args)...);
+        return map<_detail::to_type_string<_detail::type_string, SymbolString>>(std::forward<Args>(args)...);
     }
 #else
 #    if (defined(__clang__) && __clang_major__ <= 7)                                               \
@@ -71,14 +71,14 @@ public:
 #    endif
     consteval auto map(Args&&... args) const
     {
-        return map<_detail::type_string<LEXY_DECAY_DECLTYPE(C), C>>(LEXY_FWD(args)...);
+        return map<_detail::type_string<LEXY_DECAY_DECLTYPE(C), C>>(std::forward<Args>(args)...);
     }
 #endif
 
     template <typename CharT, CharT... C, typename... Args>
     consteval auto map(lexyd::_lit<CharT, C...>, Args&&... args) const
     {
-        return map<_detail::type_string<CharT, C...>>(LEXY_FWD(args)...);
+        return map<_detail::type_string<CharT, C...>>(std::forward<Args>(args)...);
     }
 
     //=== access ===//
@@ -226,7 +226,7 @@ private:
     constexpr explicit _symbol_table(lexy::_detail::index_sequence<Idx...>, const T* data,
                                      Args&&... args)
     // New data is appended at the end.
-    : _data{data[Idx]..., T(LEXY_FWD(args)...)}
+    : _data{data[Idx]..., T(std::forward<Args>(args)...)}
     {}
     template <std::size_t... Idx, template <typename> typename OtherCaseFolding>
     constexpr explicit _symbol_table(lexy::_detail::index_sequence<Idx...>,
@@ -307,7 +307,7 @@ struct _sym : branch_base
 
             // And continue parsing with the symbol value after whitespace skipping.
             using continuation = lexy::whitespace_parser<Context, NextParser>;
-            return continuation::parse(context, reader, LEXY_FWD(args)..., Table[symbol]);
+            return continuation::parse(context, reader, std::forward<Args>(args)..., Table[symbol]);
         }
     };
 
@@ -334,7 +334,7 @@ struct _sym : branch_base
                 }
 
                 // Continue parsing with the symbol value.
-                return NextParser::parse(context, reader, LEXY_FWD(args)..., Table[symbol]);
+                return NextParser::parse(context, reader, std::forward<PrevArgs>(args)..., Table[symbol]);
             }
         };
 
@@ -344,7 +344,7 @@ struct _sym : branch_base
             static_assert(lexy::is_char_encoding<typename Reader::encoding>);
             // Capture the token and continue with special continuation.
             return lexy::parser_for<_cap<Token>, _cont<Args...>>::parse(context, reader,
-                                                                        LEXY_FWD(args)...);
+                                                                        std::forward<Args>(args)...);
         }
     };
 
@@ -396,7 +396,7 @@ struct _sym<Table, _idp<L, T>, Tag> : branch_base
 
             // And continue parsing with the symbol value after whitespace skipping.
             using continuation = lexy::whitespace_parser<Context, NextParser>;
-            return continuation::parse(context, reader, LEXY_FWD(args)..., Table[symbol]);
+            return continuation::parse(context, reader, std::forward<Args>(args)..., Table[symbol]);
         }
     };
 
@@ -437,7 +437,7 @@ struct _sym<Table, _idp<L, T>, Tag> : branch_base
 
                 // And continue parsing with the symbol value after whitespace skipping.
                 using continuation = lexy::whitespace_parser<Context, NextParser>;
-                return continuation::parse(context, reader, LEXY_FWD(args)..., Table[symbol]);
+                return continuation::parse(context, reader, std::forward<Args>(args)..., Table[symbol]);
             }
         }
     };
@@ -486,7 +486,7 @@ struct _sym<Table, void, Tag> : branch_base
 
             // And continue parsing with the symbol value after whitespace skipping.
             using continuation = lexy::whitespace_parser<Context, NextParser>;
-            return continuation::parse(context, reader, LEXY_FWD(args)..., Table[symbol]);
+            return continuation::parse(context, reader, std::forward<Args>(args)..., Table[symbol]);
         }
     };
 
@@ -499,7 +499,7 @@ struct _sym<Table, void, Tag> : branch_base
             static_assert(lexy::is_char_encoding<typename Reader::encoding>);
             bp<Reader> impl{};
             if (impl.try_parse(context.control_block, reader))
-                return impl.template finish<NextParser>(context, reader, LEXY_FWD(args)...);
+                return impl.template finish<NextParser>(context, reader, std::forward<Args>(args)...);
             impl.cancel(context);
 
             // Unknown symbol.

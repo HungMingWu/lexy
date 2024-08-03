@@ -24,13 +24,13 @@ struct _lazy_init_storage_trivial
 
     template <typename... Args>
     constexpr _lazy_init_storage_trivial(int, Args&&... args)
-    : _init(true), _value(LEXY_FWD(args)...)
+    : _init(true), _value(std::forward<Args>(args)...)
     {}
 
     template <typename... Args>
     constexpr void _construct(Args&&... args)
     {
-        *this = _lazy_init_storage_trivial(0, LEXY_FWD(args)...);
+        *this = _lazy_init_storage_trivial(0, std::forward<Args>(args)...);
     }
 };
 
@@ -49,7 +49,7 @@ struct _lazy_init_storage_non_trivial
     template <typename... Args>
     constexpr void _construct(Args&&... args)
     {
-        _detail::construct_at(&_value, LEXY_FWD(args)...);
+        _detail::construct_at(&_value, std::forward<Args>(args)...);
         _init = true;
     }
 
@@ -117,9 +117,9 @@ public:
     constexpr T& emplace(Args&&... args)
     {
         if (*this)
-            this->_value = T(LEXY_FWD(args)...);
+            this->_value = T(std::forward<Args>(args)...);
         else
-            this->_construct(LEXY_FWD(args)...);
+            this->_construct(std::forward<Args>(args)...);
 
         return this->_value;
     }
@@ -127,7 +127,7 @@ public:
     template <typename Fn, typename... Args>
     constexpr T& emplace_result(Fn&& fn, Args&&... args)
     {
-        return emplace(LEXY_FWD(fn)(LEXY_FWD(args)...));
+        return emplace(std::forward<Fn>(fn)(std::forward<Args>(args)...));
     }
 
     constexpr explicit operator bool() const noexcept
@@ -170,7 +170,7 @@ public:
 private:
     template <typename... Args>
     constexpr explicit lazy_init(int, Args&&... args) noexcept
-    : _lazy_init_storage<T>(0, LEXY_FWD(args)...)
+    : _lazy_init_storage<T>(0, std::forward<Args>(args)...)
     {}
 };
 template <typename T>
@@ -190,7 +190,7 @@ public:
     template <typename Fn, typename... Args>
     constexpr T& emplace_result(Fn&& fn, Args&&... args)
     {
-        return emplace(LEXY_FWD(fn)(LEXY_FWD(args)...));
+        return emplace(std::forward<Fn>(fn)(std::forward<Args>(args)...));
     }
 
     constexpr explicit operator bool() const noexcept
@@ -228,7 +228,7 @@ public:
     template <typename Fn, typename... Args>
     constexpr void emplace_result(Fn&& fn, Args&&... args)
     {
-        LEXY_FWD(fn)(LEXY_FWD(args)...);
+        std::forward<Fn>(fn)(std::forward<Args>(args)...);
         _init = true;
     }
 

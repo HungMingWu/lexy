@@ -40,7 +40,7 @@ struct _nr : branch_base
             }
 
             return lexy::whitespace_parser<Context, NextParser>::parse(context, reader,
-                                                                       LEXY_FWD(args)...);
+                                                                       std::forward<Args>(args)...);
         }
     };
 
@@ -54,7 +54,7 @@ struct _nr : branch_base
         using rule_parser
             = lexy::whitespace_parser<Context, lexy::parser_for<R, _cont<NextParser>>>;
         if (auto rule_succeded = false;
-            rule_parser::parse(context, child_reader, rule_succeded, reader, LEXY_FWD(args)...))
+            rule_parser::parse(context, child_reader, rule_succeded, reader, std::forward<Args>(args)...))
         {
             return true;
         }
@@ -88,7 +88,7 @@ struct _nr : branch_base
         template <typename NextParser, typename Context, typename... Args>
         LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
         {
-            return _parse_rule<NextParser>(context, reader, end, LEXY_FWD(args)...);
+            return _parse_rule<NextParser>(context, reader, end, std::forward<Args>(args)...);
         }
     };
 
@@ -106,7 +106,7 @@ struct _nr : branch_base
                 return false;
             }
 
-            return _parse_rule<NextParser>(context, reader, parser.end, LEXY_FWD(args)...);
+            return _parse_rule<NextParser>(context, reader, parser.end, std::forward<Args>(args)...);
         }
     };
 };

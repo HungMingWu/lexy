@@ -278,7 +278,7 @@ struct _sfinae_sink
             // overload exists.
             static_assert(false,
                           "missing value sink callback overload for production");
-        _sink(LEXY_FWD(args)...);
+        _sink(std::forward<Args>(args)...);
     }
 
     inline constexpr auto finish() &&
@@ -348,11 +348,11 @@ public:
         if constexpr (lexy::is_callback_with_state_for<_type, ParseState, Args&&...>
                       && !std::is_void_v<ParseState>)
         {
-            return _get_value(_state)[*_state](LEXY_FWD(args)...);
+            return _get_value(_state)[*_state](std::forward<Args>(args)...);
         }
         else if constexpr (lexy::is_callback_for<_type, Args&&...>)
         {
-            return _get_value(_state)(LEXY_FWD(args)...);
+            return _get_value(_state)(std::forward<Args>(args)...);
         }
         else if constexpr ((lexy::is_sink<_type>                                              //
                             || lexy::is_sink<_type, std::add_lvalue_reference_t<ParseState>>) //
@@ -362,7 +362,7 @@ public:
             // the correct type already, or we return void and have no arguments.
             // Assume it came from the list sink and return the value without invoking a
             // callback.
-            return (LEXY_FWD(args), ...);
+            return (std::forward<Args>(args), ...);
         }
         else
         {

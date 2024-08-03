@@ -61,7 +61,7 @@ struct _peek : branch_base
         LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
         {
             context.on(_ev::backtracked{}, begin, end.position());
-            return NextParser::parse(context, reader, LEXY_FWD(args)...);
+            return NextParser::parse(context, reader, std::forward<Args>(args)...);
         }
     };
 
@@ -83,7 +83,7 @@ struct _peek : branch_base
             }
 
             context.on(_ev::backtracked{}, impl.begin, impl.end.position());
-            return NextParser::parse(context, reader, LEXY_FWD(args)...);
+            return NextParser::parse(context, reader, std::forward<Args>(args)...);
         }
     };
 
@@ -122,7 +122,7 @@ struct _peekn : branch_base
         LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
         {
             context.on(_ev::backtracked{}, begin, end.position());
-            return NextParser::parse(context, reader, LEXY_FWD(args)...);
+            return NextParser::parse(context, reader, std::forward<Args>(args)...);
         }
     };
 
@@ -146,12 +146,12 @@ struct _peekn : branch_base
                 context.on(_ev::recovery_finish{}, impl.end.position());
 
                 reader.reset(impl.end);
-                return NextParser::parse(context, reader, LEXY_FWD(args)...);
+                return NextParser::parse(context, reader, std::forward<Args>(args)...);
             }
             else
             {
                 context.on(_ev::backtracked{}, impl.begin, impl.end.position());
-                return NextParser::parse(context, reader, LEXY_FWD(args)...);
+                return NextParser::parse(context, reader, std::forward<Args>(args)...);
             }
         }
     };

@@ -42,7 +42,7 @@ struct _nullopt : rule_base
         template <typename Context, typename Reader, typename... Args>
         LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
         {
-            return NextParser::parse(context, reader, LEXY_FWD(args)..., lexy::nullopt{});
+            return NextParser::parse(context, reader, std::forward<Args>(args)..., lexy::nullopt{});
         }
     };
 };
@@ -64,12 +64,12 @@ struct _opt : rule_base
             lexy::branch_parser_for<Branch, Reader> branch{};
             if (branch.try_parse(context.control_block, reader))
                 // We take the branch.
-                return branch.template finish<NextParser>(context, reader, LEXY_FWD(args)...);
+                return branch.template finish<NextParser>(context, reader, std::forward<Args>(args)...);
             else
             {
                 // We don't take the branch and produce a nullopt.
                 branch.cancel(context);
-                return NextParser::parse(context, reader, LEXY_FWD(args)..., lexy::nullopt{});
+                return NextParser::parse(context, reader, std::forward<Args>(args)..., lexy::nullopt{});
             }
         }
     };
@@ -104,13 +104,13 @@ struct _optt : rule_base
             lexy::branch_parser_for<Term, Reader> term{};
             if (term.try_parse(context.control_block, reader))
                 // We had the terminator, so produce nullopt.
-                return term.template finish<NextParser>(context, reader, LEXY_FWD(args)...,
+                return term.template finish<NextParser>(context, reader, std::forward<Args>(args)...,
                                                         lexy::nullopt{});
             term.cancel(context);
 
             // We didn't have the terminator, so we parse the rule.
             using parser = lexy::parser_for<Rule, NextParser>;
-            return parser::parse(context, reader, LEXY_FWD(args)...);
+            return parser::parse(context, reader, std::forward<Args>(args)...);
         }
     };
 };

@@ -44,7 +44,7 @@ constexpr decltype(auto) _invoke_bound(Fn&& fn, const _detail::tuple<BoundArgs..
         (void)bound_args;
         (void)state;
         (void)actual_args;
-        return LEXY_FWD(fn)(LEXY_FWD(produced_args)...);
+        return std::forward<Fn>(fn)(std::forward<ProducedArgs>(produced_args)...);
     }
     else
     {
@@ -52,15 +52,15 @@ constexpr decltype(auto) _invoke_bound(Fn&& fn, const _detail::tuple<BoundArgs..
             = std::decay_t<typename _detail::tuple<BoundArgs...>::template element_type<Idx>>;
         if constexpr (std::is_same_v<bound_arg_t, all_values_placeholder>)
         {
-            return _invoke_bound<Idx + 1>(LEXY_FWD(fn), bound_args, state, actual_args,
-                                          actual_args.index_sequence(), LEXY_FWD(produced_args)...,
+            return _invoke_bound<Idx + 1>(std::forward<Fn>(fn), bound_args, state, actual_args,
+                                          actual_args.index_sequence(), std::forward<ProducedArgs>(produced_args)...,
                                           // Expand to all actual arguments.
-                                          LEXY_FWD(actual_args.template get<ActualIdx>())...);
+                                          actual_args.template get<ActualIdx>()...);
         }
         else
         {
-            return _invoke_bound<Idx + 1>(LEXY_FWD(fn), bound_args, state, actual_args,
-                                          actual_args.index_sequence(), LEXY_FWD(produced_args)...,
+            return _invoke_bound<Idx + 1>(std::forward<Fn>(fn), bound_args, state, actual_args,
+                                          actual_args.index_sequence(), std::forward<ProducedArgs>(produced_args)...,
                                           // Expand the currently bound argument
                                           expand_bound_arg(bound_args.template get<Idx>(), state,
                                                            actual_args));
@@ -75,11 +75,11 @@ constexpr decltype(auto) invoke_bound(Fn&&                                fn, //
                                       _detail::index_sequence<Idx...>, //
                                       State& state, Args&&... args)
 {
-    auto actual_args = _detail::forward_as_tuple(LEXY_FWD(args)...);
+    auto actual_args = _detail::forward_as_tuple(std::forward<Args>(args)...);
     if constexpr ((_detail::is_decayed_same<BoundArgs, _detail::all_values_placeholder> || ...))
     {
         // If we're having the placeholder we need to recursively expand every argument.
-        return _invoke_bound<0>(LEXY_FWD(fn), bound_args, state, actual_args,
+        return _invoke_bound<0>(std::forward<Fn>(fn), bound_args, state, actual_args,
                                 actual_args.index_sequence());
     }
     else
@@ -87,7 +87,7 @@ constexpr decltype(auto) invoke_bound(Fn&&                                fn, //
         // If we're not having the all_values_placeholder, every placeholder expands to a single
         // argument. We can thus expand it easily by mapping each value of bound args to the actual
         // argument.
-        return LEXY_FWD(fn)(
+        return std::forward<Fn>(fn)(
             expand_bound_arg(bound_args.template get<Idx>(), state, actual_args)...);
     }
 }
@@ -156,7 +156,7 @@ struct _nth_value<N, T, void> : _detail::placeholder_base // fallback only
     template <typename Fn>
     constexpr auto map(Fn&& fn) const
     {
-        return _nth_value<N, T, std::decay_t<Fn>>{{}, _fallback, LEXY_FWD(fn)};
+        return _nth_value<N, T, std::decay_t<Fn>>{{}, _fallback, std::forward<Fn>(fn)};
     }
 };
 template <std::size_t N, typename Fn>
@@ -175,12 +175,12 @@ struct _nth_value<N, void, Fn> : _detail::placeholder_base // map only
     template <typename Arg>
     constexpr auto operator||(Arg&& fallback) const
     {
-        return _nth_value<N, std::decay_t<Arg>, Fn>{{}, LEXY_FWD(fallback), _fn};
+        return _nth_value<N, std::decay_t<Arg>, Fn>{{}, std::forward<Arg>(fallback), _fn};
     }
     template <typename Arg>
     constexpr auto or_(Arg&& fallback) const
     {
-        return *this || LEXY_FWD(fallback);
+        return *this || std::forward<Arg>(fallback);
     }
 
     constexpr auto or_default() const
@@ -205,12 +205,12 @@ struct _nth_value<N, void, void> : _detail::placeholder_base
     template <typename Arg>
     constexpr auto operator||(Arg&& fallback) const
     {
-        return _nth_value<N, std::decay_t<Arg>, void>{{}, LEXY_FWD(fallback)};
+        return _nth_value<N, std::decay_t<Arg>, void>{{}, std::forward<Arg>(fallback)};
     }
     template <typename Arg>
     constexpr auto or_(Arg&& fallback) const
     {
-        return *this || LEXY_FWD(fallback);
+        return *this || std::forward<Arg>(fallback);
     }
 
     constexpr auto or_default() const
@@ -221,7 +221,7 @@ struct _nth_value<N, void, void> : _detail::placeholder_base
     template <typename Fn>
     constexpr auto map(Fn&& fn) const
     {
-        return _nth_value<N, void, std::decay_t<Fn>>{{}, LEXY_FWD(fn)};
+        return _nth_value<N, void, std::decay_t<Fn>>{{}, std::forward<Fn>(fn)};
     }
 };
 
@@ -268,7 +268,7 @@ struct _parse_state<void> : _detail::placeholder_base
     template <typename Fn>
     constexpr auto map(Fn&& fn) const
     {
-        return _parse_state<std::decay_t<Fn>>{{}, LEXY_FWD(fn)};
+        return _parse_state<std::decay_t<Fn>>{{}, std::forward<Fn>(fn)};
     }
 };
 
@@ -297,7 +297,7 @@ struct _bound_cb
         {
             return _detail::invoke_bound(_bound._callback, _bound._bound_args,
                                          _bound._bound_args.index_sequence(), _state,
-                                         LEXY_FWD(args)...);
+                                         std::forward<Args>(args)...);
         }
     };
 
@@ -312,7 +312,7 @@ struct _bound_cb
     {
         auto state = _detail::no_bind_state{};
         return _detail::invoke_bound(_callback, _bound_args, _bound_args.index_sequence(), state,
-                                     LEXY_FWD(args)...);
+                                     std::forward<Args>(args)...);
     }
 };
 
@@ -321,7 +321,7 @@ template <typename Callback, typename... BoundArgs>
 constexpr auto bind(Callback&& callback, BoundArgs&&... args)
 {
     using bound = _bound_cb<std::decay_t<Callback>, std::decay_t<BoundArgs>...>;
-    return bound{LEXY_FWD(callback), _detail::make_tuple(LEXY_FWD(args)...)};
+    return bound{std::forward<Callback>(callback), _detail::make_tuple(std::forward<BoundArgs>(args)...)};
 }
 } // namespace lexy
 
@@ -335,7 +335,7 @@ struct _sink_wrapper
     template <typename... Args>
     constexpr auto operator()(Args&&... args)
     {
-        return _sink.sink(LEXY_FWD(args)...);
+        return _sink.sink(std::forward<Args>(args)...);
     }
 };
 
@@ -346,9 +346,9 @@ struct _bound_sink
     LEXY_EMPTY_MEMBER _detail::tuple<BoundArgs...> _bound;
 
     template <typename... Args>
-    constexpr auto operator()(Args... args) const -> decltype(_sink(LEXY_FWD(args)...))
+    constexpr auto operator()(Args... args) const -> decltype(_sink(std::forward<Args>(args)...))
     {
-        return _sink(LEXY_FWD(args)...);
+        return _sink(std::forward<Args>(args)...);
     }
 
     template <bool Dummy = true,
@@ -378,7 +378,7 @@ constexpr auto bind_sink(Sink&& sink, BoundArgs&&... args)
         (!_detail::is_decayed_same<BoundArgs, _detail::all_values_placeholder> && ...),
         "lexy::values as a placeholder for bind_sink() doesn't make sense - there won't be any values");
     using bound = _bound_sink<std::decay_t<Sink>, std::decay_t<BoundArgs>...>;
-    return bound{LEXY_FWD(sink), _detail::make_tuple(LEXY_FWD(args)...)};
+    return bound{std::forward<Sink>(sink), _detail::make_tuple(std::forward<BoundArgs>(args)...)};
 }
 } // namespace lexy
 

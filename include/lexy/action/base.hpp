@@ -153,7 +153,7 @@ struct _pc
     template <typename Event, typename... Args>
     constexpr auto on(Event ev, Args&&... args)
     {
-        return handler.on(control_block->parse_handler, ev, LEXY_FWD(args)...);
+        return handler.on(control_block->parse_handler, ev, std::forward<Args>(args)...);
     }
 };
 } // namespace lexy
@@ -166,7 +166,7 @@ struct final_parser
     template <typename Context, typename Reader, typename... Args>
     LEXY_PARSER_FUNC static bool parse(Context& context, Reader&, Args&&... args)
     {
-        context.value.emplace_result(context.value_callback(), LEXY_FWD(args)...);
+        context.value.emplace_result(context.value_callback(), std::forward<Args>(args)...);
         return true;
     }
 };
@@ -185,9 +185,9 @@ struct context_finish_parser
 
         // Pass the produced value to the next parser.
         if constexpr (std::is_void_v<typename SubContext::value_type>)
-            return continuation::parse(context, reader, LEXY_FWD(args)...);
+            return continuation::parse(context, reader, std::forward<Args>(args)...);
         else
-            return continuation::parse(context, reader, LEXY_FWD(args)...,
+            return continuation::parse(context, reader, std::forward<Args>(args)...,
                                        std::move(*sub_context.value));
     }
 };

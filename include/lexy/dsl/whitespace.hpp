@@ -86,7 +86,7 @@ public:
     template <typename Event, typename... Args>
     constexpr auto real_on(Event ev, Args&&... args)
     {
-        return _event_handler->on(*_handler, ev, LEXY_FWD(args)...);
+        return _event_handler->on(*_handler, ev, std::forward<Args>(args)...);
     }
 
 private:
@@ -186,7 +186,7 @@ struct automatic_ws_parser
                 return false;
         }
 
-        return NextParser::parse(context, reader, LEXY_FWD(args)...);
+        return NextParser::parse(context, reader, std::forward<Args>(args)...);
     }
 };
 } // namespace lexy::_detail
@@ -208,7 +208,7 @@ struct _wsr : rule_base
             if (!result)
                 return false;
 
-            return NextParser::parse(context, reader, LEXY_FWD(args)...);
+            return NextParser::parse(context, reader, std::forward<Args>(args)...);
         }
     };
 
@@ -247,7 +247,7 @@ struct _wsn : _copy_base<Rule>
             context.control_block->enable_whitespace_skipping = true;
             // And skip whitespace once.
             return lexy::whitespace_parser<Context, NextParser>::parse(context, reader,
-                                                                       LEXY_FWD(args)...);
+                                                                       std::forward<Args>(args)...);
         }
     };
 
@@ -275,7 +275,7 @@ struct _wsn : _copy_base<Rule>
         {
             // Finish the rule with whitespace skipping disabled.
             context.control_block->enable_whitespace_skipping = false;
-            return rule.template finish<_pc<NextParser>>(context, reader, LEXY_FWD(args)...);
+            return rule.template finish<_pc<NextParser>>(context, reader, std::forward<Args>(args)...);
         }
     };
 
@@ -291,14 +291,14 @@ struct _wsn : _copy_base<Rule>
             {
                 // No whitespace, just parse the rule normally.
                 return lexy::parser_for<Rule, NextParser>::parse(context, reader,
-                                                                 LEXY_FWD(args)...);
+                                                                 std::forward<Args>(args)...);
             }
             else
             {
                 // Parse the rule with whitespace skipping disabled.
                 context.control_block->enable_whitespace_skipping = false;
                 using parser = lexy::parser_for<Rule, _pc<NextParser>>;
-                return parser::parse(context, reader, LEXY_FWD(args)...);
+                return parser::parse(context, reader, std::forward<Args>(args)...);
             }
         }
     };

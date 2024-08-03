@@ -27,8 +27,6 @@
 #endif
 
 //=== utility traits===//
-#define LEXY_FWD(...) static_cast<decltype(__VA_ARGS__)>(__VA_ARGS__)
-
 #define LEXY_DECLVAL(...) lexy::_detail::declval<__VA_ARGS__>()
 
 #define LEXY_DECAY_DECLTYPE(...) std::decay_t<decltype(__VA_ARGS__)>

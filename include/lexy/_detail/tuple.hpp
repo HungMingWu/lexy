@@ -52,7 +52,7 @@ public:
     constexpr _tuple() = default;
 
     template <typename... Args>
-    constexpr _tuple(Args&&... args) : _tuple_holder<Idx, T>{LEXY_FWD(args)}...
+    constexpr _tuple(Args&&... args) : _tuple_holder<Idx, T>{std::forward<Args>(args)}...
     {}
 };
 
@@ -63,7 +63,7 @@ struct tuple : _tuple<index_sequence_for<T...>, T...>
 
     template <typename... Args>
     constexpr explicit tuple(Args&&... args)
-    : _tuple<index_sequence_for<T...>, T...>(LEXY_FWD(args)...)
+    : _tuple<index_sequence_for<T...>, T...>(std::forward<Args>(args)...)
     {}
 
     template <std::size_t N>
@@ -105,13 +105,13 @@ struct tuple<>
 template <typename... Args>
 constexpr auto make_tuple(Args&&... args)
 {
-    return tuple<std::decay_t<Args>...>(LEXY_FWD(args)...);
+    return tuple<std::decay_t<Args>...>(std::forward<Args>(args)...);
 }
 
 template <typename... Args>
 constexpr auto forward_as_tuple(Args&&... args)
 {
-    return tuple<Args&&...>(LEXY_FWD(args)...);
+    return tuple<Args&&...>(std::forward<Args>(args)...);
 }
 } // namespace lexy::_detail
 

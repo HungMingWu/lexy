@@ -81,7 +81,7 @@ private:
     constexpr explicit parse_result(_impl_t&& impl, U&& v) noexcept : _impl(std::move(impl))
     {
         LEXY_PRECONDITION(impl.is_success() || impl.is_recovered_error());
-        _value.emplace(LEXY_FWD(v));
+        _value.emplace(std::forward<U>(v));
     }
 
     // In principle we could do a space optimization, as we can reconstruct the impl's status from

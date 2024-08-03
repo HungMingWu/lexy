@@ -84,7 +84,7 @@ struct _repd : rule_base // repeat, discard
             if (!_rep_impl<Item, Sep>::loop(context, reader, count))
                 return false;
 
-            return NextParser::parse(context, reader, LEXY_FWD(args)...);
+            return NextParser::parse(context, reader, std::forward<Args>(args)...);
         }
     };
 };
@@ -103,7 +103,7 @@ struct _repl : rule_base // repeat, list
                 return false;
 
             return lexy::sink_finish_parser<NextParser>::parse(context, reader, sink,
-                                                               LEXY_FWD(args)...);
+                                                               std::forward<Args>(args)...);
         }
     };
 };
@@ -121,7 +121,7 @@ struct _repc : rule_base // repeat, capture
             if (!_rep_impl<Item, Sep>::loop(context, reader, count))
                 return false;
 
-            return NextParser::parse(context, reader, LEXY_FWD(args)...,
+            return NextParser::parse(context, reader, std::forward<Args>(args)...,
                                      lexy::lexeme(reader, begin));
         }
     };

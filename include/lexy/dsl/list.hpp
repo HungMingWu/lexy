@@ -85,7 +85,7 @@ struct _lst : _copy_base<Item>
 
             // We're done with the list, finish the sink and continue.
             return lexy::sink_finish_parser<NextParser>::parse(context, reader, sink,
-                                                               LEXY_FWD(args)...);
+                                                               std::forward<Args>(args)...);
         }
     };
 
@@ -123,7 +123,7 @@ struct _lst : _copy_base<Item>
 
             // We're done with the list, finish the sink and continue.
             return lexy::sink_finish_parser<NextParser>::parse(context, reader, sink,
-                                                               LEXY_FWD(args)...);
+                                                               std::forward<Args>(args)...);
         }
     };
 };
@@ -432,11 +432,11 @@ struct _lstt : rule_base
             if constexpr (std::is_same_v<typename decltype(sink)::return_type, void>)
             {
                 std::move(sink).finish();
-                return term.template finish<NextParser>(context, reader, LEXY_FWD(args)...);
+                return term.template finish<NextParser>(context, reader, std::forward<Args>(args)...);
             }
             else
             {
-                return term.template finish<NextParser>(context, reader, LEXY_FWD(args)...,
+                return term.template finish<NextParser>(context, reader, std::forward<Args>(args)...,
                                                         std::move(sink).finish());
             }
         }

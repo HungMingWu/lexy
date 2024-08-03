@@ -17,9 +17,9 @@ struct _compose_state
     using return_type = typename Cb::return_type;
 
     template <typename... Args>
-    constexpr auto operator()(Args&&... args) const -> decltype(_cb(LEXY_FWD(args)...))
+    constexpr auto operator()(Args&&... args) const -> decltype(_cb(std::forward<Args>(args)...))
     {
-        return _cb(LEXY_FWD(args)...);
+        return _cb(std::forward<Args>(args)...);
     }
 };
 template <typename Cb, typename State>
@@ -31,9 +31,9 @@ struct _compose_state<Cb, State, std::enable_if_t<lexy::is_callback_state<Cb, St
     using return_type = typename Cb::return_type;
 
     template <typename... Args>
-    constexpr auto operator()(Args&&... args) const -> decltype(_cb[_state](LEXY_FWD(args)...))
+    constexpr auto operator()(Args&&... args) const -> decltype(_cb[_state](std::forward<Args>(args)...))
     {
-        return _cb[_state](LEXY_FWD(args)...);
+        return _cb[_state](std::forward<Args>(args)...);
     }
 };
 
@@ -61,9 +61,9 @@ struct _compose_cb
 
     template <typename... Args>
     constexpr auto operator()(Args&&... args) const
-        -> LEXY_DECAY_DECLTYPE(_first(LEXY_FWD(args)...), LEXY_DECLVAL(return_type))
+        -> LEXY_DECAY_DECLTYPE(_first(std::forward<Args>(args)...), LEXY_DECLVAL(return_type))
     {
-        return _second(_first(LEXY_FWD(args)...));
+        return _second(_first(std::forward<Args>(args)...));
     }
 };
 
@@ -76,9 +76,9 @@ struct _compose_s
     using return_type = typename Callback::return_type;
 
     template <typename... Args>
-    constexpr auto sink(Args&&... args) const -> decltype(_sink.sink(LEXY_FWD(args)...))
+    constexpr auto sink(Args&&... args) const -> decltype(_sink.sink(std::forward<Args>(args)...))
     {
-        return _sink.sink(LEXY_FWD(args)...);
+        return _sink.sink(std::forward<Args>(args)...);
     }
 
     template <typename State, typename = std::enable_if_t<lexy::is_callback_state<Callback, State>>>
@@ -88,9 +88,9 @@ struct _compose_s
     }
 
     template <typename... Args>
-    constexpr auto operator()(Args&&... args) const -> decltype(_callback(LEXY_FWD(args)...))
+    constexpr auto operator()(Args&&... args) const -> decltype(_callback(std::forward<Args>(args)...))
     {
-        return _callback(LEXY_FWD(args)...);
+        return _callback(std::forward<Args>(args)...);
     }
 };
 

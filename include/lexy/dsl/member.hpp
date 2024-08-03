@@ -16,7 +16,7 @@ struct _mem_ptr_fn
     template <typename Object, typename Value>
     constexpr void operator()(Object& object, Value&& value) const
     {
-        object.*Ptr = LEXY_FWD(value);
+        object.*Ptr = std::forward<Value>(value);
     }
 };
 
@@ -54,7 +54,7 @@ struct _mem : _copy_base<Rule>
         LEXY_PARSER_FUNC auto finish(Context& context, Reader& reader, Args&&... args)
         {
             // Add member tag here.
-            return rule.template finish<NextParser>(context, reader, LEXY_FWD(args)...,
+            return rule.template finish<NextParser>(context, reader, std::forward<Args>(args)...,
                                                     lexy::member<Fn>{});
         }
     };
@@ -67,7 +67,7 @@ struct _mem : _copy_base<Rule>
         {
             // Forward to the rule, but add member tag.
             using parser = lexy::parser_for<Rule, NextParser>;
-            return parser::parse(context, reader, LEXY_FWD(args)..., lexy::member<Fn>{});
+            return parser::parse(context, reader, std::forward<Args>(args)..., lexy::member<Fn>{});
         }
     };
 };
@@ -92,7 +92,7 @@ template <auto MemPtr>
 constexpr auto member = _mem_dsl<lexy::_mem_ptr_fn<MemPtr>>{};
 
 #define LEXY_MEM(Name)                                                                             \
-    ::lexyd::_mem_dsl([](auto& obj, auto&& value) { obj.Name = LEXY_FWD(value); })
+    ::lexyd::_mem_dsl([](auto& obj, auto&& value) { obj.Name = std::forward<decltype(value)>(value); })
 } // namespace lexyd
 
 #endif // LEXY_DSL_MEMBER_HPP_INCLUDED

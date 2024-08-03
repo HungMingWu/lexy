@@ -39,9 +39,9 @@ struct _construct
         -> std::enable_if_t<_detail::is_constructible<T, Args&&...>, T>
     {
         if constexpr (std::is_constructible_v<T, Args&&...>)
-            return T(LEXY_FWD(args)...);
+            return T(std::forward<Args>(args)...);
         else
-            return T{LEXY_FWD(args)...};
+            return T{std::forward<Args>(args)...};
     }
 };
 template <>
@@ -78,12 +78,12 @@ struct _new
     {
         if constexpr (std::is_constructible_v<T, Args&&...>)
         {
-            auto ptr = new T(LEXY_FWD(args)...);
+            auto ptr = new T(std::forward<Args>(args)...);
             return PtrT(ptr);
         }
         else
         {
-            auto ptr = new T{LEXY_FWD(args)...};
+            auto ptr = new T{std::forward<Args>(args)...};
             return PtrT(ptr);
         }
     }

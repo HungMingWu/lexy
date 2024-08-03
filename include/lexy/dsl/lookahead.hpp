@@ -94,7 +94,7 @@ struct _look : branch_base
         LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
         {
             context.on(_ev::backtracked{}, begin, end);
-            return NextParser::parse(context, reader, LEXY_FWD(args)...);
+            return NextParser::parse(context, reader, std::forward<Args>(args)...);
         }
     };
 
@@ -117,7 +117,7 @@ struct _look : branch_base
             }
 
             context.on(_ev::backtracked{}, impl.begin, impl.end);
-            return NextParser::parse(context, reader, LEXY_FWD(args)...);
+            return NextParser::parse(context, reader, std::forward<Args>(args)...);
         }
     };
 

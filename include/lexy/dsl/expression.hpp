@@ -199,7 +199,7 @@ struct operation_list
                        = Continuation<Operations>::parse(context, reader,
                                                          parsed_operator<Reader>{op.cur,
                                                                                  op.idx - cur_idx},
-                                                         LEXY_FWD(args)...),
+                                                         std::forward<Args>(args)...),
                        true)
                     : (cur_idx += op_of<Operations>::op_literals::size, false))
                || ...);
@@ -288,7 +288,7 @@ struct _expr : rule_base
                     context.value = {};
 
                     // As well as the operator we've already got.
-                    sink(LEXY_FWD(op_args)...);
+                    sink(std::forward<Args>(op_args)...);
 
                     auto result = true;
                     while (true)
@@ -347,9 +347,9 @@ struct _expr : rule_base
 
                     if constexpr (value_type_void)
                         context.value.emplace_result(context.value_callback(),
-                                                     LEXY_FWD(op_args)...);
+                                                     std::forward<Args>(op_args)...);
                     else
-                        context.value.emplace_result(context.value_callback(), LEXY_FWD(op_args)...,
+                        context.value.emplace_result(context.value_callback(), std::forward<Args>(op_args)...,
                                                      *std::move(value));
                 }
                 else if constexpr (binding_power.is_infix())
@@ -369,10 +369,10 @@ struct _expr : rule_base
 
                     if constexpr (value_type_void)
                         context.value.emplace_result(context.value_callback(),
-                                                     LEXY_FWD(op_args)...);
+                                                     std::forward<Args>(op_args)...);
                     else
                         context.value.emplace_result(context.value_callback(), *std::move(lhs),
-                                                     LEXY_FWD(op_args)..., *std::move(rhs));
+                                                     std::forward<Args>(op_args)..., *std::move(rhs));
 
                     if constexpr (std::is_base_of_v<infix_op_single, Operation>)
                     {
@@ -395,10 +395,10 @@ struct _expr : rule_base
 
                     if constexpr (value_type_void)
                         context.value.emplace_result(context.value_callback(),
-                                                     LEXY_FWD(op_args)...);
+                                                     std::forward<Args>(op_args)...);
                     else
                         context.value.emplace_result(context.value_callback(), *std::move(value),
-                                                     LEXY_FWD(op_args)...);
+                                                     std::forward<Args>(op_args)...);
                 }
 
                 context.on(_ev::operation_chain_op{}, Operation{}, reader.position());

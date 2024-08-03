@@ -405,7 +405,7 @@ struct _int : _copy_base<Token>
 
             // Need to skip whitespace now as well.
             return lexy::whitespace_parser<Context, NextParser>::parse(context, reader,
-                                                                       LEXY_FWD(args)..., value);
+                                                                       std::forward<Args>(args)..., value);
         }
     };
 
@@ -434,7 +434,7 @@ struct _int : _copy_base<Token>
             reader.reset(end);
 
             return _pc<NextParser>::parse(context, reader, begin, end.position(),
-                                          LEXY_FWD(args)...);
+                                          std::forward<Args>(args)...);
         }
     };
 
@@ -479,7 +479,7 @@ struct _int : _copy_base<Token>
             }
             auto end = reader.position();
 
-            return _pc<NextParser>::parse(context, reader, begin, end, LEXY_FWD(args)...);
+            return _pc<NextParser>::parse(context, reader, begin, end, std::forward<Args>(args)...);
         }
     };
 };

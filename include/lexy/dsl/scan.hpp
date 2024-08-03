@@ -76,12 +76,12 @@ public:
     template <typename U = T>
     constexpr decltype(auto) value_or(U&& fallback) const& noexcept
     {
-        return _value ? *_value : LEXY_FWD(fallback);
+        return _value ? *_value : std::forward<U>(fallback);
     }
     template <typename U = T>
     constexpr decltype(auto) value_or(U&& fallback) && noexcept
     {
-        return _value ? std::move(*_value) : LEXY_FWD(fallback);
+        return _value ? std::move(*_value) : std::forward<U>(fallback);
     }
 
 private:
@@ -326,27 +326,27 @@ public:
     constexpr void error(Tag, Args&&... args)
     {
         auto& context = static_cast<Derived&>(*this).context();
-        context.on(parse_events::error{}, lexy::error<Reader, Tag>(LEXY_FWD(args)...));
+        context.on(parse_events::error{}, lexy::error<Reader, Tag>(std::forward<Args>(args)...));
     }
 
     template <typename... Args>
     constexpr void error(const char* msg, Args&&... args)
     {
         auto& context = static_cast<Derived&>(*this).context();
-        context.on(parse_events::error{}, lexy::error<Reader, void>(LEXY_FWD(args)..., msg));
+        context.on(parse_events::error{}, lexy::error<Reader, void>(std::forward<Args>(args)..., msg));
     }
 
     template <typename Tag, typename... Args>
     constexpr void fatal_error(Tag tag, Args&&... args)
     {
-        error(tag, LEXY_FWD(args)...);
+        error(tag, std::forward<Args>(args)...);
         _state = _state_failed;
     }
 
     template <typename... Args>
     constexpr void fatal_error(const char* msg, Args&&... args)
     {
-        error(msg, LEXY_FWD(args)...);
+        error(msg, std::forward<Args>(args)...);
         _state = _state_failed;
     }
 
@@ -477,9 +477,9 @@ struct _scan : rule_base
                                   _detect_scan_state, Context, decltype(scanner),
                                   decltype(context.control_block->parse_state), Args&&...>)
                     return Context::production::scan(scanner, *context.control_block->parse_state,
-                                                     LEXY_FWD(args)...);
+                                                     std::forward<Args>(args)...);
                 else
-                    return Context::production::scan(scanner, LEXY_FWD(args)...);
+                    return Context::production::scan(scanner, std::forward<Args>(args)...);
             }();
             reader.reset(scanner.current());
             if (!result)
@@ -495,7 +495,7 @@ struct _scan : rule_base
         LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             lexy::rule_scanner scanner(context, reader);
-            return _parse(scanner, context, reader, LEXY_FWD(args)...);
+            return _parse(scanner, context, reader, std::forward<Args>(args)...);
         }
     };
 };

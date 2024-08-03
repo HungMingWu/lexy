@@ -115,13 +115,13 @@ public:
         template <typename Error>
         void on(_pth& handler, parse_events::error ev, Error&& error)
         {
-            _validate.on(handler._validate, ev, LEXY_FWD(error));
+            _validate.on(handler._validate, ev, std::forward<Error>(error));
         }
 
         template <typename Event, typename... Args>
         auto on(_pth& handler, Event ev, Args&&... args)
         {
-            return _validate.on(handler._validate, ev, LEXY_FWD(args)...);
+            return _validate.on(handler._validate, ev, std::forward<Args>(args)...);
         }
 
     private:

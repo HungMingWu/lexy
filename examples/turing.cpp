@@ -34,7 +34,7 @@ namespace dsl_ext
                                                    typename Reader::marker old, Args&&... args)
                 {
                     reader.reset(old);
-                    return NextParser::parse(context, reader, LEXY_FWD(args)...);
+                    return NextParser::parse(context, reader, std::forward<Args>(args)...);
                 }
             };
 
@@ -43,7 +43,7 @@ namespace dsl_ext
             {
                 auto cur = reader.current();
                 return lexy::parser_for<Rule, continuation>::parse(context, reader, cur,
-                                                                   LEXY_FWD(args)...);
+                                                                   std::forward<Args>(args)...);
             }
         };
     };

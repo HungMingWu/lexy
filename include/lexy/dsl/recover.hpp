@@ -30,7 +30,7 @@ struct _recovery_wrapper : _recovery_base
             {
                 recovery_finished = true;
                 context.on(_ev::recovery_finish{}, reader.position());
-                return NextParser::parse(context, reader, LEXY_FWD(args)...);
+                return NextParser::parse(context, reader, std::forward<Args>(args)...);
             }
         };
 
@@ -42,7 +42,7 @@ struct _recovery_wrapper : _recovery_base
 
             // As part of the recovery, we parse the rule and whitespace.
             using parser = lexy::parser_for<Rule, lexy::whitespace_parser<Context, _continuation>>;
-            auto result  = parser::parse(context, reader, recovery_finished, LEXY_FWD(args)...);
+            auto result  = parser::parse(context, reader, recovery_finished, std::forward<Args>(args)...);
 
             if (!recovery_finished)
                 context.on(_ev::recovery_cancel{}, reader.position());
@@ -86,7 +86,7 @@ struct _find : _recovery_base
                     context.on(_ev::token{}, lexy::error_token_kind, begin, end.position());
                     context.on(_ev::recovery_finish{}, end.position());
                     reader.reset(end); // reset to before the token
-                    return NextParser::parse(context, reader, LEXY_FWD(args)...);
+                    return NextParser::parse(context, reader, std::forward<Args>(args)...);
                 }
                 else if (result == 1 || reader.peek() == Reader::encoding::eof())
                 {
@@ -178,7 +178,7 @@ struct _reco : _recovery_base
             context.on(_ev::recovery_finish{}, end);
 
             // Finish with the rule that matched.
-            return recovery.template finish<NextParser>(context, reader, LEXY_FWD(args)...);
+            return recovery.template finish<NextParser>(context, reader, std::forward<Args>(args)...);
         }
     };
 
@@ -228,10 +228,10 @@ struct _tryt : rule_base
 
             // We need to parse the terminator on success as well, if we have one.
             if constexpr (std::is_void_v<Terminator>)
-                return NextParser::parse(context, reader, LEXY_FWD(args)...);
+                return NextParser::parse(context, reader, std::forward<Args>(args)...);
             else
                 return lexy::parser_for<Terminator, NextParser>::parse(context, reader,
-                                                                       LEXY_FWD(args)...);
+                                                                       std::forward<Args>(args)...);
         }
 
         template <typename Context, typename Reader, typename... Args>
@@ -241,19 +241,19 @@ struct _tryt : rule_base
             {
                 using recovery_rule = _recovery_wrapper<_noop_recovery>;
                 return lexy::parser_for<recovery_rule, NextParser>::parse(context, reader,
-                                                                          LEXY_FWD(args)...);
+                                                                          std::forward<Args>(args)...);
             }
             else if constexpr (std::is_base_of_v<_recovery_base, Recover>)
             {
                 using recovery_rule = Recover;
                 return lexy::parser_for<recovery_rule, NextParser>::parse(context, reader,
-                                                                          LEXY_FWD(args)...);
+                                                                          std::forward<Args>(args)...);
             }
             else
             {
                 using recovery_rule = _recovery_wrapper<Recover>;
                 return lexy::parser_for<recovery_rule, NextParser>::parse(context, reader,
-                                                                          LEXY_FWD(args)...);
+                                                                          std::forward<Args>(args)...);
             }
         }
     };
@@ -268,14 +268,14 @@ struct _tryt : rule_base
 
             // Parse the rule and check whether it reached the continuation.
             auto continuation_reached = false;
-            auto result = parser::parse(context, reader, continuation_reached, LEXY_FWD(args)...);
+            auto result = parser::parse(context, reader, continuation_reached, std::forward<Args>(args)...);
             if (continuation_reached)
                 // Whatever happened, it is not our problem as we've reached the continuation.
                 return result;
 
             // We haven't reached the continuation, so need to recover.
             LEXY_ASSERT(!result, "we've failed without reaching the continuation?!");
-            return _pc<NextParser>::recover(context, reader, LEXY_FWD(args)...);
+            return _pc<NextParser>::recover(context, reader, std::forward<Args>(args)...);
         }
     };
 };
@@ -309,14 +309,14 @@ struct _tryr : _copy_base<Rule>
             using continuation        = typename impl::template _pc<NextParser>;
             auto continuation_reached = false;
             auto result = rule.template finish<continuation>(context, reader, continuation_reached,
-                                                             LEXY_FWD(args)...);
+                                                             std::forward<Args>(args)...);
             if (continuation_reached)
                 // Whatever happened, it is not our problem as we've reached the continuation.
                 return result;
 
             // We haven't reached the continuation, so need to recover.
             LEXY_ASSERT(!result, "we've failed without reaching the continuation?!");
-            return continuation::recover(context, reader, LEXY_FWD(args)...);
+            return continuation::recover(context, reader, std::forward<Args>(args)...);
         }
     };
 

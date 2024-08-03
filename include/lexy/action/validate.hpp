@@ -142,23 +142,23 @@ struct _validate_callbacks
       generic([](_detail::any_ref sink, production_info info, _detail::any_cref input,
                  typename Reader::iterator begin, const error<Reader, void>& error) {
           lexy::error_context err_ctx(info, *input->template get<const Input*>(), begin);
-          sink->template get<Sink>()(err_ctx, LEXY_FWD(error));
+          sink->template get<Sink>()(err_ctx, std::forward<decltype(error)>(error));
       }),
       literal([](_detail::any_ref sink, production_info info, _detail::any_cref input,
                  typename Reader::iterator begin, const error<Reader, expected_literal>& error) {
           lexy::error_context err_ctx(info, *input->template get<const Input*>(), begin);
-          sink->template get<Sink>()(err_ctx, LEXY_FWD(error));
+          sink->template get<Sink>()(err_ctx, std::forward<decltype(error)>(error));
       }),
       keyword([](_detail::any_ref sink, production_info info, _detail::any_cref input,
                  typename Reader::iterator begin, const error<Reader, expected_keyword>& error) {
           lexy::error_context err_ctx(info, *input->template get<const Input*>(), begin);
-          sink->template get<Sink>()(err_ctx, LEXY_FWD(error));
+          sink->template get<Sink>()(err_ctx, std::forward<decltype(error)>(error));
       }),
       char_class([](_detail::any_ref sink, production_info info, _detail::any_cref input,
                     typename Reader::iterator                 begin,
                     const error<Reader, expected_char_class>& error) {
           lexy::error_context err_ctx(info, *input->template get<const Input*>(), begin);
-          sink->template get<Sink>()(err_ctx, LEXY_FWD(error));
+          sink->template get<Sink>()(err_ctx, std::forward<decltype(error)>(error));
       })
     {}
 };

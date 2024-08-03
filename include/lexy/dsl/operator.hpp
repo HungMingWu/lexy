@@ -118,16 +118,16 @@ struct _op : branch_base
         using continuation
             = lexy::whitespace_parser<Context, lexy::parser_for<_seq_impl<R...>, NextParser>>;
         if constexpr (std::is_void_v<TagType>)
-            return continuation::parse(context, reader, LEXY_FWD(args)...);
+            return continuation::parse(context, reader, std::forward<Args>(args)...);
         else if constexpr (lexy::_detail::is_detected<_detect_op_tag_ctor_with_state, op_tag_type,
                                                       Reader, Context>)
-            return continuation::parse(context, reader, LEXY_FWD(args)...,
+            return continuation::parse(context, reader, std::forward<Args>(args)...,
                                        op_tag_type(*context.control_block->parse_state, op.pos));
         else if constexpr (lexy::_detail::is_detected<_detect_op_tag_ctor, op_tag_type, Reader>)
-            return continuation::parse(context, reader, LEXY_FWD(args)...,
+            return continuation::parse(context, reader, std::forward<Args>(args)...,
                                        op_tag_type(op.cur.position()));
         else
-            return continuation::parse(context, reader, LEXY_FWD(args)..., op_tag_type{});
+            return continuation::parse(context, reader, std::forward<Args>(args)..., op_tag_type{});
     }
 
     template <typename Reader>
@@ -153,18 +153,18 @@ struct _op : branch_base
             using continuation = lexy::parser_for<_seq_impl<R...>, NextParser>;
 
             if constexpr (std::is_void_v<TagType>)
-                return impl.template finish<continuation>(context, reader, LEXY_FWD(args)...);
+                return impl.template finish<continuation>(context, reader, std::forward<Args>(args)...);
             else if constexpr (lexy::_detail::is_detected<_detect_op_tag_ctor_with_state,
                                                           op_tag_type, Reader, Context>)
                 return impl
-                    .template finish<continuation>(context, reader, LEXY_FWD(args)...,
+                    .template finish<continuation>(context, reader, std::forward<Args>(args)...,
                                                    op_tag_type(*context.control_block->parse_state,
                                                                reader.position()));
             else if constexpr (lexy::_detail::is_detected<_detect_op_tag_ctor, op_tag_type, Reader>)
-                return impl.template finish<continuation>(context, reader, LEXY_FWD(args)...,
+                return impl.template finish<continuation>(context, reader, std::forward<Args>(args)...,
                                                           op_tag_type(reader.position()));
             else
-                return impl.template finish<continuation>(context, reader, LEXY_FWD(args)...,
+                return impl.template finish<continuation>(context, reader, std::forward<Args>(args)...,
                                                           op_tag_type{});
         }
     };
@@ -180,15 +180,15 @@ struct _op : branch_base
             using continuation
                 = lexy::parser_for<Literal, lexy::parser_for<_seq_impl<R...>, NextParser>>;
             if constexpr (std::is_void_v<TagType>)
-                return continuation::parse(context, reader, LEXY_FWD(args)...);
+                return continuation::parse(context, reader, std::forward<Args>(args)...);
             else if constexpr (lexy::_detail::is_detected<_detect_op_tag_ctor_with_state,
                                                           op_tag_type, Reader, Context>)
-                return continuation::parse(context, reader, LEXY_FWD(args)...,
+                return continuation::parse(context, reader, std::forward<Args>(args)...,
                                            op_tag_type(*context.control_block->parse_state, pos));
             else if constexpr (lexy::_detail::is_detected<_detect_op_tag_ctor, op_tag_type, Reader>)
-                return continuation::parse(context, reader, LEXY_FWD(args)..., op_tag_type(pos));
+                return continuation::parse(context, reader, std::forward<Args>(args)..., op_tag_type(pos));
             else
-                return continuation::parse(context, reader, LEXY_FWD(args)..., op_tag_type{});
+                return continuation::parse(context, reader, std::forward<Args>(args)..., op_tag_type{});
         }
     };
 };
@@ -254,7 +254,7 @@ struct _opc : branch_base
         auto cur_idx = std::size_t(0);
         (void)((cur_idx == op.idx
                     ? (result = Ops::template op_finish<NextParser>(context, reader, op,
-                                                                    LEXY_FWD(args)...),
+                                                                    std::forward<Args>(args)...),
                        true)
                     : (++cur_idx, false))
                || ...);
@@ -283,7 +283,7 @@ struct _opc : branch_base
         LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
         {
             reader.reset(end);
-            return op_finish<NextParser>(context, reader, op, LEXY_FWD(args)...);
+            return op_finish<NextParser>(context, reader, op, std::forward<Args>(args)...);
         }
     };
 
@@ -302,7 +302,7 @@ struct _opc : branch_base
             }
             else
             {
-                return impl.template finish<NextParser>(context, reader, LEXY_FWD(args)...);
+                return impl.template finish<NextParser>(context, reader, std::forward<Args>(args)...);
             }
         }
     };

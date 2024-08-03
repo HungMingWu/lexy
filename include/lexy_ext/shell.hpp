@@ -352,7 +352,7 @@ public:
     template <typename... Args>
     auto write_message(Args&&... args)
     {
-        return writer{_prompt.write_message(LEXY_FWD(args)...)};
+        return writer{_prompt.write_message(std::forward<Args>(args)...)};
     }
 
     Prompt& get_prompt() noexcept

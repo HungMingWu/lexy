@@ -138,7 +138,7 @@ struct unconditional_branch_parser
     template <typename NextParser, typename Context, typename... Args>
     LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
     {
-        return parser_for<Rule, NextParser>::parse(context, reader, LEXY_FWD(args)...);
+        return parser_for<Rule, NextParser>::parse(context, reader, std::forward<Args>(args)...);
     }
 };
 
@@ -163,7 +163,7 @@ struct continuation_branch_parser
     template <typename NextParser, typename Context, typename... Args>
     LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
     {
-        return impl.template finish<Continuation<NextParser>>(context, reader, LEXY_FWD(args)...);
+        return impl.template finish<Continuation<NextParser>>(context, reader, std::forward<Args>(args)...);
     }
 };
 
@@ -188,7 +188,7 @@ struct sink_parser
     LEXY_PARSER_FUNC static std::true_type parse(Context&, Reader&, Sink& sink, Args&&... args)
     {
         if constexpr (sizeof...(Args) > 0)
-            sink(LEXY_FWD(args)...);
+            sink(std::forward<Args>(args)...);
 
         return {};
     }
@@ -204,11 +204,11 @@ struct sink_finish_parser
         if constexpr (std::is_same_v<typename Sink::return_type, void>)
         {
             std::move(sink).finish();
-            return NextParser::parse(context, reader, LEXY_FWD(args)...);
+            return NextParser::parse(context, reader, std::forward<Args>(args)...);
         }
         else
         {
-            return NextParser::parse(context, reader, LEXY_FWD(args)..., std::move(sink).finish());
+            return NextParser::parse(context, reader, std::forward<Args>(args)..., std::move(sink).finish());
         }
     }
 };

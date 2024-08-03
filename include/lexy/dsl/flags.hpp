@@ -71,7 +71,7 @@ struct _flags : rule_base
             _int_type result{};
             if (!_parse(result, context, reader))
                 return false;
-            return NextParser::parse(context, reader, LEXY_FWD(args)..., _enum_type(result));
+            return NextParser::parse(context, reader, std::forward<Args>(args)..., _enum_type(result));
         }
     };
 
@@ -113,11 +113,11 @@ struct _flag : rule_base
         {
             lexy::branch_parser_for<Rule, Reader> branch{};
             if (branch.try_parse(context.control_block, reader))
-                return branch.template finish<NextParser>(context, reader, LEXY_FWD(args)..., If);
+                return branch.template finish<NextParser>(context, reader, std::forward<Args>(args)..., If);
             else
             {
                 branch.cancel(context);
-                return NextParser::parse(context, reader, LEXY_FWD(args)..., Else);
+                return NextParser::parse(context, reader, std::forward<Args>(args)..., Else);
             }
         }
     };

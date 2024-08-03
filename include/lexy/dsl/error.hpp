@@ -79,7 +79,7 @@ struct _must : branch_base
             // Try and parse the branch.
             lexy::branch_parser_for<Branch, Reader> branch{};
             if (branch.try_parse(context.control_block, reader))
-                return branch.template finish<NextParser>(context, reader, LEXY_FWD(args)...);
+                return branch.template finish<NextParser>(context, reader, std::forward<Args>(args)...);
             branch.cancel(context);
 
             // The branch wasn't taken, so we fail with the specific error by parsing Error.

@@ -39,7 +39,7 @@ struct _eof : branch_base
         {
             auto pos = reader.position();
             context.on(_ev::token{}, lexy::eof_token_kind, pos, pos);
-            return NextParser::parse(context, reader, LEXY_FWD(args)...);
+            return NextParser::parse(context, reader, std::forward<Args>(args)...);
         }
     };
 
@@ -63,7 +63,7 @@ struct _eof : branch_base
                 context.on(_ev::token{}, lexy::eof_token_kind, pos, pos);
             }
 
-            return NextParser::parse(context, reader, LEXY_FWD(args)...);
+            return NextParser::parse(context, reader, std::forward<Args>(args)...);
         }
     };
 };

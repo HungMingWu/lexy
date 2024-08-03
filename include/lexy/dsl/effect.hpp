@@ -35,11 +35,11 @@ struct _eff : rule_base
                 if constexpr (std::is_void_v<return_type>)
                 {
                     Fn(*context.control_block->parse_state);
-                    return NextParser::parse(context, reader, LEXY_FWD(args)...);
+                    return NextParser::parse(context, reader, std::forward<Args>(args)...);
                 }
                 else
                 {
-                    return NextParser::parse(context, reader, LEXY_FWD(args)...,
+                    return NextParser::parse(context, reader, std::forward<Args>(args)...,
                                              Fn(*context.control_block->parse_state));
                 }
             }
@@ -49,11 +49,11 @@ struct _eff : rule_base
                 if constexpr (std::is_void_v<return_type>)
                 {
                     Fn();
-                    return NextParser::parse(context, reader, LEXY_FWD(args)...);
+                    return NextParser::parse(context, reader, std::forward<Args>(args)...);
                 }
                 else
                 {
-                    return NextParser::parse(context, reader, LEXY_FWD(args)..., Fn());
+                    return NextParser::parse(context, reader, std::forward<Args>(args)..., Fn());
                 }
             }
         }

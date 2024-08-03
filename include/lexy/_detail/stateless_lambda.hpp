@@ -63,7 +63,7 @@ struct stateless_lambda
     template <typename... Args>
     constexpr decltype(auto) operator()(Args&&... args) const
     {
-        return get()(LEXY_FWD(args)...);
+        return get()(std::forward<Args>(args)...);
     }
 };
 } // namespace lexy::_detail

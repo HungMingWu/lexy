@@ -82,7 +82,7 @@ struct _chc
             (void)((Idx == branch_idx
                         ? (result
                            = r_parsers.template get<Idx>()
-                                 .template finish<NextParser>(context, reader, LEXY_FWD(args)...),
+                                 .template finish<NextParser>(context, reader, std::forward<Args>(args)...),
                            true)
                         : (r_parsers.template get<Idx>().cancel(context), false))
                    || ...);
@@ -104,7 +104,7 @@ struct _chc
                     return false;
                 }
 
-                // LEXY_FWD(args) will break MSVC builds targeting C++17.
+                // std::forward<Args>(args) will break MSVC builds targeting C++17.
                 result = parser.template finish<NextParser>(context, reader,
                                                             static_cast<Args&&>(args)...);
                 return true;

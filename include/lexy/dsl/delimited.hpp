@@ -267,11 +267,11 @@ struct _del : rule_base
             if constexpr (std::is_same_v<typename decltype(sink)::return_type, void>)
             {
                 std::move(sink).finish();
-                return close.template finish<NextParser>(context, reader, LEXY_FWD(args)...);
+                return close.template finish<NextParser>(context, reader, std::forward<Args>(args)...);
             }
             else
             {
-                return close.template finish<NextParser>(context, reader, LEXY_FWD(args)...,
+                return close.template finish<NextParser>(context, reader, std::forward<Args>(args)...,
                                                          std::move(sink).finish());
             }
         }

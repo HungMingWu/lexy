@@ -61,9 +61,9 @@ struct _fn_holder
 
     template <typename... Args>
     constexpr auto operator()(Args&&... args) const
-        -> decltype(_detail::invoke(fn, LEXY_FWD(args)...))
+        -> decltype(_detail::invoke(fn, std::forward<Args>(args)...))
     {
-        return _detail::invoke(fn, LEXY_FWD(args)...);
+        return _detail::invoke(fn, std::forward<Args>(args)...);
     }
 };
 
@@ -82,9 +82,9 @@ template <typename... Op>
 constexpr auto _make_overloaded(Op&&... op)
 {
     if constexpr (sizeof...(Op) == 1)
-        return (LEXY_FWD(op), ...);
+        return (std::forward<Op>(op), ...);
     else
-        return _overloaded(LEXY_FWD(op)...);
+        return _overloaded(std::forward<Op>(op)...);
 }
 } // namespace lexy
 

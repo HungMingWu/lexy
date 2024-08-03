@@ -32,16 +32,16 @@ struct _list_sink
     using return_type = Container;
 
     template <typename C = Container, typename U>
-    constexpr auto operator()(U&& obj) -> decltype(LEXY_DECLVAL(C&).push_back(LEXY_FWD(obj)))
+    constexpr auto operator()(U&& obj) -> decltype(LEXY_DECLVAL(C&).push_back(std::forward<U>(obj)))
     {
-        return _result.push_back(LEXY_FWD(obj));
+        return _result.push_back(std::forward<U>(obj));
     }
 
     template <typename C = Container, typename... Args>
     constexpr auto operator()(Args&&... args)
-        -> decltype(LEXY_DECLVAL(C&).emplace_back(LEXY_FWD(args)...))
+        -> decltype(LEXY_DECLVAL(C&).emplace_back(std::forward<Args>(args)...))
     {
-        return _result.emplace_back(LEXY_FWD(args)...);
+        return _result.emplace_back(std::forward<Args>(args)...);
     }
 
     constexpr Container&& finish() &&
@@ -74,13 +74,13 @@ struct _list_alloc
 
         template <typename... Args>
         constexpr auto operator()(Args&&... args) const
-            -> LEXY_DECAY_DECLTYPE((LEXY_DECLVAL(Container&).push_back(LEXY_FWD(args)), ...),
+            -> LEXY_DECAY_DECLTYPE((LEXY_DECLVAL(Container&).push_back(std::forward<Args>(args)), ...),
                                    LEXY_DECLVAL(Container))
         {
             Container result(_detail::invoke(_alloc, _state));
             if constexpr (_has_reserve<Container>)
                 result.reserve(sizeof...(args));
-            (result.emplace_back(LEXY_FWD(args)), ...);
+            (result.emplace_back(std::forward<Args>(args)), ...);
             return result;
         }
     };
@@ -114,23 +114,23 @@ struct _list
 
     template <typename... Args>
     constexpr auto operator()(Args&&... args) const
-        -> LEXY_DECAY_DECLTYPE((LEXY_DECLVAL(Container&).push_back(LEXY_FWD(args)), ...),
+        -> LEXY_DECAY_DECLTYPE((LEXY_DECLVAL(Container&).push_back(std::forward<Args>(args)), ...),
                                LEXY_DECLVAL(Container))
     {
         Container result;
         if constexpr (_has_reserve<Container>)
             result.reserve(sizeof...(args));
-        (result.emplace_back(LEXY_FWD(args)), ...);
+        (result.emplace_back(std::forward<Args>(args)), ...);
         return result;
     }
     template <typename C = Container, typename... Args>
     constexpr auto operator()(const typename C::allocator_type& allocator, Args&&... args) const
-        -> decltype((LEXY_DECLVAL(C&).push_back(LEXY_FWD(args)), ...), C(allocator))
+        -> decltype((LEXY_DECLVAL(C&).push_back(std::forward<Args>(args)), ...), C(allocator))
     {
         Container result(allocator);
         if constexpr (_has_reserve<Container>)
             result.reserve(sizeof...(args));
-        (result.emplace_back(LEXY_FWD(args)), ...);
+        (result.emplace_back(std::forward<Args>(args)), ...);
         return result;
     }
 
@@ -172,16 +172,16 @@ struct _collection_sink
     using return_type = Container;
 
     template <typename C = Container, typename U>
-    constexpr auto operator()(U&& obj) -> decltype(LEXY_DECLVAL(C&).insert(LEXY_FWD(obj)))
+    constexpr auto operator()(U&& obj) -> decltype(LEXY_DECLVAL(C&).insert(std::forward<U>(obj)))
     {
-        return _result.insert(LEXY_FWD(obj));
+        return _result.insert(std::forward<U>(obj));
     }
 
     template <typename C = Container, typename... Args>
     constexpr auto operator()(Args&&... args)
-        -> decltype(LEXY_DECLVAL(C&).emplace(LEXY_FWD(args)...))
+        -> decltype(LEXY_DECLVAL(C&).emplace(std::forward<Args>(args)...))
     {
-        return _result.emplace(LEXY_FWD(args)...);
+        return _result.emplace(std::forward<Args>(args)...);
     }
 
     constexpr Container&& finish() &&
@@ -214,13 +214,13 @@ struct _collection_alloc
 
         template <typename... Args>
         constexpr auto operator()(Args&&... args) const
-            -> LEXY_DECAY_DECLTYPE((LEXY_DECLVAL(Container&).insert(LEXY_FWD(args)), ...),
+            -> LEXY_DECAY_DECLTYPE((LEXY_DECLVAL(Container&).insert(std::forward<Args>(args)), ...),
                                    LEXY_DECLVAL(Container))
         {
             Container result(_detail::invoke(_alloc, _state));
             if constexpr (_has_reserve<Container>)
                 result.reserve(sizeof...(args));
-            (result.emplace(LEXY_FWD(args)), ...);
+            (result.emplace(std::forward<Args>(args)), ...);
             return result;
         }
     };
@@ -254,24 +254,24 @@ struct _collection
 
     template <typename... Args>
     constexpr auto operator()(Args&&... args) const
-        -> LEXY_DECAY_DECLTYPE((LEXY_DECLVAL(Container&).insert(LEXY_FWD(args)), ...),
+        -> LEXY_DECAY_DECLTYPE((LEXY_DECLVAL(Container&).insert(std::forward<Args>(args)), ...),
                                LEXY_DECLVAL(Container))
     {
         Container result;
         if constexpr (_has_reserve<Container>)
             result.reserve(sizeof...(args));
-        (result.emplace(LEXY_FWD(args)), ...);
+        (result.emplace(std::forward<Args>(args)), ...);
         return result;
     }
 
     template <typename C = Container, typename... Args>
     constexpr auto operator()(const typename C::allocator_type& allocator, Args&&... args) const
-        -> decltype((LEXY_DECLVAL(C&).insert(LEXY_FWD(args)), ...), C(allocator))
+        -> decltype((LEXY_DECLVAL(C&).insert(std::forward<Args>(args)), ...), C(allocator))
     {
         Container result(allocator);
         if constexpr (_has_reserve<Container>)
             result.reserve(sizeof...(args));
-        (result.emplace(LEXY_FWD(args)), ...);
+        (result.emplace(std::forward<Args>(args)), ...);
         return result;
     }
 
@@ -346,9 +346,9 @@ struct _concat
     }
 
     template <typename... Args>
-    constexpr auto operator()(Args&&... args) const -> decltype(_call(Container(LEXY_FWD(args))...))
+    constexpr auto operator()(Args&&... args) const -> decltype(_call(Container(std::forward<Args>(args))...))
     {
-        return _call(Container(LEXY_FWD(args))...);
+        return _call(Container(std::forward<Args>(args))...);
     }
 
     struct _sink
@@ -424,9 +424,9 @@ public:
 
     template <typename... Args>
     constexpr auto operator()(Args&&... args)
-        -> decltype(void(LEXY_DECLVAL(Callback)(LEXY_FWD(args)...)))
+        -> decltype(void(LEXY_DECLVAL(Callback)(std::forward<Args>(args)...)))
     {
-        _result.push_back(_callback(LEXY_FWD(args)...));
+        _result.push_back(_callback(std::forward<Args>(args)...));
     }
 
     constexpr auto finish() &&
@@ -449,9 +449,9 @@ public:
 
     template <typename... Args>
     constexpr auto operator()(Args&&... args)
-        -> decltype(void(LEXY_DECLVAL(Callback)(LEXY_FWD(args)...)))
+        -> decltype(void(LEXY_DECLVAL(Callback)(std::forward<Args>(args)...)))
     {
-        _callback(LEXY_FWD(args)...);
+        _callback(std::forward<Args>(args)...);
         ++_count;
     }
 
@@ -493,7 +493,7 @@ constexpr auto collect(Callback&& callback)
     using callback_t = std::decay_t<Callback>;
     static_assert(std::is_void_v<typename callback_t::return_type>,
                   "need to specify a container to collect into for non-void callbacks");
-    return _collect<void, callback_t>(LEXY_FWD(callback));
+    return _collect<void, callback_t>(std::forward<Callback>(callback));
 }
 
 /// Returns a sink that invokes the callback multiple times, storing each result in the container.
@@ -503,7 +503,7 @@ constexpr auto collect(Callback&& callback)
     using callback_t = std::decay_t<Callback>;
     static_assert(!std::is_void_v<typename callback_t::return_type>,
                   "cannot collect a void callback into a container");
-    return _collect<Container, callback_t>(LEXY_FWD(callback));
+    return _collect<Container, callback_t>(std::forward<Callback>(callback));
 }
 } // namespace lexy
 

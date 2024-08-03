@@ -18,7 +18,7 @@ struct _pos : rule_base
         {
             auto pos = reader.position();
             context.on(_ev::token{}, lexy::position_token_kind, pos, pos);
-            return NextParser::parse(context, reader, LEXY_FWD(args)..., pos);
+            return NextParser::parse(context, reader, std::forward<Args>(args)..., pos);
         }
     };
 };
@@ -48,7 +48,7 @@ struct _posr : _copy_base<Rule>
         {
             auto pos = reader.position();
             context.on(_ev::token{}, lexy::position_token_kind, pos, pos);
-            return rule.template finish<NextParser>(context, reader, LEXY_FWD(args)..., pos);
+            return rule.template finish<NextParser>(context, reader, std::forward<Args>(args)..., pos);
         }
     };
 
@@ -60,7 +60,7 @@ struct _posr : _copy_base<Rule>
         {
             auto pos = reader.position();
             context.on(_ev::token{}, lexy::position_token_kind, pos, pos);
-            return lexy::parser_for<Rule, NextParser>::parse(context, reader, LEXY_FWD(args)...,
+            return lexy::parser_for<Rule, NextParser>::parse(context, reader, std::forward<Args>(args)...,
                                                              pos);
         }
     };

@@ -43,7 +43,7 @@ struct _pas_final_parser
     LEXY_PARSER_FUNC static bool parse(Context&, Reader&, lexy::_detail::lazy_init<T>& value,
                                        Args&&... args)
     {
-        value.emplace_result(lexy::construct<T>, LEXY_FWD(args)...);
+        value.emplace_result(lexy::construct<T>, std::forward<Args>(args)...);
         return true;
     }
 };
@@ -103,11 +103,11 @@ struct _pas : _copy_base<Rule>
                 return false;
             else if constexpr (std::is_void_v<T>)
                 // NOLINTNEXTLINE: clang-tidy wrongly thinks the branch is repeated.
-                return NextParser::parse(context, reader, LEXY_FWD(args)...);
+                return NextParser::parse(context, reader, std::forward<Args>(args)...);
             else if constexpr (Front)
-                return NextParser::parse(context, reader, *std::move(value), LEXY_FWD(args)...);
+                return NextParser::parse(context, reader, *std::move(value), std::forward<Args>(args)...);
             else
-                return NextParser::parse(context, reader, LEXY_FWD(args)..., *std::move(value));
+                return NextParser::parse(context, reader, std::forward<Args>(args)..., *std::move(value));
         }
     };
 
@@ -136,11 +136,11 @@ struct _pas : _copy_base<Rule>
                 return false;
             else if constexpr (std::is_void_v<T>)
                 // NOLINTNEXTLINE: clang-tidy wrongly thinks the branch is repeated.
-                return NextParser::parse(context, reader, LEXY_FWD(args)...);
+                return NextParser::parse(context, reader, std::forward<Args>(args)...);
             else if constexpr (Front)
-                return NextParser::parse(context, reader, *std::move(value), LEXY_FWD(args)...);
+                return NextParser::parse(context, reader, *std::move(value), std::forward<Args>(args)...);
             else
-                return NextParser::parse(context, reader, LEXY_FWD(args)..., *std::move(value));
+                return NextParser::parse(context, reader, std::forward<Args>(args)..., *std::move(value));
         }
     };
 };

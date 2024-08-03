@@ -36,7 +36,7 @@ struct _ctx_ccreate : rule_base
         {
             _ctx_counter<Id> var(InitialValue);
             var.link(context);
-            auto result = NextParser::parse(context, reader, LEXY_FWD(args)...);
+            auto result = NextParser::parse(context, reader, std::forward<Args>(args)...);
             var.unlink(context);
             return result;
         }
@@ -53,7 +53,7 @@ struct _ctx_cadd : rule_base
         LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             _ctx_counter<Id>::get(context.control_block) += Delta;
-            return NextParser::parse(context, reader, LEXY_FWD(args)...);
+            return NextParser::parse(context, reader, std::forward<Args>(args)...);
         }
     };
 };
@@ -73,7 +73,7 @@ struct _ctx_cpush : _copy_base<Rule>
 
             _ctx_counter<Id>::get(context.control_block) += int(length) * Sign;
 
-            return NextParser::parse(context, reader, LEXY_FWD(args)...);
+            return NextParser::parse(context, reader, std::forward<Args>(args)...);
         }
     };
 
@@ -99,7 +99,7 @@ struct _ctx_cpush : _copy_base<Rule>
         {
             // Forward to the rule, but remember the current reader position.
             return rule.template finish<_pc<NextParser>>(context, reader, reader.position(),
-                                                         LEXY_FWD(args)...);
+                                                         std::forward<Args>(args)...);
         }
     };
 
@@ -111,7 +111,7 @@ struct _ctx_cpush : _copy_base<Rule>
         {
             // Forward to the rule, but remember the current reader position.
             using parser = lexy::parser_for<Rule, _pc<NextParser>>;
-            return parser::parse(context, reader, reader.position(), LEXY_FWD(args)...);
+            return parser::parse(context, reader, reader.position(), std::forward<Args>(args)...);
         }
     };
 };
@@ -135,7 +135,7 @@ struct _ctx_cis : branch_base
         template <typename NextParser, typename Context, typename... Args>
         LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
         {
-            return NextParser::parse(context, reader, LEXY_FWD(args)...);
+            return NextParser::parse(context, reader, std::forward<Args>(args)...);
         }
     };
 
@@ -152,7 +152,7 @@ struct _ctx_cvalue : rule_base
         template <typename Context, typename Reader, typename... Args>
         LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
         {
-            return NextParser::parse(context, reader, LEXY_FWD(args)...,
+            return NextParser::parse(context, reader, std::forward<Args>(args)...,
                                      _ctx_counter<Id>::get(context.control_block));
         }
     };
@@ -180,7 +180,7 @@ struct _ctx_ceq<H, T...> : branch_base
         template <typename NextParser, typename Context, typename... Args>
         LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
         {
-            return NextParser::parse(context, reader, LEXY_FWD(args)...);
+            return NextParser::parse(context, reader, std::forward<Args>(args)...);
         }
     };
 
@@ -198,7 +198,7 @@ struct _ctx_ceq<H, T...> : branch_base
                 // Trivially recover.
             }
 
-            return NextParser::parse(context, reader, LEXY_FWD(args)...);
+            return NextParser::parse(context, reader, std::forward<Args>(args)...);
         }
     };
 };

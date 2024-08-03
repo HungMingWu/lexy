@@ -53,7 +53,7 @@ struct _loop : rule_base
                     return false;
             }
 
-            return NextParser::parse(context, reader, LEXY_FWD(args)...);
+            return NextParser::parse(context, reader, std::forward<Args>(args)...);
         }
     };
 };
@@ -85,7 +85,7 @@ struct _whl : rule_base
             }
             branch.cancel(context);
 
-            return NextParser::parse(context, reader, LEXY_FWD(args)...);
+            return NextParser::parse(context, reader, std::forward<Args>(args)...);
         }
     };
 };

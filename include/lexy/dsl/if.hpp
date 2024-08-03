@@ -21,12 +21,12 @@ struct _if : rule_base
             lexy::branch_parser_for<Branch, Reader> branch{};
             if (branch.try_parse(context.control_block, reader))
                 // We take the branch.
-                return branch.template finish<NextParser>(context, reader, LEXY_FWD(args)...);
+                return branch.template finish<NextParser>(context, reader, std::forward<Args>(args)...);
             else
             {
                 // We don't take the branch.
                 branch.cancel(context);
-                return NextParser::parse(context, reader, LEXY_FWD(args)...);
+                return NextParser::parse(context, reader, std::forward<Args>(args)...);
             }
         }
     };

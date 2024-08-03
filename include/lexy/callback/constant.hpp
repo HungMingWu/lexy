@@ -25,7 +25,7 @@ struct _constant
 template <typename Arg>
 consteval auto constant(Arg&& value)
 {
-    return _constant<std::decay_t<Arg>>{LEXY_FWD(value)};
+    return _constant<std::decay_t<Arg>>{std::forward<Arg>(value)};
 }
 } // namespace lexy
 

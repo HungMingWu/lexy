@@ -23,7 +23,7 @@ struct _ctx_fcreate : rule_base
         {
             _ctx_flag<Id> var(InitialValue);
             var.link(context);
-            auto result = NextParser::parse(context, reader, LEXY_FWD(args)...);
+            auto result = NextParser::parse(context, reader, std::forward<Args>(args)...);
             var.unlink(context);
             return result;
         }
@@ -40,7 +40,7 @@ struct _ctx_fset : rule_base
         LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             _ctx_flag<Id>::get(context.control_block) = Value;
-            return NextParser::parse(context, reader, LEXY_FWD(args)...);
+            return NextParser::parse(context, reader, std::forward<Args>(args)...);
         }
     };
 };
@@ -56,7 +56,7 @@ struct _ctx_ftoggle : rule_base
         {
             auto& flag = _ctx_flag<Id>::get(context.control_block);
             flag       = !flag;
-            return NextParser::parse(context, reader, LEXY_FWD(args)...);
+            return NextParser::parse(context, reader, std::forward<Args>(args)...);
         }
     };
 };
@@ -80,7 +80,7 @@ struct _ctx_fis : branch_base
         template <typename NextParser, typename Context, typename... Args>
         LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
         {
-            return NextParser::parse(context, reader, LEXY_FWD(args)...);
+            return NextParser::parse(context, reader, std::forward<Args>(args)...);
         }
     };
 
@@ -97,7 +97,7 @@ struct _ctx_fvalue : rule_base
         template <typename Context, typename Reader, typename... Args>
         LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
         {
-            return NextParser::parse(context, reader, LEXY_FWD(args)...,
+            return NextParser::parse(context, reader, std::forward<Args>(args)...,
                                      _ctx_flag<Id>::get(context.control_block));
         }
     };

@@ -191,7 +191,7 @@ struct _pb : branch_base
 
             _validate(context, reader, begin, end.position());
             return lexy::whitespace_parser<Context, NextParser>::parse(context, reader,
-                                                                       LEXY_FWD(args)...);
+                                                                       std::forward<Args>(args)...);
         }
     };
 
@@ -209,7 +209,7 @@ struct _pb : branch_base
 
             _validate(context, reader, begin, end);
             return lexy::whitespace_parser<Context, NextParser>::parse(context, reader,
-                                                                       LEXY_FWD(args)...);
+                                                                       std::forward<Args>(args)...);
         }
     };
 };
@@ -314,7 +314,7 @@ struct _bint : branch_base
             }
 
             return lexy::whitespace_parser<Context, NextParser>::parse(context, reader,
-                                                                       LEXY_FWD(args)..., result);
+                                                                       std::forward<Args>(args)..., result);
         }
     };
 
@@ -344,7 +344,7 @@ struct _bint : branch_base
             reader.reset(end);
 
             return _pc<NextParser>::parse(context, reader, begin, end.position(),
-                                          LEXY_FWD(args)...);
+                                          std::forward<Args>(args)...);
         }
     };
 
@@ -359,7 +359,7 @@ struct _bint : branch_base
             if (!_rule::token_parse(context, reader))
                 return false;
             auto end = reader.position();
-            return _pc<NextParser>::parse(context, reader, begin, end, LEXY_FWD(args)...);
+            return _pc<NextParser>::parse(context, reader, begin, end, std::forward<Args>(args)...);
         }
     };
 

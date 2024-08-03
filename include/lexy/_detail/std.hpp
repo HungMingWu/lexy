@@ -45,7 +45,7 @@ namespace lexy::_detail
 template <typename T, typename... Args>
 T* construct_at(T* ptr, Args&&... args)
 {
-    return ::new ((void*)ptr) T(LEXY_FWD(args)...);
+    return ::new ((void*)ptr) T(std::forward<Args>(args)...);
 }
 } // namespace lexy::_detail
 
@@ -60,7 +60,7 @@ constexpr T* construct_at(T* ptr, Args&&... args)
 #    if defined(_MSVC_CONSTEXPR)
     _MSVC_CONSTEXPR
 #    endif
-    return ::new ((void*)ptr) T(LEXY_FWD(args)...);
+    return ::new ((void*)ptr) T(std::forward<Args>(args)...);
 }
 } // namespace lexy::_detail
 
@@ -79,7 +79,7 @@ namespace std
 template <typename T, typename... Args>
 constexpr T* construct_at(lexy::_detail::_construct_at_tag, T* ptr, Args&&... args)
 {
-    return ::new ((void*)ptr) T(LEXY_FWD(args)...);
+    return ::new ((void*)ptr) T(std::forward<Args>(args)...);
 }
 } // namespace std
 
@@ -88,7 +88,7 @@ namespace lexy::_detail
 template <typename T, typename... Args>
 constexpr T* construct_at(T* ptr, Args&&... args)
 {
-    return std::construct_at(lexy::_detail::_construct_at_tag{}, ptr, LEXY_FWD(args)...);
+    return std::construct_at(lexy::_detail::_construct_at_tag{}, ptr, std::forward<Args>(args)...);
 }
 } // namespace lexy::_detail
 

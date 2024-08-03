@@ -66,7 +66,7 @@ struct token_base : _token_inherit<ImplOrTag>
             context.on(_ev::token{}, Derived{}, reader.position(), end.position());
             reader.reset(end);
             return lexy::whitespace_parser<Context, NextParser>::parse(context, reader,
-                                                                       LEXY_FWD(args)...);
+                                                                       std::forward<Args>(args)...);
         }
     };
 
@@ -110,7 +110,7 @@ struct token_base : _token_inherit<ImplOrTag>
                 return false;
             else
                 return lexy::whitespace_parser<Context, NextParser>::parse(context, reader,
-                                                                           LEXY_FWD(args)...);
+                                                                           std::forward<Args>(args)...);
         }
     };
 

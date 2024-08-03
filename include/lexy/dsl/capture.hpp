@@ -39,7 +39,7 @@ struct _cap : _copy_base<Token>
             reader.reset(end);
 
             using continuation = lexy::whitespace_parser<Context, NextParser>;
-            return continuation::parse(context, reader, LEXY_FWD(args)...,
+            return continuation::parse(context, reader, std::forward<Args>(args)...,
                                        lexy::lexeme<Reader>(begin, end.position()));
         }
     };
@@ -56,7 +56,7 @@ struct _cap : _copy_base<Token>
             auto end = reader.position();
 
             using continuation = lexy::whitespace_parser<Context, NextParser>;
-            return continuation::parse(context, reader, LEXY_FWD(args)...,
+            return continuation::parse(context, reader, std::forward<Args>(args)...,
                                        lexy::lexeme<Reader>(begin, end));
         }
     };
@@ -74,8 +74,8 @@ struct _capr : _copy_base<Rule>
                                            Args&&... args)
         {
             using continuation = lexy::whitespace_parser<Context, NextParser>;
-            return continuation::parse(context, reader, LEXY_FWD(prev_args)...,
-                                       lexy::lexeme(reader, begin), LEXY_FWD(args)...);
+            return continuation::parse(context, reader, std::forward<PrevArgs>(prev_args)...,
+                                       lexy::lexeme(reader, begin), std::forward<Args>(args)...);
         }
     };
 
@@ -101,7 +101,7 @@ struct _capr : _copy_base<Rule>
         {
             // Forward to the rule, but remember the current reader position.
             using continuation = _pc<NextParser, Args...>;
-            return rule.template finish<continuation>(context, reader, LEXY_FWD(args)...,
+            return rule.template finish<continuation>(context, reader, std::forward<Args>(args)...,
                                                       reader.position());
         }
     };
@@ -114,7 +114,7 @@ struct _capr : _copy_base<Rule>
         {
             // Forward to the rule, but remember the current reader position.
             using parser = lexy::parser_for<Rule, _pc<NextParser, Args...>>;
-            return parser::parse(context, reader, LEXY_FWD(args)..., reader.position());
+            return parser::parse(context, reader, std::forward<Args>(args)..., reader.position());
         }
     };
 };

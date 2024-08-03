@@ -35,7 +35,7 @@ struct _ctx_icreate : rule_base
         {
             _ctx_id<Id, Reader> var({});
             var.link(context);
-            auto result = NextParser::parse(context, reader, LEXY_FWD(args)...);
+            auto result = NextParser::parse(context, reader, std::forward<Args>(args)...);
             var.unlink(context);
             return result;
         }
@@ -53,7 +53,7 @@ struct _ctx_icap : branch_base
         {
             // The last argument will be a lexeme.
             _ctx_id<Id, Reader>::get(context.control_block) = (args, ...);
-            return NextParser::parse(context, reader, LEXY_FWD(args)...);
+            return NextParser::parse(context, reader, std::forward<Args>(args)...);
         }
     };
     template <typename Reader>
@@ -101,7 +101,7 @@ struct _ctx_irem : branch_base
                        end.position());
             reader.reset(end);
             return lexy::whitespace_parser<Context, NextParser>::parse(context, reader,
-                                                                       LEXY_FWD(args)...);
+                                                                       std::forward<Args>(args)...);
         }
     };
 
@@ -127,7 +127,7 @@ struct _ctx_irem : branch_base
                 }
 
                 // Continue parsing with the symbol value.
-                return NextParser::parse(context, reader, LEXY_FWD(args)...);
+                return NextParser::parse(context, reader, std::forward<PrevArgs>(args)...);
             }
         };
 
@@ -136,7 +136,7 @@ struct _ctx_irem : branch_base
         {
             // Capture the pattern and continue with special continuation.
             return lexy::parser_for<_cap<_pattern>, _cont<Args...>>::parse(context, reader,
-                                                                           LEXY_FWD(args)...);
+                                                                           std::forward<Args>(args)...);
         }
     };
 

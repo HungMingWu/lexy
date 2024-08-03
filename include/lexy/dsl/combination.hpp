@@ -53,7 +53,7 @@ struct _comb_it : rule_base
             {
                 if (!ctrl.handled[Idx])
                     // Only call the sink if it is not a duplicate.
-                    ctrl.sink(LEXY_FWD(args)...);
+                    ctrl.sink(std::forward<Args>(args)...);
             }
             return true;
         }
@@ -113,7 +113,7 @@ struct _comb : rule_base
 
             // Obtain the final result and continue.
             return lexy::sink_finish_parser<NextParser>::parse(context, reader, sink,
-                                                               LEXY_FWD(args)...);
+                                                               std::forward<Args>(args)...);
         }
     };
 

@@ -292,7 +292,7 @@ public:
 
         auto memory = _cur_pos;
         _cur_pos += size;
-        return ::new (static_cast<void*>(memory)) T(LEXY_FWD(args)...);
+        return ::new (static_cast<void*>(memory)) T(std::forward<Args>(args)...);
     }
 
     void* top()

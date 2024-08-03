@@ -63,7 +63,7 @@ struct _prd
                 sub_context.on(_ev::production_finish{}, reader.position());
 
                 using continuation = lexy::_detail::context_finish_parser<NextParser>;
-                return continuation::parse(context, reader, sub_context, LEXY_FWD(args)...);
+                return continuation::parse(context, reader, sub_context, std::forward<Args>(args)...);
             }
             else
             {
@@ -110,7 +110,7 @@ struct _prd
                 sub_context.on(_ev::production_finish{}, reader.position());
 
                 using continuation = lexy::_detail::context_finish_parser<NextParser>;
-                return continuation::parse(context, reader, sub_context, LEXY_FWD(args)...);
+                return continuation::parse(context, reader, sub_context, std::forward<Args>(args)...);
             }
             else
             {
@@ -172,7 +172,7 @@ struct _recb : branch_base
         {
             auto control_block = context.control_block;
             --control_block->cur_depth;
-            return NextParser::parse(context, reader, LEXY_FWD(args)...);
+            return NextParser::parse(context, reader, std::forward<Args>(args)...);
         }
     };
 
@@ -202,7 +202,7 @@ struct _recb : branch_base
             using depth = _depth_handler<NextParser>;
             if (!depth::increment_depth(context, reader))
                 return false;
-            return _impl.template finish<depth>(context, reader, LEXY_FWD(args)...);
+            return _impl.template finish<depth>(context, reader, std::forward<Args>(args)...);
         }
     };
 
@@ -217,7 +217,7 @@ struct _recb : branch_base
                 return false;
 
             return lexy::parser_for<_prd<Production>, depth>::parse(context, reader,
-                                                                    LEXY_FWD(args)...);
+                                                                    std::forward<Args>(args)...);
         }
     };
 

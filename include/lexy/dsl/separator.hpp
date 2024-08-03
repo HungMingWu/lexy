@@ -41,7 +41,7 @@ struct _nsep : rule_base
                 context.on(_ev::error{}, err);
 
                 // Trivially recover.
-                return NextParser::parse(context, reader, LEXY_FWD(args)...);
+                return NextParser::parse(context, reader, std::forward<Args>(args)...);
             }
         };
 
@@ -53,13 +53,13 @@ struct _nsep : rule_base
             {
                 // Didn't have the separator, everything is okay.
                 parser.cancel(context);
-                return NextParser::parse(context, reader, LEXY_FWD(args)...);
+                return NextParser::parse(context, reader, std::forward<Args>(args)...);
             }
             else
             {
                 // Did have the separator, report error.
                 return parser.template finish<_pc>(context, reader, reader.position(),
-                                                   LEXY_FWD(args)...);
+                                                   std::forward<Args>(args)...);
             }
         }
     };

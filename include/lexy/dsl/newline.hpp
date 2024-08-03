@@ -55,13 +55,13 @@ struct _eol : branch_base
             {
                 auto pos = reader.position();
                 context.on(_ev::token{}, lexy::eof_token_kind, pos, pos);
-                return NextParser::parse(context, reader, LEXY_FWD(args)...);
+                return NextParser::parse(context, reader, std::forward<Args>(args)...);
             }
             else
             {
                 // Note that we're re-doing the parsing for newline,
                 // this looks at most at two characters, so it doesn't really matter.
-                return lexy::parser_for<_nl, NextParser>::parse(context, reader, LEXY_FWD(args)...);
+                return lexy::parser_for<_nl, NextParser>::parse(context, reader, std::forward<Args>(args)...);
             }
         }
     };
@@ -73,7 +73,7 @@ struct _eol : branch_base
         LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             static_assert(lexy::is_char_encoding<typename Reader::encoding>);
-            return bp<Reader>{}.template finish<NextParser>(context, reader, LEXY_FWD(args)...);
+            return bp<Reader>{}.template finish<NextParser>(context, reader, std::forward<Args>(args)...);
         }
     };
 };

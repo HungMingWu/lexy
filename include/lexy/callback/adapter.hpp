@@ -30,7 +30,7 @@ struct _callback_with_state : _overloaded<Fns...>
         template <typename... Args>
         constexpr return_type operator()(Args&&... args) const&&
         {
-            return _cb(_state, LEXY_FWD(args)...);
+            return _cb(_state, std::forward<Args>(args)...);
         }
     };
 
@@ -49,14 +49,14 @@ constexpr auto callback(Fns&&... fns)
 {
     if constexpr ((lexy::is_callback<std::decay_t<Fns>> && ...))
         return _callback<std::common_type_t<typename std::decay_t<Fns>::return_type...>,
-                         std::decay_t<Fns>...>(LEXY_FWD(fns)...);
+                         std::decay_t<Fns>...>(std::forward<Fns>(fns)...);
     else
-        return _callback<void, std::decay_t<Fns>...>(LEXY_FWD(fns)...);
+        return _callback<void, std::decay_t<Fns>...>(std::forward<Fns>(fns)...);
 }
 template <typename ReturnType, typename... Fns>
 constexpr auto callback(Fns&&... fns)
 {
-    return _callback<ReturnType, std::decay_t<Fns>...>(LEXY_FWD(fns)...);
+    return _callback<ReturnType, std::decay_t<Fns>...>(std::forward<Fns>(fns)...);
 }
 
 /// Creates a callback that also receives the parse state.
@@ -65,14 +65,14 @@ constexpr auto callback_with_state(Fns&&... fns)
 {
     if constexpr ((lexy::is_callback<std::decay_t<Fns>> && ...))
         return _callback_with_state<std::common_type_t<typename std::decay_t<Fns>::return_type...>,
-                                    std::decay_t<Fns>...>(LEXY_FWD(fns)...);
+                                    std::decay_t<Fns>...>(std::forward<Fns>(fns)...);
     else
-        return _callback_with_state<void, std::decay_t<Fns>...>(LEXY_FWD(fns)...);
+        return _callback_with_state<void, std::decay_t<Fns>...>(std::forward<Fns>(fns)...);
 }
 template <typename ReturnType, typename... Fns>
 constexpr auto callback_with_state(Fns&&... fns)
 {
-    return _callback_with_state<ReturnType, std::decay_t<Fns>...>(LEXY_FWD(fns)...);
+    return _callback_with_state<ReturnType, std::decay_t<Fns>...>(std::forward<Fns>(fns)...);
 }
 
 template <typename Sink>
@@ -85,10 +85,10 @@ struct _cb_from_sink
 
     template <typename... Args>
     constexpr auto operator()(Args&&... args) const
-        -> decltype((LEXY_DECLVAL(_cb&)(LEXY_FWD(args)), ..., LEXY_DECLVAL(_cb&&).finish()))
+        -> decltype((LEXY_DECLVAL(_cb&)(std::forward<Args>(args)), ..., LEXY_DECLVAL(_cb&&).finish()))
     {
         auto cb = _sink.sink();
-        (cb(LEXY_FWD(args)), ...);
+        (cb(std::forward<Args>(args)), ...);
         return std::move(cb).finish();
     }
 };
@@ -97,7 +97,7 @@ struct _cb_from_sink
 template <typename Sink, typename = lexy::sink_callback<Sink>>
 constexpr auto callback(Sink&& sink)
 {
-    return _cb_from_sink<std::decay_t<Sink>>{LEXY_FWD(sink)};
+    return _cb_from_sink<std::decay_t<Sink>>{std::forward<Sink>(sink)};
 }
 } // namespace lexy
 
@@ -150,9 +150,9 @@ struct _mem_fn<MemFn T::*>
 
     template <typename... Args>
     constexpr auto operator()(Args&&... args) const
-        -> decltype(_detail::_mem_invoker<MemFn T::*>::invoke(_fn, LEXY_FWD(args)...))
+        -> decltype(_detail::_mem_invoker<MemFn T::*>::invoke(_fn, std::forward<Args>(args)...))
     {
-        return _detail::_mem_invoker<MemFn T::*>::invoke(_fn, LEXY_FWD(args)...);
+        return _detail::_mem_invoker<MemFn T::*>::invoke(_fn, std::forward<Args>(args)...);
     }
 };
 

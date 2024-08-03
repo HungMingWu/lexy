@@ -93,9 +93,9 @@ struct _subg : rule_base
                 return false;
 
             if constexpr (std::is_void_v<value_type>)
-                return NextParser::parse(context, reader, LEXY_FWD(args)...);
+                return NextParser::parse(context, reader, std::forward<Args>(args)...);
             else
-                return NextParser::parse(context, reader, LEXY_FWD(args)..., *std::move(value));
+                return NextParser::parse(context, reader, std::forward<Args>(args)..., *std::move(value));
         }
     };
 };

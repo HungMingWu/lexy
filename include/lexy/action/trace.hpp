@@ -32,7 +32,7 @@ struct _debug : rule_base
         {
             constexpr auto str = lexy::_detail::type_string<CharT, C...>::template c_str<>;
             context.on(_ev::debug{}, reader.position(), str);
-            return NextParser::parse(context, reader, LEXY_FWD(args)...);
+            return NextParser::parse(context, reader, std::forward<Args>(args)...);
         }
     };
 };

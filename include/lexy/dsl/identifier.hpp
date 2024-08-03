@@ -164,7 +164,7 @@ struct _id : branch_base
 
             // Skip whitespace and continue with the value.
             using continuation = lexy::whitespace_parser<Context, NextParser>;
-            return continuation::parse(context, reader, LEXY_FWD(args)...,
+            return continuation::parse(context, reader, std::forward<Args>(args)...,
                                        lexy::lexeme<Reader>(begin, end));
         }
     };
@@ -201,7 +201,7 @@ struct _id : branch_base
             reader.reset(end);
 
             using continuation = lexy::whitespace_parser<Context, NextParser>;
-            return continuation::parse(context, reader, LEXY_FWD(args)...,
+            return continuation::parse(context, reader, std::forward<Args>(args)...,
                                        lexy::lexeme<Reader>(begin, end.position()));
         }
     };

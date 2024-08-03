@@ -43,9 +43,9 @@ struct _fold
             typename _fold_sfinae<Inplace>::template type<Op, T, Args&&...>
         {
             if constexpr (Inplace)
-                _detail::invoke(_op, _result, LEXY_FWD(args)...);
+                _detail::invoke(_op, _result, std::forward<Args>(args)...);
             else
-                _result = _detail::invoke(_op, std::move(_result), LEXY_FWD(args)...);
+                _result = _detail::invoke(_op, std::move(_result), std::forward<Args>(args)...);
         }
 
         constexpr T finish() &&
@@ -67,8 +67,8 @@ struct _fold
 template <typename T, typename Arg = T, typename... Op>
 constexpr auto fold(Arg&& init, Op&&... op)
 {
-    auto fn = _make_overloaded(LEXY_FWD(op)...);
-    return _fold<T, std::decay_t<Arg>, false, decltype(fn)>{LEXY_FWD(init), std::move(fn)};
+    auto fn = _make_overloaded(std::forward<Op>(op)...);
+    return _fold<T, std::decay_t<Arg>, false, decltype(fn)>{std::forward<Arg>(init), std::move(fn)};
 }
 
 /// Sink that folds all the arguments with the binary operation op that modifies the
@@ -76,8 +76,8 @@ constexpr auto fold(Arg&& init, Op&&... op)
 template <typename T, typename Arg = T, typename... Op>
 constexpr auto fold_inplace(Arg&& init, Op&&... op)
 {
-    auto fn = _make_overloaded(LEXY_FWD(op)...);
-    return _fold<T, std::decay_t<Arg>, true, decltype(fn)>{LEXY_FWD(init), std::move(fn)};
+    auto fn = _make_overloaded(std::forward<Op>(op)...);
+    return _fold<T, std::decay_t<Arg>, true, decltype(fn)>{std::forward<Arg>(init), std::move(fn)};
 }
 } // namespace lexy
 

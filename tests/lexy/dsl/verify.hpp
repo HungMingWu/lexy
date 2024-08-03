@@ -522,7 +522,7 @@ public:
         constexpr return_type operator()([[maybe_unused]] Args&&... args) const
         {
             if constexpr (is_test_production<Production>)
-                return _handler->_cb(_handler->_begin, LEXY_FWD(args)...);
+                return _handler->_cb(_handler->_begin, std::forward<Args>(args)...);
             else
                 return nullptr;
         }
