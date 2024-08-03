@@ -4,6 +4,7 @@
 #ifndef LEXY_DETAIL_SWAR_HPP_INCLUDED
 #define LEXY_DETAIL_SWAR_HPP_INCLUDED
 
+#include <bit>
 #include <climits>
 #include <cstdint>
 #include <cstring>
@@ -204,17 +205,17 @@ public:
         auto ptr = static_cast<const Derived&>(*this).position();
 
         swar_int result;
-#if LEXY_IS_LITTLE_ENDIAN
-        std::memcpy(&result, ptr, sizeof(swar_int));
-#else
-        using char_type = typename Derived::encoding::char_type;
-        auto dst        = reinterpret_cast<char*>(&result);
-        auto length     = sizeof(swar_int) / sizeof(char_type);
-        for (auto i = 0u; i != length; ++i)
-        {
-            std::memcpy(dst + i, ptr + length - i - 1, sizeof(char_type));
+	if constexpr (std::endian::native == std::endian::little) {
+            std::memcpy(&result, ptr, sizeof(swar_int));
+	} else {
+            using char_type = typename Derived::encoding::char_type;
+            auto dst        = reinterpret_cast<char*>(&result);
+            auto length     = sizeof(swar_int) / sizeof(char_type);
+            for (auto i = 0u; i != length; ++i)
+            {
+                std::memcpy(dst + i, ptr + length - i - 1, sizeof(char_type));
+            }
         }
-#endif
         return result;
     }
 

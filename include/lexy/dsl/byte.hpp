@@ -4,6 +4,7 @@
 #ifndef LEXY_DSL_BYTE_HPP_INCLUDED
 #define LEXY_DSL_BYTE_HPP_INCLUDED
 
+#include <bit>
 #include <cstdint>
 #include <lexy/_detail/integer_sequence.hpp>
 #include <lexy/dsl/base.hpp>
@@ -227,11 +228,7 @@ enum bint_endianness
     bint_little,
     bint_big,
 
-#if LEXY_IS_LITTLE_ENDIAN
-    bint_native = bint_little,
-#else
-    bint_native = bint_big,
-#endif
+    bint_native = (std::endian::native == std::endian::little) ? bint_little : bint_big,
 };
 
 template <std::size_t N>

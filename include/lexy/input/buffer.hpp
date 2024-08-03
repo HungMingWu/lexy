@@ -4,6 +4,7 @@
 #ifndef LEXY_INPUT_BUFFER_HPP_INCLUDED
 #define LEXY_INPUT_BUFFER_HPP_INCLUDED
 
+#include <bit>
 #include <cstring>
 #include <lexy/_detail/memory_resource.hpp>
 #include <lexy/_detail/swar.hpp>
@@ -322,7 +323,7 @@ struct _make_buffer
                     MemoryResource* resource = _detail::get_memory_resource<MemoryResource>()) const
     {
         constexpr auto native_endianness
-            = LEXY_IS_LITTLE_ENDIAN ? encoding_endianness::little : encoding_endianness::big;
+            = (std::endian::native == std::endian::little) ? encoding_endianness::little : encoding_endianness::big;
 
         using char_type = typename Encoding::char_type;
         LEXY_PRECONDITION(size % sizeof(char_type) == 0);

@@ -77,23 +77,6 @@ using type_or = std::conditional_t<std::is_void_v<T>, Fallback, T>;
 #    define LEXY_NTTP_PARAM const auto&
 #endif
 
-//=== endianness ===//
-#ifndef LEXY_IS_LITTLE_ENDIAN
-#    if defined(__BYTE_ORDER__)
-#        if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-#            define LEXY_IS_LITTLE_ENDIAN 1
-#        elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
-#            define LEXY_IS_LITTLE_ENDIAN 0
-#        else
-#            error "unsupported byte order"
-#        endif
-#    elif defined(_MSC_VER)
-#        define LEXY_IS_LITTLE_ENDIAN 1
-#    else
-#        error "unknown endianness"
-#    endif
-#endif
-
 //=== force inline ===//
 #ifndef LEXY_FORCE_INLINE
 #    if defined(__has_cpp_attribute)
