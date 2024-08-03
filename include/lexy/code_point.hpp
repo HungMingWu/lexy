@@ -279,7 +279,7 @@ constexpr lexy::code_point lexy::simple_case_fold(code_point cp) noexcept
 namespace lexy::_detail
 {
 template <lexy::_unicode_db::binary_properties_t... Props>
-LEXY_FORCE_INLINE constexpr bool code_point_has_properties(char32_t cp)
+inline constexpr bool code_point_has_properties(char32_t cp)
 {
     constexpr auto mask = ((1 << Props) | ...);
 

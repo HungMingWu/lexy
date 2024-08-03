@@ -105,7 +105,7 @@ using _copy_base = decltype(_copy_base_impl<Rule>());
 } // namespace lexyd
 
 //=== parser ===//
-#define LEXY_PARSER_FUNC LEXY_FORCE_INLINE constexpr
+#define LEXY_PARSER_FUNC inline constexpr
 
 namespace lexy
 {
@@ -242,7 +242,7 @@ template <typename TokenRule, typename Reader>
 using token_parser_for = typename TokenRule::template tp<Reader>;
 
 template <typename TokenRule, typename Reader>
-LEXY_FORCE_INLINE constexpr auto try_match_token(TokenRule, Reader& reader)
+inline constexpr auto try_match_token(TokenRule, Reader& reader)
 {
     lexy::token_parser_for<TokenRule, Reader> parser(reader);
 

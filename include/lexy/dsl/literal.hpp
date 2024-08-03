@@ -215,7 +215,7 @@ template <std::size_t CharClassIdx, bool, typename...>
 struct _node_char_class_impl
 {
     template <typename Reader>
-    LEXY_FORCE_INLINE static constexpr std::false_type match(const Reader&)
+    inline static constexpr std::false_type match(const Reader&)
     {
         return {};
     }
@@ -224,7 +224,7 @@ template <typename H, typename... T>
 struct _node_char_class_impl<0, true, H, T...>
 {
     template <typename Reader>
-    LEXY_FORCE_INLINE static constexpr bool match(Reader reader)
+    inline static constexpr bool match(Reader reader)
     {
         return lexy::token_parser_for<H, Reader>(reader).try_parse(reader);
     }
@@ -244,7 +244,7 @@ template <typename Encoding, template <typename> typename CaseFolding, std::size
 struct lit_trie_matcher<Trie, CurNode>
 {
     template <std::size_t TransIdx, typename Reader, typename IntT>
-    LEXY_FORCE_INLINE static constexpr bool _try_transition(std::size_t& result, Reader& reader,
+    inline static constexpr bool _try_transition(std::size_t& result, Reader& reader,
                                                             IntT cur)
     {
         static_assert(Trie.transition_from[TransIdx] == CurNode);
@@ -267,7 +267,7 @@ struct lit_trie_matcher<Trie, CurNode>
     struct _impl<index_sequence<Idx...>>
     {
         template <typename Reader>
-        LEXY_FORCE_INLINE static constexpr std::size_t try_match(Reader& reader)
+        inline static constexpr std::size_t try_match(Reader& reader)
         {
             constexpr auto cur_value = Trie.node_value[CurNode];
 
@@ -304,7 +304,7 @@ struct lit_trie_matcher<Trie, CurNode>
     };
 
     template <typename Reader>
-    LEXY_FORCE_INLINE static constexpr std::size_t try_match(Reader& _reader)
+    inline static constexpr std::size_t try_match(Reader& _reader)
     {
         static_assert(lexy::is_char_encoding<typename Reader::encoding>);
         if constexpr (std::is_same_v<CaseFolding<Reader>, Reader>)

@@ -268,10 +268,10 @@ struct _sfinae_sink
 
     using return_type = typename Sink::return_type;
 
-    LEXY_FORCE_INLINE constexpr _sfinae_sink(Production, Sink&& sink) : _sink(LEXY_MOV(sink)) {}
+    inline constexpr _sfinae_sink(Production, Sink&& sink) : _sink(LEXY_MOV(sink)) {}
 
     template <typename... Args>
-    LEXY_FORCE_INLINE constexpr void operator()(Args&&... args)
+    inline constexpr void operator()(Args&&... args)
     {
         if constexpr (!is_sink_callback_for<Sink, Args&&...>)
             // We're attempting to call a sink of Production with the given arguments, but no such
@@ -281,7 +281,7 @@ struct _sfinae_sink
         _sink(LEXY_FWD(args)...);
     }
 
-    LEXY_FORCE_INLINE constexpr auto finish() &&
+    inline constexpr auto finish() &&
     {
         return LEXY_MOV(_sink).finish();
     }

@@ -77,19 +77,6 @@ using type_or = std::conditional_t<std::is_void_v<T>, Fallback, T>;
 #    define LEXY_NTTP_PARAM const auto&
 #endif
 
-//=== force inline ===//
-#ifndef LEXY_FORCE_INLINE
-#    if defined(__has_cpp_attribute)
-#        if __has_cpp_attribute(gnu::always_inline)
-#            define LEXY_FORCE_INLINE [[gnu::always_inline]]
-#        endif
-#    endif
-#
-#    ifndef LEXY_FORCE_INLINE
-#        define LEXY_FORCE_INLINE inline
-#    endif
-#endif
-
 //=== empty_member ===//
 #ifndef LEXY_EMPTY_MEMBER
 

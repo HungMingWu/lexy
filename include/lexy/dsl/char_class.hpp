@@ -148,7 +148,7 @@ struct ascii_set_matcher<CompressedAsciiSet, index_sequence<RangeIdx...>,
     }
 
     template <typename Encoding>
-    LEXY_FORCE_INLINE static constexpr bool match([[maybe_unused]] typename Encoding::int_type cur)
+    inline static constexpr bool match([[maybe_unused]] typename Encoding::int_type cur)
     {
         return
             // It must be in one of the ranges...

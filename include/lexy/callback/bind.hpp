@@ -117,7 +117,7 @@ struct _nth_value : _detail::placeholder_base // fallback + map
     LEXY_EMPTY_MEMBER Fn _fn;
 
     template <typename State, typename... Args>
-    LEXY_FORCE_INLINE constexpr decltype(auto) operator()(State&,
+    inline constexpr decltype(auto) operator()(State&,
                                                           const _detail::tuple<Args...>& args) const
     {
         if constexpr (N > sizeof...(Args))
@@ -138,7 +138,7 @@ struct _nth_value<N, T, void> : _detail::placeholder_base // fallback only
     LEXY_EMPTY_MEMBER T _fallback;
 
     template <typename State, typename... Args>
-    LEXY_FORCE_INLINE constexpr decltype(auto) operator()(State&,
+    inline constexpr decltype(auto) operator()(State&,
                                                           const _detail::tuple<Args...>& args) const
     {
         if constexpr (N > sizeof...(Args))
@@ -165,7 +165,7 @@ struct _nth_value<N, void, Fn> : _detail::placeholder_base // map only
     LEXY_EMPTY_MEMBER Fn _fn;
 
     template <typename State, typename... Args>
-    LEXY_FORCE_INLINE constexpr decltype(auto) operator()(State&,
+    inline constexpr decltype(auto) operator()(State&,
                                                           const _detail::tuple<Args...>& args) const
     {
         static_assert(N <= sizeof...(Args), "not enough arguments for nth_value<N>");
@@ -195,7 +195,7 @@ struct _nth_value<N, void, void> : _detail::placeholder_base
     static_assert(N > 0, "values are 1-indexed");
 
     template <typename State, typename... Args>
-    LEXY_FORCE_INLINE constexpr decltype(auto) operator()(State&,
+    inline constexpr decltype(auto) operator()(State&,
                                                           const _detail::tuple<Args...>& args) const
     {
         static_assert(N <= sizeof...(Args), "not enough arguments for nth_value<N>");

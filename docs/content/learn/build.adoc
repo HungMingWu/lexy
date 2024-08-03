@@ -71,8 +71,6 @@ Those are:
   Whether or not the compiler supports {cpp}20's generalized non-type template parameters.
 `LEXY_HAS_CHAR8_t`::
   Whether or not the compiler supports `char8_t`.
-`LEXY_FORCE_INLINE`::
-  The compiler specific attribute to force inlining.
 `LEXY_EMPTY_MEMBER`::
   The compiler specific attribute for `[[no_unique_address]]`.
 
