@@ -134,12 +134,12 @@ constexpr auto compress_ascii_set()
 namespace lexy::_detail
 {
 template <const auto& CompressedAsciiSet,
-          typename = make_index_sequence<CompressedAsciiSet.range_count()>,
-          typename = make_index_sequence<CompressedAsciiSet.single_count()>>
+          typename = std::make_index_sequence<CompressedAsciiSet.range_count()>,
+          typename = std::make_index_sequence<CompressedAsciiSet.single_count()>>
 struct ascii_set_matcher;
 template <const auto& CompressedAsciiSet, std::size_t... RangeIdx, std::size_t... SingleIdx>
-struct ascii_set_matcher<CompressedAsciiSet, index_sequence<RangeIdx...>,
-                         index_sequence<SingleIdx...>>
+struct ascii_set_matcher<CompressedAsciiSet, std::index_sequence<RangeIdx...>,
+                         std::index_sequence<SingleIdx...>>
 {
     template <typename Encoding>
     static consteval auto to_int_type(char c)

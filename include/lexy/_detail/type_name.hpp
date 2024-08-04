@@ -6,7 +6,6 @@
 
 #include <lexy/_detail/config.hpp>
 #include <lexy/_detail/detect.hpp>
-#include <lexy/_detail/integer_sequence.hpp>
 #include <lexy/_detail/string_view.hpp>
 
 namespace lexy::_detail

@@ -26,8 +26,6 @@ struct type_string
 };
 } // namespace lexy::_detail
 
-#    include <lexy/_detail/integer_sequence.hpp>
-
 namespace lexy::_detail
 {
 template <std::size_t N, typename CharT>
@@ -58,13 +56,13 @@ template <typename CharT>
 string_literal(CharT) -> string_literal<1, CharT>;
 
 template <template <typename C, C... Cs> typename T, string_literal Str, std::size_t... Idx>
-auto _to_type_string(index_sequence<Idx...>)
+auto _to_type_string(std::index_sequence<Idx...>)
 {
     return T<typename decltype(Str)::char_type, Str.data[Idx]...>{};
 }
 template <template <typename C, C... Cs> typename T, string_literal Str>
 using to_type_string
-    = decltype(_to_type_string<T, Str>(make_index_sequence<decltype(Str)::size()>{}));
+    = decltype(_to_type_string<T, Str>(std::make_index_sequence<decltype(Str)::size()>{}));
 } // namespace lexy::_detail
 
 #    define LEXY_NTTP_STRING(T, Str)                                                               \

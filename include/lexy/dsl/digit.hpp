@@ -560,10 +560,10 @@ namespace lexyd
 template <std::size_t N, typename Base, typename Sep>
 struct _ndigits_s : token_base<_ndigits_s<N, Base, Sep>>
 {
-    template <typename Reader, typename Indices = lexy::_detail::make_index_sequence<N - 1>>
+    template <typename Reader, typename Indices = std::make_index_sequence<N - 1>>
     struct tp;
     template <typename Reader, std::size_t... Idx>
-    struct tp<Reader, lexy::_detail::index_sequence<Idx...>>
+    struct tp<Reader, std::index_sequence<Idx...>>
     {
         typename Reader::marker end;
 
@@ -601,10 +601,10 @@ struct _ndigits : token_base<_ndigits<N, Base>>
 {
     static_assert(N > 1);
 
-    template <typename Reader, typename Indices = lexy::_detail::make_index_sequence<N>>
+    template <typename Reader, typename Indices = std::make_index_sequence<N>>
     struct tp;
     template <typename Reader, std::size_t... Idx>
-    struct tp<Reader, lexy::_detail::index_sequence<Idx...>>
+    struct tp<Reader, std::index_sequence<Idx...>>
     {
         typename Reader::marker end;
 

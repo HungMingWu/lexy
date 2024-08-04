@@ -43,7 +43,7 @@ public:
     consteval auto case_folding(CaseFoldingDSL) const
     {
         return _symbol_table<T, CaseFoldingDSL::template case_folding,
-                             Strings...>(_detail::make_index_sequence<size()>{}, *this);
+                             Strings...>(std::make_index_sequence<size()>{}, *this);
     }
 
     template <typename SymbolString, typename... Args>
@@ -51,9 +51,9 @@ public:
     {
         using next_table = _symbol_table<T, CaseFolding, Strings..., SymbolString>;
         if constexpr (empty())
-            return next_table(_detail::make_index_sequence<0>{}, nullptr, std::forward<Args>(args)...);
+            return next_table(std::make_index_sequence<0>{}, nullptr, std::forward<Args>(args)...);
         else
-            return next_table(_detail::make_index_sequence<size()>{}, _data, std::forward<Args>(args)...);
+            return next_table(std::make_index_sequence<size()>{}, _data, std::forward<Args>(args)...);
     }
 
     template <_detail::string_literal SymbolString, typename... Args>
@@ -210,13 +210,13 @@ private:
         = _build_trie<Encoding>();
 
     template <std::size_t... Idx, typename... Args>
-    constexpr explicit _symbol_table(lexy::_detail::index_sequence<Idx...>, const T* data,
+    constexpr explicit _symbol_table(std::index_sequence<Idx...>, const T* data,
                                      Args&&... args)
     // New data is appended at the end.
     : _data{data[Idx]..., T(std::forward<Args>(args)...)}
     {}
     template <std::size_t... Idx, template <typename> typename OtherCaseFolding>
-    constexpr explicit _symbol_table(lexy::_detail::index_sequence<Idx...>,
+    constexpr explicit _symbol_table(std::index_sequence<Idx...>,
                                      const _symbol_table<T, OtherCaseFolding, Strings...>& table)
     : _data{table._data[Idx]...}
     {}

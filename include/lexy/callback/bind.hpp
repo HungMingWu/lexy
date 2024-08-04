@@ -36,7 +36,7 @@ template <std::size_t Idx, typename Fn, typename... BoundArgs, typename State,
 constexpr decltype(auto) _invoke_bound(Fn&& fn, const _detail::tuple<BoundArgs...>& bound_args,
                                        State&                               state,
                                        const _detail::tuple<ActualArgs...>& actual_args,
-                                       _detail::index_sequence<ActualIdx...>,
+                                       std::index_sequence<ActualIdx...>,
                                        ProducedArgs&&... produced_args)
 {
     if constexpr (Idx == sizeof...(BoundArgs))
@@ -72,7 +72,7 @@ template <typename Fn, typename... BoundArgs, std::size_t... Idx, typename State
           typename... Args>
 constexpr decltype(auto) invoke_bound(Fn&&                                fn, //
                                       const _detail::tuple<BoundArgs...>& bound_args,
-                                      _detail::index_sequence<Idx...>, //
+                                      std::index_sequence<Idx...>, //
                                       State& state, Args&&... args)
 {
     auto actual_args = _detail::forward_as_tuple(std::forward<Args>(args)...);

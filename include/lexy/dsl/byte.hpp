@@ -6,7 +6,6 @@
 
 #include <bit>
 #include <cstdint>
-#include <lexy/_detail/integer_sequence.hpp>
 #include <lexy/dsl/base.hpp>
 #include <lexy/dsl/char_class.hpp>
 #include <lexy/dsl/token.hpp>
@@ -35,11 +34,11 @@ struct _b : token_base<_b<N, Predicate>>
         }
     }
 
-    template <typename Reader, typename Indices = lexy::_detail::make_index_sequence<N>>
+    template <typename Reader, typename Indices = std::make_index_sequence<N>>
     struct tp;
 
     template <typename Reader, std::size_t... Idx>
-    struct tp<Reader, lexy::_detail::index_sequence<Idx...>>
+    struct tp<Reader, std::index_sequence<Idx...>>
     {
         static_assert(lexy::is_byte_encoding<typename Reader::encoding>);
         typename Reader::marker end;
@@ -271,11 +270,11 @@ struct _bint : branch_base
 {
     using _rule = lexy::_detail::type_or<Rule, _b<N, void>>;
 
-    template <typename NextParser, typename Indices = lexy::_detail::make_index_sequence<N>>
+    template <typename NextParser, typename Indices = std::make_index_sequence<N>>
     struct _pc;
 
     template <typename NextParser, std::size_t... Idx>
-    struct _pc<NextParser, lexy::_detail::index_sequence<Idx...>>
+    struct _pc<NextParser, std::index_sequence<Idx...>>
     {
         template <typename Context, typename Reader, typename... Args>
         LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader,

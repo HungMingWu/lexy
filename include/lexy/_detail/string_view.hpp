@@ -6,7 +6,6 @@
 
 #include <lexy/_detail/assert.hpp>
 #include <lexy/_detail/config.hpp>
-#include <lexy/_detail/integer_sequence.hpp>
 
 namespace lexy::_detail
 {
@@ -194,10 +193,10 @@ using string_view = basic_string_view<char>;
 
 namespace lexy::_detail
 {
-template <auto FnPtr, typename Indices = make_index_sequence<FnPtr().size()>>
+template <auto FnPtr, typename Indices = std::make_index_sequence<FnPtr().size()>>
 struct _string_view_holder;
 template <auto FnPtr, std::size_t... Indices>
-struct _string_view_holder<FnPtr, index_sequence<Indices...>>
+struct _string_view_holder<FnPtr, std::index_sequence<Indices...>>
 {
     static constexpr auto view = FnPtr();
 

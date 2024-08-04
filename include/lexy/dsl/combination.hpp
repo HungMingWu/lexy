@@ -4,7 +4,6 @@
 #ifndef LEXY_DSL_COMBINATION_HPP_INCLUDED
 #define LEXY_DSL_COMBINATION_HPP_INCLUDED
 
-#include <lexy/_detail/integer_sequence.hpp>
 #include <lexy/dsl/base.hpp>
 #include <lexy/dsl/choice.hpp>
 #include <lexy/dsl/error.hpp>
@@ -64,14 +63,14 @@ template <typename DuplicateError, typename ElseRule, typename... R>
 struct _comb : rule_base
 {
     template <std::size_t... Idx>
-    static auto _comb_choice_(lexy::_detail::index_sequence<Idx...>)
+    static auto _comb_choice_(std::index_sequence<Idx...>)
     {
         if constexpr (std::is_void_v<ElseRule>)
             return ((R{} >> _comb_it<Idx>{}) | ...);
         else
             return ((R{} >> _comb_it<Idx>{}) | ... | ElseRule{});
     }
-    using _comb_choice = decltype(_comb_choice_(lexy::_detail::index_sequence_for<R...>{}));
+    using _comb_choice = decltype(_comb_choice_(std::index_sequence_for<R...>{}));
 
     template <typename NextParser>
     struct p

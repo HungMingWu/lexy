@@ -5,7 +5,6 @@
 #define LEXY_DSL_LITERAL_HPP_INCLUDED
 
 #include <lexy/_detail/code_point.hpp>
-#include <lexy/_detail/integer_sequence.hpp>
 #include <lexy/_detail/iterator.hpp>
 #include <lexy/_detail/nttp_string.hpp>
 #include <lexy/_detail/swar.hpp>
@@ -261,10 +260,10 @@ struct lit_trie_matcher<Trie, CurNode>
 
     static constexpr auto transitions = Trie.node_transitions(CurNode);
 
-    template <typename Indices = make_index_sequence<transitions.length>>
+    template <typename Indices = std::make_index_sequence<transitions.length>>
     struct _impl;
     template <std::size_t... Idx>
-    struct _impl<index_sequence<Idx...>>
+    struct _impl<std::index_sequence<Idx...>>
     {
         template <typename Reader>
         inline static constexpr std::size_t try_match(Reader& reader)
@@ -440,10 +439,10 @@ struct _lcp : token_base<_lcp<Cp...>>, _lit_base
 
     template <typename Reader,
               typename Indices
-              = lexy::_detail::make_index_sequence<_string<typename Reader::encoding>.length>>
+              = std::make_index_sequence<_string<typename Reader::encoding>.length>>
     struct tp;
     template <typename Reader, std::size_t... Idx>
-    struct tp<Reader, lexy::_detail::index_sequence<Idx...>>
+    struct tp<Reader, std::index_sequence<Idx...>>
     {
         typename Reader::marker end;
 

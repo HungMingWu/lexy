@@ -5,7 +5,6 @@
 #define LEXY_DETAIL_TUPLE_HPP_INCLUDED
 
 #include <lexy/_detail/config.hpp>
-#include <lexy/_detail/integer_sequence.hpp>
 
 namespace lexy::_detail
 {
@@ -46,7 +45,7 @@ struct _tuple_get_type<T&&>
 template <typename Indices, typename... T>
 class _tuple;
 template <std::size_t... Idx, typename... T>
-class _tuple<index_sequence<Idx...>, T...> : public _tuple_holder<Idx, T>...
+class _tuple<std::index_sequence<Idx...>, T...> : public _tuple_holder<Idx, T>...
 {
 public:
     constexpr _tuple() = default;
@@ -57,13 +56,13 @@ public:
 };
 
 template <typename... T>
-struct tuple : _tuple<index_sequence_for<T...>, T...>
+struct tuple : _tuple<std::index_sequence_for<T...>, T...>
 {
     constexpr tuple() = default;
 
     template <typename... Args>
     constexpr explicit tuple(Args&&... args)
-    : _tuple<index_sequence_for<T...>, T...>(std::forward<Args>(args)...)
+    : _tuple<std::index_sequence_for<T...>, T...>(std::forward<Args>(args)...)
     {}
 
     template <std::size_t N>
@@ -88,7 +87,7 @@ struct tuple : _tuple<index_sequence_for<T...>, T...>
 
     static constexpr auto index_sequence()
     {
-        return index_sequence_for<T...>{};
+        return std::index_sequence_for<T...>{};
     }
 };
 template <>
@@ -98,7 +97,7 @@ struct tuple<>
 
     static constexpr auto index_sequence()
     {
-        return index_sequence_for<>{};
+        return std::index_sequence_for<>{};
     }
 };
 

@@ -30,10 +30,10 @@ struct _chc
 {
     static constexpr auto _any_unconditional = (lexy::is_unconditional_branch_rule<R> || ...);
 
-    template <typename Reader, typename Indices = lexy::_detail::make_index_sequence<sizeof...(R)>>
+    template <typename Reader, typename Indices = std::make_index_sequence<sizeof...(R)>>
     struct bp;
     template <typename Reader, std::size_t... Idx>
-    struct bp<Reader, lexy::_detail::index_sequence<Idx...>>
+    struct bp<Reader, std::index_sequence<Idx...>>
     {
         template <typename Rule>
         using rp = lexy::branch_parser_for<Rule, Reader>;
