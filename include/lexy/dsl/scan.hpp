@@ -460,8 +460,7 @@ private:
 namespace lexyd
 {
 template <typename Context, typename Scanner, typename StatePtr, typename... Args>
-using _detect_scan_state = decltype(Context::production::scan(LEXY_DECLVAL(Scanner&), *StatePtr(),
-                                                              LEXY_DECLVAL(Args)...));
+using _detect_scan_state = decltype(Context::production::scan(std::declval<Scanner>(), *StatePtr(), std::declval<Args>()...));
 
 struct _scan : rule_base
 {

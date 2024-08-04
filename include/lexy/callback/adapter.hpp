@@ -85,7 +85,7 @@ struct _cb_from_sink
 
     template <typename... Args>
     constexpr auto operator()(Args&&... args) const
-        -> decltype((LEXY_DECLVAL(_cb&)(std::forward<Args>(args)), ..., LEXY_DECLVAL(_cb&&).finish()))
+        -> decltype((std::declval<_cb&>()(std::forward<Args>(args)), ..., std::declval<_cb&&>().finish()))
     {
         auto cb = _sink.sink();
         (cb(std::forward<Args>(args)), ...);

@@ -14,7 +14,7 @@ namespace lexy::_detail
 {
 // Can't use std::is_base_of_v<std::random_access_iterator_tag, ...> without including <iterator>.
 template <typename Iterator>
-using _detect_random_access = decltype(LEXY_DECLVAL(Iterator) - LEXY_DECLVAL(Iterator));
+using _detect_random_access = decltype(std::declval<Iterator>() - std::declval<Iterator>());
 template <typename Iterator>
 constexpr auto is_random_access_iterator = is_detected<_detect_random_access, Iterator>;
 

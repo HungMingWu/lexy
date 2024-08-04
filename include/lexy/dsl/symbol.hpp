@@ -103,7 +103,7 @@ public:
             if constexpr (empty())
             {
                 LEXY_PRECONDITION(false);
-                return value_type{"", LEXY_DECLVAL(T)};
+                return value_type{"", std::declval<T>()};
             }
             else
             {

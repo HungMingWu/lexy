@@ -16,7 +16,7 @@ namespace lexy
 struct nullopt;
 
 template <typename String>
-using _string_char_type = LEXY_DECAY_DECLTYPE(LEXY_DECLVAL(String)[0]);
+using _string_char_type = LEXY_DECAY_DECLTYPE(std::declval<String>()[0]);
 
 template <typename String, typename Encoding, typename CaseFoldingDSL = void>
 struct _as_string
@@ -148,7 +148,7 @@ struct _as_string
 
         using return_type = String;
 
-        template <typename CharT, typename = decltype(LEXY_DECLVAL(String).push_back(CharT()))>
+        template <typename CharT, typename = decltype(std::declval<String>().push_back(CharT()))>
         constexpr void operator()(CharT c)
         {
             _result.push_back(c);
@@ -161,7 +161,7 @@ struct _as_string
 
         template <typename Str = String, typename Iterator>
         constexpr auto operator()(Iterator begin, Iterator end)
-            -> decltype(void(LEXY_DECLVAL(Str).append(begin, end)))
+            -> decltype(void(std::declval<Str>().append(begin, end)))
         {
             _result.append(begin, end);
         }

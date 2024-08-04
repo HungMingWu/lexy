@@ -18,7 +18,7 @@ class lexeme
 public:
     using encoding  = typename Reader::encoding;
     using iterator  = typename Reader::iterator;
-    using char_type = LEXY_DECAY_DECLTYPE(*LEXY_DECLVAL(iterator&));
+    using char_type = LEXY_DECAY_DECLTYPE(*std::declval<iterator>());
 
     constexpr lexeme() noexcept : _begin(), _end() {}
     constexpr lexeme(iterator begin, iterator end) noexcept : _begin(begin), _end(end) {}

@@ -94,12 +94,12 @@ constexpr auto parse_operator(Reader& reader)
 namespace lexyd
 {
 template <typename Tag, typename Reader>
-using _detect_op_tag_ctor = decltype(Tag(LEXY_DECLVAL(Reader).position()));
+using _detect_op_tag_ctor = decltype(Tag(std::declval<Reader>().position()));
 
 template <typename Tag, typename Reader, typename Context>
 using _detect_op_tag_ctor_with_state
-    = decltype(Tag(*LEXY_DECLVAL(Context).control_block->parse_state,
-                   LEXY_DECLVAL(Reader).position()));
+    = decltype(Tag(*std::declval<Context>().control_block->parse_state,
+                   std::declval<Reader>().position()));
 
 template <typename TagType, typename Literal, typename... R>
 struct _op : branch_base

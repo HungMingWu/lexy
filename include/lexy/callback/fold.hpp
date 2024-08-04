@@ -15,14 +15,14 @@ struct _fold_sfinae<true>
 {
     template <typename Op, typename T, typename... Args>
     using type = decltype(void(
-        _detail::invoke(LEXY_DECLVAL(Op), LEXY_DECLVAL(T&), LEXY_DECLVAL(Args)...)));
+        _detail::invoke(std::declval<Op>(), std::declval<T&>(), std::declval<Args>()...)));
 };
 template <>
 struct _fold_sfinae<false>
 {
     template <typename Op, typename T, typename... Args>
     using type = decltype(void(
-        _detail::invoke(LEXY_DECLVAL(Op), LEXY_DECLVAL(T&&), LEXY_DECLVAL(Args)...)));
+        _detail::invoke(std::declval<Op>(), std::declval<T&&>(), std::declval<Args>()...)));
 };
 
 template <typename T, typename Arg, bool Inplace, typename Op>

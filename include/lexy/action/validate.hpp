@@ -39,7 +39,7 @@ constexpr auto _get_error_sink(const Callback& callback)
     }
 }
 template <typename Callback>
-using _error_sink_t = decltype(_get_error_sink(LEXY_DECLVAL(Callback)));
+using _error_sink_t = decltype(_get_error_sink(std::declval<Callback>()));
 
 template <typename ErrorCallback>
 class validate_result

@@ -27,8 +27,6 @@
 #endif
 
 //=== utility traits===//
-#define LEXY_DECLVAL(...) lexy::_detail::declval<__VA_ARGS__>()
-
 #define LEXY_DECAY_DECLTYPE(...) std::decay_t<decltype(__VA_ARGS__)>
 
 /// Creates a new type from the instantiation of a template.

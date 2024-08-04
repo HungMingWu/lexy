@@ -20,7 +20,7 @@ struct _pas_handler
 
     // We are implicitly convertible to all handler types the original handler is convertible to.
     // This is because the handler is passed to event_handler::on.
-    template <typename H, typename = decltype(static_cast<H&>(LEXY_DECLVAL(Handler&)))>
+    template <typename H, typename = decltype(static_cast<H&>(std::declval<Handler&>()))>
     constexpr operator H&() const
     {
         return static_cast<H&>(_handler);

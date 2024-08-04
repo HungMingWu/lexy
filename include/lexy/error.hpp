@@ -226,7 +226,7 @@ using error_for = error<input_reader<Input>, Tag>;
 namespace lexy
 {
 template <typename Input>
-using _detect_parent_input = decltype(LEXY_DECLVAL(Input).parent_input());
+using _detect_parent_input = decltype(std::declval<Input>().parent_input());
 
 /// Contains information about the context of an error, production is type-erased.
 template <typename Input>

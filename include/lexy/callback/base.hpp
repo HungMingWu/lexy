@@ -16,36 +16,36 @@ template <typename T>
 constexpr bool is_callback = _detail::is_detected<_detect_callback, T>;
 
 template <typename T, typename... Args>
-using _detect_callback_for = decltype(LEXY_DECLVAL(const T)(LEXY_DECLVAL(Args)...));
+using _detect_callback_for = decltype(std::declval<const T>()(std::declval<Args>()...));
 template <typename T, typename... Args>
 constexpr bool is_callback_for
     = _detail::is_detected<_detect_callback_for, std::decay_t<T>, Args...>;
 
 template <typename T, typename State>
-using _detect_callback_state = decltype(LEXY_DECLVAL(const T)[LEXY_DECLVAL(State&)]);
+using _detect_callback_state = decltype(std::declval<const T>()[std::declval<State&>()]);
 template <typename T, typename State>
 constexpr bool is_callback_state
     = _detail::is_detected<_detect_callback_state, T, std::decay_t<State>>;
 
 template <typename T, typename State, typename... Args>
 using _detect_callback_with_state_for
-    = decltype(LEXY_DECLVAL(const T)[LEXY_DECLVAL(State&)](LEXY_DECLVAL(Args)...));
+    = decltype(std::declval<const T>()[std::declval<State&>()](std::declval<Args>()...));
 template <typename T, typename State, typename... Args>
 constexpr bool is_callback_with_state_for
     = _detail::is_detected<_detect_callback_with_state_for, std::decay_t<T>, State, Args...>;
 
 /// Returns the type of the `.sink()` function.
 template <typename Sink, typename... Args>
-using sink_callback = decltype(LEXY_DECLVAL(Sink).sink(LEXY_DECLVAL(Args)...));
+using sink_callback = decltype(std::declval<Sink>().sink(std::declval<Args>()...));
 
 template <typename T, typename... Args>
-using _detect_sink_callback_for = decltype(LEXY_DECLVAL(T&)(LEXY_DECLVAL(Args)...));
+using _detect_sink_callback_for = decltype(std::declval<T&>()(std::declval<Args>()...));
 template <typename T, typename... Args>
 constexpr bool is_sink_callback_for
     = _detail::is_detected<_detect_sink_callback_for, std::decay_t<T>, Args...>;
 
 template <typename T, typename... Args>
-using _detect_sink = decltype(LEXY_DECLVAL(const T).sink(LEXY_DECLVAL(Args)...).finish());
+using _detect_sink = decltype(std::declval<const T>().sink(std::declval<Args>()...).finish());
 template <typename T, typename... Args>
 constexpr bool is_sink = _detail::is_detected<_detect_sink, T, Args...>;
 } // namespace lexy

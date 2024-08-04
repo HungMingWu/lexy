@@ -256,7 +256,7 @@ template <typename ParseState, typename Production>
 using _detect_value_of =
     // We're testing a non-const ParseState on purpose, to handle cases where a user forgot to const
     // qualify value_of() (it causes a hard error instead of going to ::value).
-    typename decltype(LEXY_DECLVAL(ParseState&).value_of(Production{}))::return_type;
+    typename decltype(std::declval<ParseState&>().value_of(Production{}))::return_type;
 
 template <typename Production>
 using _detect_value = decltype(Production::value);
@@ -309,7 +309,7 @@ class production_value_callback
         if constexpr (lexy::is_callback<_type>)
             return _get_value(nullptr);
         else if constexpr (lexy::is_sink<_type, std::add_lvalue_reference_t<ParseState>>)
-            return _get_value(nullptr).sink(LEXY_DECLVAL(ParseState&));
+            return _get_value(nullptr).sink(lexy::_detail::declval<ParseState>());
         else
             return _get_value(nullptr).sink();
     }

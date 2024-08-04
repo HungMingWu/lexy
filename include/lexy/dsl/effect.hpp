@@ -10,7 +10,7 @@
 namespace lexyd
 {
 template <typename EffRule, typename State>
-using _detect_eff_fn = decltype(EffRule::_fn()(LEXY_DECLVAL(State&)));
+using _detect_eff_fn = decltype(EffRule::_fn()(std::declval<State&>()));
 
 template <LEXY_NTTP_PARAM Fn>
 struct _eff : rule_base

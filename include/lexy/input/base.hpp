@@ -103,7 +103,7 @@ constexpr auto _range_reader(Iterator begin, Sentinel end)
 namespace lexy
 {
 template <typename Input>
-using input_reader = decltype(LEXY_DECLVAL(Input).reader());
+using input_reader = decltype(std::declval<Input>().reader());
 
 template <typename Input>
 constexpr bool input_is_view = std::is_trivially_copyable_v<Input>;

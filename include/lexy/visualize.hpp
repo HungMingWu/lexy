@@ -490,7 +490,7 @@ OutputIt visualize_to(OutputIt out, lexy::lexeme<Reader> lexeme,
     }
 }
 
-template <typename OutputIt, typename Tree, typename = decltype(LEXY_DECLVAL(Tree&).traverse())>
+template <typename OutputIt, typename Tree, typename = decltype(std::declval<Tree>().traverse())>
 OutputIt visualize_to(OutputIt out, const Tree& tree, visualization_options opts = {})
 {
     struct label_t
