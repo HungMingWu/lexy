@@ -69,9 +69,7 @@ TEST_CASE("dsl::lit")
         CHECK(lexy::is_token_rule<decltype(rule)>);
         CHECK(lexy::is_literal_rule<decltype(rule)>);
 
-#if LEXY_HAS_NTTP
         CHECK(equivalent_rules(rule, dsl::lit<"abc">));
-#endif
 
         auto empty = LEXY_VERIFY("");
         CHECK(empty.status == test_result::fatal_error);
@@ -112,9 +110,7 @@ TEST_CASE("dsl::lit")
         CHECK(lexy::is_token_rule<decltype(rule)>);
         CHECK(lexy::is_literal_rule<decltype(rule)>);
 
-#if LEXY_HAS_NTTP
         CHECK(equivalent_rules(rule, dsl::lit<u"abc">));
-#endif
 
         auto empty = LEXY_VERIFY("");
         CHECK(empty.status == test_result::fatal_error);
@@ -134,9 +130,7 @@ TEST_CASE("dsl::lit")
         CHECK(lexy::is_token_rule<decltype(rule)>);
         CHECK(lexy::is_literal_rule<decltype(rule)>);
 
-#if LEXY_HAS_NTTP
         CHECK(equivalent_rules(rule, dsl::lit<u"äöü">));
-#endif
 
         auto empty = LEXY_VERIFY(u"");
         CHECK(empty.status == test_result::fatal_error);

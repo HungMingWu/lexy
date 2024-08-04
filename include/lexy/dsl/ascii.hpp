@@ -500,11 +500,9 @@ struct _one_of
     using rule = _alt<C...>;
 };
 
-#if LEXY_HAS_NTTP
 /// Matches one of the ASCII characters.
 template <lexy::_detail::string_literal Str>
 constexpr auto one_of = typename lexy::_detail::to_type_string<_one_of, Str>::rule{};
-#endif
 
 #define LEXY_ASCII_ONE_OF(Str)                                                                     \
     LEXY_NTTP_STRING(::lexyd::ascii::_one_of, Str)::rule {}

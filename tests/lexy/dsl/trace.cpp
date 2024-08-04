@@ -10,9 +10,7 @@ TEST_CASE("dsl::debug")
     constexpr auto rule = LEXY_DEBUG("hello");
     CHECK(lexy::is_rule<decltype(rule)>);
 
-#if LEXY_HAS_NTTP
     CHECK(equivalent_rules(rule, dsl::debug<"hello">));
-#endif
 
     constexpr auto callback = token_callback;
 

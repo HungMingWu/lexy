@@ -12,7 +12,7 @@ namespace lexyd
 template <typename EffRule, typename State>
 using _detect_eff_fn = decltype(EffRule::_fn()(std::declval<State&>()));
 
-template <LEXY_NTTP_PARAM Fn>
+template <auto Fn>
 struct _eff : rule_base
 {
     static constexpr auto _fn()
@@ -61,7 +61,7 @@ struct _eff : rule_base
 };
 
 /// Invokes Fn and produces its value as result.
-template <LEXY_NTTP_PARAM Fn>
+template <auto Fn>
 constexpr auto effect = _eff<Fn>{};
 } // namespace lexyd
 

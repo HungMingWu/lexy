@@ -56,24 +56,11 @@ public:
             return next_table(_detail::make_index_sequence<size()>{}, _data, std::forward<Args>(args)...);
     }
 
-#if LEXY_HAS_NTTP
     template <_detail::string_literal SymbolString, typename... Args>
     consteval auto map(Args&&... args) const
     {
         return map<_detail::to_type_string<_detail::type_string, SymbolString>>(std::forward<Args>(args)...);
     }
-#else
-#    if (defined(__clang__) && __clang_major__ <= 7)                                               \
-        || (defined(__clang__) && defined(__apple_build_version__) && __clang_major__ <= 10)
-    template <char C, typename... Args> // Sorry, compiler bug.
-#    else
-    template <auto C, typename... Args>
-#    endif
-    consteval auto map(Args&&... args) const
-    {
-        return map<_detail::type_string<LEXY_DECAY_DECLTYPE(C), C>>(std::forward<Args>(args)...);
-    }
-#endif
 
     template <typename CharT, CharT... C, typename... Args>
     consteval auto map(lexyd::_lit<CharT, C...>, Args&&... args) const

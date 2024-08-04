@@ -27,11 +27,7 @@ TEST_CASE("symbol_table")
                          .map<'a'>(0)
                          .map(LEXY_LIT("b"), 1)
                          .map<LEXY_SYMBOL("c")>(2)
-#if LEXY_HAS_NTTP
                          .map<"abc">(3);
-#else
-                         .map<LEXY_SYMBOL("abc")>(3);
-#endif
         CHECK(!table.empty());
         CHECK(table.size() == 4);
 

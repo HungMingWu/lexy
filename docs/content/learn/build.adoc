@@ -67,8 +67,6 @@ Those are:
 `LEXY_ENABLE_ASSERT`::
   Whether or not internal assertions and precondition checks are enabled.
   By default, they are enabled unless `NDEBUG` is defined.
-`LEXY_HAS_NTTP`::
-  Whether or not the compiler supports {cpp}20's generalized non-type template parameters.
 `LEXY_HAS_CHAR8_t`::
   Whether or not the compiler supports `char8_t`.
 `LEXY_EMPTY_MEMBER`::

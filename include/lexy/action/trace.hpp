@@ -37,10 +37,8 @@ struct _debug : rule_base
     };
 };
 
-#if LEXY_HAS_NTTP
 template <lexy::_detail::string_literal Str>
 constexpr auto debug = lexy::_detail::to_type_string<_debug, Str>{};
-#endif
 
 #define LEXY_DEBUG(Str)                                                                            \
     LEXY_NTTP_STRING(::lexyd::_debug, Str) {}

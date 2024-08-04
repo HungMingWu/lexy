@@ -18,10 +18,8 @@ TEST_CASE("LEXY_NTTP_STRING")
     CHECK(wstring::c_str<> == lexy::_detail::basic_string_view<wchar_t>(L"abc"));
     CHECK(wstring::c_str<char> == lexy::_detail::string_view("abc"));
 
-#if LEXY_HAS_NTTP
     using lit_string = lexy::_detail::to_type_string<lexy::_detail::type_string,
                                                      lexy::_detail::string_literal("abc")>;
     CHECK(lit_string::c_str<> == lexy::_detail::string_view("abc"));
-#endif
 }
 

@@ -57,22 +57,6 @@ template <typename T, typename Fallback>
 using type_or = std::conditional_t<std::is_void_v<T>, Fallback, T>;
 } // namespace lexy::_detail
 
-//=== NTTP ===//
-#ifndef LEXY_HAS_NTTP
-//   See https://github.com/foonathan/lexy/issues/15.
-#    if __cpp_nontype_template_parameter_class >= 201806 || __cpp_nontype_template_args >= 201911
-#        define LEXY_HAS_NTTP 1
-#    else
-#        define LEXY_HAS_NTTP 0
-#    endif
-#endif
-
-#if LEXY_HAS_NTTP
-#    define LEXY_NTTP_PARAM auto
-#else
-#    define LEXY_NTTP_PARAM const auto&
-#endif
-
 //=== empty_member ===//
 #ifndef LEXY_EMPTY_MEMBER
 

@@ -33,11 +33,7 @@ struct _opv
     }
 };
 
-#if LEXY_HAS_NTTP
 template <auto Operator>
-#else
-template <const auto& Operator>
-#endif
 using op = typename LEXY_DECAY_DECLTYPE(Operator)::op_tag_type;
 } // namespace lexy
 

@@ -383,11 +383,9 @@ constexpr auto lit_c = _lit<LEXY_DECAY_DECLTYPE(C), C>{};
 template <unsigned char... C>
 constexpr auto lit_b = _lit<unsigned char, C...>{};
 
-#if LEXY_HAS_NTTP
 /// Matches the literal string.
 template <lexy::_detail::string_literal Str>
 constexpr auto lit = lexy::_detail::to_type_string<_lit, Str>{};
-#endif
 
 #define LEXY_LIT(Str)                                                                              \
     LEXY_NTTP_STRING(::lexyd::_lit, Str) {}

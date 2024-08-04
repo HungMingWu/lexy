@@ -268,9 +268,7 @@ TEST_CASE("dsl::ascii::one_of")
     constexpr auto rule = LEXY_ASCII_ONE_OF("abc");
     CHECK(lexy::is_token_rule<decltype(rule)>);
 
-#if LEXY_HAS_NTTP
     CHECK(equivalent_rules(rule, dsl::ascii::one_of<"abc">));
-#endif
 
     test("abc", rule, [](int c) { return c == 'a' || c == 'b' || c == 'c'; });
 }

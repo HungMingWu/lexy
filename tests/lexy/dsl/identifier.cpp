@@ -358,9 +358,7 @@ TEST_CASE("dsl::keyword")
         constexpr auto rule = LEXY_KEYWORD("Int", id);
         CHECK(lexy::is_token_rule<decltype(rule)>);
 
-#if LEXY_HAS_NTTP
         CHECK(equivalent_rules(rule, dsl::keyword<"Int">(id)));
-#endif
 
         constexpr auto callback = token_callback;
 
