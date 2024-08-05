@@ -4,10 +4,10 @@
 #ifndef LEXY_DETAIL_ITERATOR_HPP_INCLUDED
 #define LEXY_DETAIL_ITERATOR_HPP_INCLUDED
 
+#include <iterator>
 #include <lexy/_detail/assert.hpp>
 #include <lexy/_detail/config.hpp>
 #include <lexy/_detail/detect.hpp>
-#include <lexy/_detail/std.hpp>
 
 //=== iterator algorithms ===//
 namespace lexy::_detail

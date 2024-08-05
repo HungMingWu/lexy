@@ -5,7 +5,6 @@
 #define LEXY_INPUT_FILE_HPP_INCLUDED
 
 #include <lexy/_detail/lazy_init.hpp>
-#include <lexy/_detail/std.hpp>
 #include <lexy/input/base.hpp>
 #include <lexy/input/buffer.hpp>
 

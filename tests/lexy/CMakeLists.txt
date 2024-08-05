@@ -8,7 +8,6 @@ set(tests
         detail/lazy_init.cpp
         detail/nttp_string.cpp
         detail/stateless_lambda.cpp
-        detail/std.cpp
         detail/string_view.cpp
         detail/swar.cpp
         detail/type_name.cpp

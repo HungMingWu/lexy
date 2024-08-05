@@ -4,9 +4,9 @@
 #ifndef LEXY_DETAIL_LAZY_INIT_HPP_INCLUDED
 #define LEXY_DETAIL_LAZY_INIT_HPP_INCLUDED
 
+#include <memory>
 #include <lexy/_detail/assert.hpp>
 #include <lexy/_detail/config.hpp>
-#include <lexy/_detail/std.hpp>
 
 namespace lexy::_detail
 {
@@ -49,7 +49,7 @@ struct _lazy_init_storage_non_trivial
     template <typename... Args>
     constexpr void _construct(Args&&... args)
     {
-        _detail::construct_at(&_value, std::forward<Args>(args)...);
+        std::construct_at(&_value, std::forward<Args>(args)...);
         _init = true;
     }
 
@@ -65,7 +65,7 @@ struct _lazy_init_storage_non_trivial
     : _init(other._init), _empty()
     {
         if (_init)
-            _detail::construct_at(&_value, std::move(other._value));
+            std::construct_at(&_value, std::move(other._value));
     }
 
     constexpr _lazy_init_storage_non_trivial& operator=(
@@ -80,7 +80,7 @@ struct _lazy_init_storage_non_trivial
         }
         else if (!_init && other._init)
         {
-            _detail::construct_at(&_value, std::move(other._value));
+            std::construct_at(&_value, std::move(other._value));
             _init = true;
         }
         else
