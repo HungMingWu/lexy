@@ -11,9 +11,9 @@
 namespace lexy
 {
 template <typename T>
-using _detect_callback = typename T::return_type;
-template <typename T>
-constexpr bool is_callback = _detail::is_detected<_detect_callback, T>;
+concept is_callback = requires {
+	typename T::return_type;
+};
 
 template <typename T, typename... Args>
 using _detect_callback_for = decltype(std::declval<const T>()(std::declval<Args>()...));

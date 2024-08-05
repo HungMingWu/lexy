@@ -95,8 +95,7 @@ struct _compose_s
 };
 
 /// Composes two callbacks.
-template <typename First, typename Second, typename = _detect_callback<First>,
-          typename = _detect_callback<Second>>
+template <is_callback First, is_callback Second>
 constexpr auto operator|(First first, Second second)
 {
     return _compose_cb(std::move(first), std::move(second));
@@ -109,7 +108,7 @@ constexpr auto operator|(_compose_s<S, Cb> composed, Second second)
 }
 
 /// Composes a sink with a callback.
-template <typename Sink, typename Callback, typename = _detect_callback<Callback>>
+template <typename Sink, is_callback Callback>
 constexpr auto operator>>(Sink sink, Callback cb)
 {
     return _compose_s<Sink, Callback>{std::move(sink), std::move(cb)};
