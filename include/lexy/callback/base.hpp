@@ -16,10 +16,9 @@ concept is_callback = requires {
 };
 
 template <typename T, typename... Args>
-using _detect_callback_for = decltype(std::declval<const T>()(std::declval<Args>()...));
-template <typename T, typename... Args>
-constexpr bool is_callback_for
-    = _detail::is_detected<_detect_callback_for, std::decay_t<T>, Args...>;
+concept is_callback_for = requires {
+    std::declval<T>()(std::declval<Args>()...);
+};
 
 template <typename T, typename State>
 using _detect_callback_state = decltype(std::declval<const T>()[std::declval<State&>()]);
