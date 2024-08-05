@@ -44,9 +44,10 @@ constexpr bool is_sink_callback_for
     = _detail::is_detected<_detect_sink_callback_for, std::decay_t<T>, Args...>;
 
 template <typename T, typename... Args>
-using _detect_sink = decltype(std::declval<const T>().sink(std::declval<Args>()...).finish());
-template <typename T, typename... Args>
-constexpr bool is_sink = _detail::is_detected<_detect_sink, T, Args...>;
+concept is_sink = requires {
+    std::declval<T>().sink(std::declval<Args>()...).finish();
+};
+
 } // namespace lexy
 
 namespace lexy
