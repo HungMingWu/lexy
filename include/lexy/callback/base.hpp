@@ -12,7 +12,7 @@ namespace lexy
 {
 template <typename T>
 concept is_callback = requires {
-	typename T::return_type;
+    typename T::return_type;
 };
 
 template <typename T, typename... Args>
@@ -21,27 +21,23 @@ concept is_callback_for = requires {
 };
 
 template <typename T, typename State>
-using _detect_callback_state = decltype(std::declval<const T>()[std::declval<State&>()]);
-template <typename T, typename State>
-constexpr bool is_callback_state
-    = _detail::is_detected<_detect_callback_state, T, std::decay_t<State>>;
+concept is_callback_state = requires {
+    std::declval<T>()[std::declval<State&>()];
+};
 
 template <typename T, typename State, typename... Args>
-using _detect_callback_with_state_for
-    = decltype(std::declval<const T>()[std::declval<State&>()](std::declval<Args>()...));
-template <typename T, typename State, typename... Args>
-constexpr bool is_callback_with_state_for
-    = _detail::is_detected<_detect_callback_with_state_for, std::decay_t<T>, State, Args...>;
+concept is_callback_with_state_for = requires {
+    std::declval<T>()[std::declval<State&>()](std::declval<Args>()...);
+};
 
 /// Returns the type of the `.sink()` function.
 template <typename Sink, typename... Args>
 using sink_callback = decltype(std::declval<Sink>().sink(std::declval<Args>()...));
 
 template <typename T, typename... Args>
-using _detect_sink_callback_for = decltype(std::declval<T&>()(std::declval<Args>()...));
-template <typename T, typename... Args>
-constexpr bool is_sink_callback_for
-    = _detail::is_detected<_detect_sink_callback_for, std::decay_t<T>, Args...>;
+concept is_sink_callback_for = requires {
+    std::declval<T>()(std::declval<Args>()...);
+};
 
 template <typename T, typename... Args>
 concept is_sink = requires {

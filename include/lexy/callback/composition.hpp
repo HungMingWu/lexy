@@ -8,7 +8,7 @@
 
 namespace lexy
 {
-template <typename Cb, typename State, typename = void>
+template <typename Cb, typename State>
 struct _compose_state
 {
     const Cb& _cb;
@@ -17,23 +17,13 @@ struct _compose_state
     using return_type = typename Cb::return_type;
 
     template <typename... Args>
-    constexpr auto operator()(Args&&... args) const -> decltype(_cb(std::forward<Args>(args)...))
+    constexpr decltype(auto) operator()(Args&&... args) const
     {
-        return _cb(std::forward<Args>(args)...);
-    }
-};
-template <typename Cb, typename State>
-struct _compose_state<Cb, State, std::enable_if_t<lexy::is_callback_state<Cb, State>>>
-{
-    const Cb& _cb;
-    State&    _state;
-
-    using return_type = typename Cb::return_type;
-
-    template <typename... Args>
-    constexpr auto operator()(Args&&... args) const -> decltype(_cb[_state](std::forward<Args>(args)...))
-    {
-        return _cb[_state](std::forward<Args>(args)...);
+        if constexpr (lexy::is_callback_state<Cb, State>) {
+	    return _cb[_state](std::forward<Args>(args)...);
+        } else {
+            return _cb(std::forward<Args>(args)...);
+        }
     }
 };
 
@@ -49,9 +39,8 @@ struct _compose_cb
 
     using return_type = typename Second::return_type;
 
-    template <typename State,
-              typename = std::enable_if_t<lexy::is_callback_state<First, State> //
-                                          || lexy::is_callback_state<Second, State>>>
+    template <typename State>
+    requires lexy::is_callback_state<First, State> || lexy::is_callback_state<Second, State>
     constexpr auto operator[](State& state) const
     {
         auto first  = _compose_state<First, State>{_first, state};
@@ -81,7 +70,8 @@ struct _compose_s
         return _sink.sink(std::forward<Args>(args)...);
     }
 
-    template <typename State, typename = std::enable_if_t<lexy::is_callback_state<Callback, State>>>
+    template <typename State>
+    requires lexy::is_callback_state<Callback, State>
     constexpr auto operator[](State& state) const
     {
         return _compose_state<Callback, State>{_callback, state};
