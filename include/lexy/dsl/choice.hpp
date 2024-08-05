@@ -4,7 +4,7 @@
 #ifndef LEXY_DSL_CHOICE_HPP_INCLUDED
 #define LEXY_DSL_CHOICE_HPP_INCLUDED
 
-#include <lexy/_detail/tuple.hpp>
+#include <tuple>
 #include <lexy/dsl/base.hpp>
 #include <lexy/error.hpp>
 
@@ -38,7 +38,7 @@ struct _chc
         template <typename Rule>
         using rp = lexy::branch_parser_for<Rule, Reader>;
 
-        lexy::_detail::tuple<rp<R>...> r_parsers;
+        std::tuple<rp<R>...> r_parsers;
         std::size_t                    branch_idx;
 
         template <typename ControlBlock>
@@ -54,7 +54,7 @@ struct _chc
             };
 
             // Need to try each possible branch.
-            auto found_branch = (try_r(Idx, r_parsers.template get<Idx>()) || ...);
+            auto found_branch = (try_r(Idx, std::get<Idx>(r_parsers)) || ...);
             if constexpr (_any_unconditional)
             {
                 LEXY_ASSERT(found_branch,
@@ -71,7 +71,7 @@ struct _chc
         constexpr void cancel(Context& context)
         {
             // Need to cancel all branches.
-            (r_parsers.template get<Idx>().cancel(context), ...);
+            (std::get<Idx>(r_parsers).cancel(context), ...);
         }
 
         template <typename NextParser, typename Context, typename... Args>
@@ -81,10 +81,10 @@ struct _chc
             auto result = false;
             (void)((Idx == branch_idx
                         ? (result
-                           = r_parsers.template get<Idx>()
+                           = std::get<Idx>(r_parsers)
                                  .template finish<NextParser>(context, reader, std::forward<Args>(args)...),
                            true)
-                        : (r_parsers.template get<Idx>().cancel(context), false))
+                        : (std::get<Idx>(r_parsers).cancel(context), false))
                    || ...);
             return result;
         }

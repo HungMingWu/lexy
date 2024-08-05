@@ -11,7 +11,6 @@ set(tests
         detail/std.cpp
         detail/string_view.cpp
         detail/swar.cpp
-        detail/tuple.cpp
         detail/type_name.cpp
 
         action/base.cpp
