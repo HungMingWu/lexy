@@ -643,10 +643,9 @@ constexpr auto _get_input(Encoding)
 {
     return lexy::string_input<Encoding>();
 }
-template <typename Encoding, typename... CharT,
-          typename
-          = std::enable_if_t<(std::is_convertible_v<CharT, typename Encoding::char_type> && ...)
-                             || (std::is_same_v<CharT, lexy::code_point> && ...)>>
+template <typename Encoding, typename... CharT>
+requires (std::is_convertible_v<CharT, typename Encoding::char_type> && ...)
+      || (std::is_same_v<CharT, lexy::code_point> && ...)
 constexpr auto _get_input(Encoding, CharT... cs)
 {
     using char_type = typename Encoding::char_type;
