@@ -49,7 +49,7 @@ public:
     constexpr scan_result() = default;
     constexpr scan_result(scan_failed_t) {}
 
-    template <typename U = T, typename = std::enable_if_t<std::is_constructible_v<T, U>>>
+    template <typename U = T> requires std::is_constructible_v<T, U>
     constexpr scan_result(U&& value)
     {
         _value.emplace(std::move(value));
@@ -197,7 +197,7 @@ public:
     }
 
     //=== parsing ===//
-    template <typename T, typename Rule, typename = std::enable_if_t<lexy::is_rule<Rule>>>
+    template <typename T, lexy::is_rule Rule>
     constexpr void parse(scan_result<T>& result, Rule)
     {
         if (_state == _state_failed)
@@ -223,7 +223,7 @@ public:
         return result;
     }
 
-    template <typename Rule, typename = std::enable_if_t<lexy::is_rule<Rule>>>
+    template <lexy::is_rule Rule>
     constexpr void parse(Rule rule)
     {
         scan_result<void> result;
@@ -231,7 +231,7 @@ public:
     }
 
     //=== branch parsing ===//
-    template <typename T, typename Rule, typename = std::enable_if_t<lexy::is_rule<Rule>>>
+    template <typename T, lexy::is_rule Rule>
     constexpr bool branch(scan_result<T>& result, Rule)
     {
         LEXY_REQUIRE_BRANCH_RULE(Rule, "branch");
@@ -259,7 +259,7 @@ public:
         return branch(result, lexyd::_prd<Production>{});
     }
 
-    template <typename Rule, typename = std::enable_if_t<lexy::is_rule<Rule>>>
+    template <lexy::is_rule Rule>
     constexpr bool branch(Rule rule)
     {
         scan_result<void> result;
@@ -351,7 +351,7 @@ public:
     }
 
     //=== convenience ===//
-    template <typename T, typename Rule, typename = std::enable_if_t<lexy::is_rule<Rule>>>
+    template <typename T, lexy::is_rule Rule>
     constexpr auto parse(Rule rule)
     {
         scan_result<T> result;
