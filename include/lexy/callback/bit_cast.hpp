@@ -47,8 +47,8 @@ struct _bit_cast
 
     using return_type = T;
 
-    template <typename Arg, typename = std::enable_if_t<sizeof(T) == sizeof(Arg)
-                                                        && std::is_trivially_copyable_v<Arg>>>
+    template <typename Arg>
+    requires (sizeof(T) == sizeof(Arg))&& std::is_trivially_copyable_v<Arg>
     LEXY_BITCAST_CONSTEXPR T operator()(const Arg& arg) const
     {
 #if LEXY_HAS_BITCAST == 2
