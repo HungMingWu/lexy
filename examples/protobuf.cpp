@@ -4,6 +4,7 @@
 // This examples parses a protobuf message in the binary encoding.
 // It then prints the basic structure of it, without knowing the message definition.
 
+#include <bit>
 #include <cinttypes>
 #include <cstdint>
 #include <string>
@@ -44,7 +45,7 @@ namespace ast
         {
             auto as_unsigned = value;
             auto as_signed   = (value << 1) ^ (value >> 31);
-            auto as_float    = lexy::bit_cast<float>(value);
+            auto as_float    = std::bit_cast<float>(value);
             std::printf("%" PRIu32 " / %" PRIi32 " / %f", as_unsigned, as_signed, as_float);
         }
     };
@@ -58,7 +59,7 @@ namespace ast
         {
             auto as_unsigned = value;
             auto as_signed   = (value << 1) ^ (value >> 63);
-            auto as_float    = lexy::bit_cast<double>(value);
+            auto as_float    = std::bit_cast<double>(value);
             std::printf("%" PRIu64 " / %" PRIi64 " / %f", as_unsigned, as_signed, as_float);
         }
     };
