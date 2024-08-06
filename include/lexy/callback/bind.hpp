@@ -103,7 +103,8 @@ struct nullopt;
 
 struct _default
 {
-    template <typename T, typename = std::enable_if_t<std::is_default_constructible_v<T>>>
+    template <typename T>
+    requires std::is_default_constructible_v<T>
     constexpr operator T() const noexcept
     {
         return T();
@@ -351,8 +352,8 @@ struct _bound_sink
         return _sink(std::forward<Args>(args)...);
     }
 
-    template <bool Dummy = true,
-              typename   = std::enable_if_t<(!_detail::is_placeholder<BoundArgs> && ... && Dummy)>>
+    template <bool Dummy = true>
+    requires (!_detail::is_placeholder<BoundArgs> && ... && Dummy)
     constexpr auto sink() const
     {
         auto state = _detail::no_bind_state{};
