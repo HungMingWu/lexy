@@ -454,9 +454,6 @@ template <typename Encoding, encoding_endianness Endianness>
 constexpr auto make_buffer_from_raw = _make_buffer<Encoding, Endianness>{};
 
 //=== make_buffer_from_input ===//
-template <typename Input>
-using _detect_input_data = decltype(std::declval<Input>().data());
-
 template <typename Input, typename MemoryResource = void>
 constexpr auto make_buffer_from_input(const Input&    input,
                                       MemoryResource* resource
@@ -464,7 +461,7 @@ constexpr auto make_buffer_from_input(const Input&    input,
     -> buffer<typename input_reader<Input>::encoding, MemoryResource>
 {
     using type = buffer<typename input_reader<Input>::encoding, MemoryResource>;
-    if constexpr (_detail::is_detected<_detect_input_data, Input>)
+    if constexpr (requires { input.data(); })
     {
         return type(input.data(), input.size(), resource);
     }
