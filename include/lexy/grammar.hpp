@@ -50,7 +50,7 @@ template <typename T>
 constexpr bool is_unconditional_branch_rule = std::is_base_of_v<dsl::unconditional_branch_base, T>;
 
 template <typename T>
-constexpr bool is_token_rule = std::is_base_of_v<dsl::_token_base, T>;
+concept is_token_rule = std::is_base_of_v<dsl::_token_base, T>;
 
 template <typename T>
 constexpr bool is_char_class_rule = std::is_base_of_v<dsl::_char_class_base, T>;

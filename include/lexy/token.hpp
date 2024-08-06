@@ -132,7 +132,7 @@ public:
     }
 
     /// Creates the token kind of a token rule.
-    template <typename TokenRule, typename = std::enable_if_t<lexy::is_token_rule<TokenRule>>>
+    template <lexy::is_token_rule TokenRule>
     constexpr token_kind(TokenRule) noexcept
     // We initialize it according to the external mapping.
     : token_kind(token_kind_map_for<TokenKind>.lookup(TokenRule{}))
@@ -209,11 +209,11 @@ private:
     std::uint_least16_t _value;
 };
 
-template <typename TokenKind, typename = std::enable_if_t<std::is_integral_v<TokenKind>>>
+template <typename TokenKind> requires std::is_integral_v<TokenKind>
 token_kind(TokenKind) -> token_kind<void>;
-template <typename TokenKind, typename = std::enable_if_t<std::is_enum_v<TokenKind>>>
+template <typename TokenKind> requires std::is_enum_v<TokenKind>
 token_kind(TokenKind) -> token_kind<TokenKind>;
-template <typename TokenRule, typename = std::enable_if_t<_has_special_token_kind<TokenRule>>>
+template <typename TokenRule> requires _has_special_token_kind<TokenRule>
 token_kind(TokenRule) -> token_kind<LEXY_DECAY_DECLTYPE(lexy::token_kind_of<TokenRule>)>;
 } // namespace lexy
 
@@ -264,14 +264,11 @@ private:
 
 template <typename TokenKind, typename Reader>
 token(token_kind<TokenKind>, lexy::lexeme<Reader>) -> token<Reader, TokenKind>;
-template <typename TokenKind, typename Reader,
-          typename = std::enable_if_t<std::is_integral_v<TokenKind>>>
+template <typename TokenKind, typename Reader> requires std::is_integral_v<TokenKind>
 token(TokenKind, lexy::lexeme<Reader>) -> token<Reader, void>;
-template <typename TokenKind, typename Reader,
-          typename = std::enable_if_t<std::is_enum_v<TokenKind>>>
+template <typename TokenKind, typename Reader> requires std::is_enum_v<TokenKind>
 token(TokenKind, lexy::lexeme<Reader>) -> token<Reader, TokenKind>;
-template <typename TokenRule, typename Reader,
-          typename = std::enable_if_t<_has_special_token_kind<TokenRule>>>
+template <typename TokenRule, typename Reader> requires _has_special_token_kind<TokenRule>
 token(TokenRule, lexy::lexeme<Reader>)
     -> token<Reader, LEXY_DECAY_DECLTYPE(lexy::token_kind_of<TokenRule>)>;
 

@@ -31,7 +31,7 @@ namespace lexy
     template <typename T>
     constexpr bool is_unconditional_branch_rule; <4>
     template <typename T>
-    constexpr bool is_token_rule;  <5>
+    concept is_token_rule;  <5>
 
     template <typename T>
     constexpr bool is_literal_rule; <6>
