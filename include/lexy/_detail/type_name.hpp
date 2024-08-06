@@ -10,10 +10,16 @@
 
 namespace lexy::_detail
 {
+
 template <typename T>
-using _detect_name_f = std::enable_if_t<std::is_convertible_v<decltype(T::name()), string_view>>;
+concept _detect_name_f = requires {
+    { T::name() } -> std::convertible_to<string_view>;
+};
+
 template <typename T>
-using _detect_name_v = decltype(T::name);
+concept _detect_name_v = requires {
+    T::name;
+};
 
 template <typename T>
 constexpr auto _full_type_name()
@@ -92,9 +98,9 @@ constexpr string_view _type_name()
 template <typename T, int NsCount = 1>
 constexpr const char* type_name()
 {
-    if constexpr (_detail::is_detected<_detect_name_f, T>)
+    if constexpr (_detect_name_f<T>)
         return T::name();
-    else if constexpr (_detail::is_detected<_detect_name_v, T>)
+    else if constexpr (_detect_name_v<T>)
         return T::name;
     else if constexpr (LEXY_HAS_CONSTEXPR_AUTOMATIC_TYPE_NAME)
         return make_cstr<_type_name<T, NsCount>>;
@@ -110,8 +116,8 @@ inline constexpr const char* _type_id_holder = type_name<T, NsCount>();
 template <typename T, int NsCount = 1>
 constexpr const char* const* type_id()
 {
-    if constexpr (_detail::is_detected<_detect_name_v, T> //
-                  && !_detail::is_detected<_detect_name_f, T>)
+    if constexpr (_detect_name_v<T> //
+                  && !_detect_name_f<T>)
     {
         // We can use the address of the static constexpr directly.
         return &T::name;
