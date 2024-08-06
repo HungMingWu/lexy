@@ -459,8 +459,6 @@ private:
 
 namespace lexyd
 {
-template <typename Context, typename Scanner, typename StatePtr, typename... Args>
-using _detect_scan_state = decltype(Context::production::scan(std::declval<Scanner>(), *StatePtr(), std::declval<Args>()...));
 
 struct _scan : rule_base
 {
@@ -472,9 +470,7 @@ struct _scan : rule_base
                                             Args&&... args)
         {
             typename Context::production::scan_result result = [&] {
-                if constexpr (lexy::_detail::is_detected<
-                                  _detect_scan_state, Context, decltype(scanner),
-                                  decltype(context.control_block->parse_state), Args&&...>)
+                if constexpr (requires { Context::production::scan(scanner, *context.control_block->parse_state, args...);})
                     return Context::production::scan(scanner, *context.control_block->parse_state,
                                                      std::forward<Args>(args)...);
                 else
