@@ -11,14 +11,15 @@ namespace lexy
 struct nullopt;
 
 template <typename Container>
-using _detect_reserve = decltype(std::declval<Container&>().reserve(std::size_t()));
-template <typename Container>
-constexpr auto _has_reserve = _detail::is_detected<_detect_reserve, Container>;
+concept _has_reserve = requires {
+    std::declval<Container&>().reserve(std::size_t());
+};
 
 template <typename Container>
-using _detect_append = decltype(std::declval<Container&>().append(std::declval<Container&&>()));
-template <typename Container>
-constexpr auto _has_append = _detail::is_detected<_detect_append, Container>;
+concept _has_append = requires {
+    std::declval<Container&>().append(std::declval<Container&&>());
+};
+
 } // namespace lexy
 
 //=== as_list ===//
