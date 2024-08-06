@@ -20,11 +20,15 @@ namespace lexy
 // * it includes pointers, which is ok
 // * it includes `std::optional` and all non-std implementations of it
 template <typename T>
-using _detect_optional_like = decltype(T(), *std::declval<T&>(), !std::declval<const T&>());
+concept is_optional_like = requires {
+    T();
+    *std::declval<T&>();
+    !std::declval<const T&>();
+};
 
 struct nullopt
 {
-    template <typename T, typename = _detect_optional_like<T>>
+    template <is_optional_like T>
     constexpr operator T() const
     {
         return T();
