@@ -225,8 +225,6 @@ using error_for = error<input_reader<Input>, Tag>;
 
 namespace lexy
 {
-template <typename Input>
-using _detect_parent_input = decltype(std::declval<Input>().parent_input());
 
 /// Contains information about the context of an error, production is type-erased.
 template <typename Input>
@@ -241,7 +239,7 @@ public:
     /// The input.
     constexpr const auto& input() const noexcept
     {
-        if constexpr (_detail::is_detected<_detect_parent_input, Input>)
+        if constexpr (requires { _input->parent_input(); })
             return _input->parent_input();
         else
             return *_input;
