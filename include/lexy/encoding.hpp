@@ -282,8 +282,7 @@ constexpr bool is_compatible_char_type = std::is_same_v<typename Encoding::char_
                                          || Encoding::template is_secondary_char_type<CharT>();
 
 template <typename Encoding, typename CharT>
-using require_secondary_char_type
-    = std::enable_if_t<Encoding::template is_secondary_char_type<CharT>()>;
+concept require_secondary_char_type = Encoding::template is_secondary_char_type<CharT>();
 
 template <typename CharT>
 constexpr bool is_ascii(CharT c)
