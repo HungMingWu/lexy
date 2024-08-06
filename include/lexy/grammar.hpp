@@ -186,7 +186,7 @@ consteval std::size_t max_recursion_depth()
 }
 
 template <typename T>
-using _enable_production_or_operation = std::enable_if_t<is_production<T> || is_operation<T>>;
+concept _enable_production_or_operation = is_production<T> || is_operation<T>;
 
 struct production_info
 {
@@ -195,7 +195,7 @@ struct production_info
     bool               is_token;
     bool               is_transparent;
 
-    template <typename Production, typename = _enable_production_or_operation<Production>>
+    template <_enable_production_or_operation Production>
     constexpr production_info(Production)
     : id(_detail::type_id<Production>()), name(production_name<Production>()),
       is_token(is_token_production<Production>),
@@ -318,11 +318,12 @@ class production_value_callback
 public:
     constexpr explicit production_value_callback(ParseState* state) : _state(state) {}
 
-    template <typename State = ParseState, typename = std::enable_if_t<std::is_void_v<State>>>
+    template <typename State = ParseState>
+    requires std::is_void_v<State>
     constexpr production_value_callback() : _state(nullptr)
     {}
-    template <typename State = ParseState,
-              typename       = std::enable_if_t<std::is_same_v<State, ParseState>>>
+    template <typename State = ParseState>
+    requires std::is_same_v<State, ParseState>
     constexpr explicit production_value_callback(State& state) : _state(&state)
     {}
 
