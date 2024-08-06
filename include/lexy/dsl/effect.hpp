@@ -9,27 +9,17 @@
 
 namespace lexyd
 {
-template <typename EffRule, typename State>
-using _detect_eff_fn = decltype(EffRule::_fn()(std::declval<State&>()));
 
 template <auto Fn>
 struct _eff : rule_base
 {
-    static constexpr auto _fn()
-    {
-        return Fn;
-    }
-
     template <typename NextParser>
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
         LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
         {
-            using control_block_type = LEXY_DECAY_DECLTYPE(*context.control_block);
-            using state_type         = typename control_block_type::state_type;
-
-            if constexpr (lexy::_detail::is_detected<_detect_eff_fn, _eff, state_type>)
+            if constexpr (requires { Fn(*context.control_block->parse_state); })
             {
                 using return_type = decltype(Fn(*context.control_block->parse_state));
                 if constexpr (std::is_void_v<return_type>)
