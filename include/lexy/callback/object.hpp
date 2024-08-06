@@ -8,14 +8,15 @@
 
 namespace lexy::_detail
 {
-template <typename T, typename... Args>
-using _detect_brace_construct = decltype(T{std::declval<Args>()...});
-template <typename T, typename... Args>
-constexpr auto is_brace_constructible = _detail::is_detected<_detect_brace_construct, T, Args...>;
 
 template <typename T, typename... Args>
-constexpr auto is_constructible
-    = std::is_constructible_v<T, Args...> || is_brace_constructible<T, Args...>;
+concept is_brace_constructible = requires {
+    T{std::declval<Args>()...};
+};
+
+template <typename T, typename... Args>
+concept is_constructible = std::is_constructible_v<T, Args...> || is_brace_constructible<T, Args...>;
+
 } // namespace lexy::_detail
 
 namespace lexy
