@@ -4,7 +4,6 @@
 #ifndef LEXY_DSL_OPERATOR_HPP_INCLUDED
 #define LEXY_DSL_OPERATOR_HPP_INCLUDED
 
-#include <lexy/_detail/detect.hpp>
 #include <lexy/dsl/base.hpp>
 #include <lexy/dsl/literal.hpp>
 #include <lexy/dsl/token.hpp>

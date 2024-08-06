@@ -5,7 +5,6 @@
 #define LEXY_CALLBACK_BASE_HPP_INCLUDED
 
 #include <lexy/_detail/config.hpp>
-#include <lexy/_detail/detect.hpp>
 #include <lexy/_detail/invoke.hpp>
 
 namespace lexy

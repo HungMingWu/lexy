@@ -7,7 +7,6 @@
 #include <iterator>
 #include <lexy/_detail/assert.hpp>
 #include <lexy/_detail/config.hpp>
-#include <lexy/_detail/detect.hpp>
 
 //=== iterator algorithms ===//
 namespace lexy::_detail

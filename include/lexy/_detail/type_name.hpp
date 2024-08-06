@@ -5,7 +5,6 @@
 #define LEXY_DETAIL_TYPE_NAME_HPP_INCLUDED
 
 #include <lexy/_detail/config.hpp>
-#include <lexy/_detail/detect.hpp>
 #include <lexy/_detail/string_view.hpp>
 
 namespace lexy::_detail

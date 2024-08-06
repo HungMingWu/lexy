@@ -6,7 +6,6 @@
 
 #include <cstdint>
 #include <lexy/_detail/config.hpp>
-#include <lexy/_detail/detect.hpp>
 #include <lexy/_detail/type_name.hpp>
 #include <lexy/callback/base.hpp>
 
