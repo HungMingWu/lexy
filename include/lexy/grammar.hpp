@@ -143,11 +143,14 @@ constexpr auto token_kind_of<const TokenRule> = token_kind_of<TokenRule>;
 //=== production ===//
 namespace lexy
 {
+
 template <typename Production>
 using production_rule = LEXY_DECAY_DECLTYPE(Production::rule);
 
 template <typename Production>
-constexpr bool is_production = _detail::is_detected<production_rule, Production>;
+concept is_production = requires {
+    Production::rule;
+};
 
 /// Base class to indicate that this production is conceptually a token.
 /// This inhibits whitespace skipping inside the production.
@@ -174,13 +177,10 @@ consteval const char* production_name()
     return _detail::type_name<Production>();
 }
 
-template <typename Production>
-using _detect_max_recursion_depth = decltype(Production::max_recursion_depth);
-
 template <typename EntryProduction>
 consteval std::size_t max_recursion_depth()
 {
-    if constexpr (_detail::is_detected<_detect_max_recursion_depth, EntryProduction>)
+    if constexpr (requires { EntryProduction::max_recursion_depth; })
         return EntryProduction::max_recursion_depth;
     else
         return 1024; // Arbitrary power of two.
@@ -216,12 +216,11 @@ struct production_info
 
 namespace lexy
 {
-template <typename Production>
-using _detect_whitespace = decltype(Production::whitespace);
 
 template <typename Production>
-constexpr auto _production_defines_whitespace
-    = lexy::_detail::is_detected<_detect_whitespace, Production>;
+concept _production_defines_whitespace = requires {
+    Production::whitespace;
+};
 
 template <typename Production, typename WhitespaceProduction>
 auto _production_whitespace()
@@ -253,13 +252,16 @@ template <>
 inline constexpr auto _is_convertible<void> = true;
 
 template <typename ParseState, typename Production>
-using _detect_value_of =
+concept _detect_value_of = requires {
     // We're testing a non-const ParseState on purpose, to handle cases where a user forgot to const
     // qualify value_of() (it causes a hard error instead of going to ::value).
     typename decltype(std::declval<ParseState&>().value_of(Production{}))::return_type;
+};
 
 template <typename Production>
-using _detect_value = decltype(Production::value);
+concept _detect_value = requires {
+    Production::value;
+};
 
 template <typename Production, typename Sink>
 struct _sfinae_sink
@@ -289,15 +291,15 @@ struct _sfinae_sink
 
 template <typename Production, typename ParseState = void>
 constexpr bool production_has_value_callback
-    = lexy::_detail::is_detected<_detect_value_of, ParseState, Production>
-      || lexy::_detail::is_detected<_detect_value, Production>;
+    = _detect_value_of<ParseState, Production>
+      || _detect_value<Production>;
 
 template <typename Production, typename ParseState = void>
 class production_value_callback
 {
     static constexpr auto _get_value([[maybe_unused]] ParseState* state)
     {
-        if constexpr (lexy::_detail::is_detected<_detect_value_of, ParseState, Production>)
+        if constexpr (_detect_value_of<ParseState, Production>)
             return state->value_of(Production{});
         else
             return Production::value;
