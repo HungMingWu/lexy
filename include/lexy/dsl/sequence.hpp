@@ -99,7 +99,7 @@ struct _seq : rule_base
     using p = lexy::parser_for<_seq_impl<R...>, NextParser>;
 };
 
-template <typename R, typename S, typename = std::enable_if_t<lexy::is_rule<R> && lexy::is_rule<S>>>
+template <lexy::is_rule R, lexy::is_rule S>
 constexpr auto operator+(R, S)
 {
     return _seq<R, S>{};

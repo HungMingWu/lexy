@@ -22,10 +22,10 @@ Traits and definitions for the grammar.
 namespace lexy
 {
     template <typename T>
-    constexpr bool is_production;  <1>
+    concept is_production;  <1>
 
     template <typename T>
-    constexpr bool is_rule;        <2>
+    concept is_rule;        <2>
     template <typename T>
     constexpr bool is_branch_rule; <3>
     template <typename T>

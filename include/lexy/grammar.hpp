@@ -42,7 +42,7 @@ namespace lexy
 namespace dsl = lexyd;
 
 template <typename T>
-constexpr bool is_rule = std::is_base_of_v<dsl::rule_base, T>;
+concept is_rule = std::is_base_of_v<dsl::rule_base, T>;
 
 template <typename T>
 constexpr bool is_branch_rule = std::is_base_of_v<dsl::branch_base, T>;
