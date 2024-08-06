@@ -54,7 +54,8 @@ void verify_success(Rule rule)
         CHECK(utf32.trace == test_trace().token(doctest::toString(cp).c_str()));
     }
 }
-template <char32_t... Cp, typename Rule, typename = std::enable_if_t<(sizeof...(Cp) > 1)>>
+template <char32_t... Cp, typename Rule>
+requires (sizeof...(Cp) > 1)
 void verify_success(Rule rule)
 {
     (verify_success<Cp>(rule), ...);
@@ -87,7 +88,8 @@ void verify_failure(Rule rule, const char* name)
         CHECK(utf32.trace == test_trace().expected_char_class(0, name).cancel());
     }
 }
-template <char32_t... Cp, typename Rule, typename = std::enable_if_t<(sizeof...(Cp) > 1)>>
+template <char32_t... Cp, typename Rule>
+requires (sizeof...(Cp) > 1)
 void verify_failure(Rule rule, const char* name)
 {
     (verify_failure<Cp>(rule, name), ...);
