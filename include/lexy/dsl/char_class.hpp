@@ -356,14 +356,13 @@ struct _cb : char_class_base<_cb<Byte>>
     }
 };
 
-template <typename C, typename = std::enable_if_t<lexy::is_char_class_rule<C>>>
+template <lexy::is_char_class_rule C>
 constexpr auto _make_char_class(C c)
 {
     return c;
 }
-template <typename CharT, CharT C,
-          typename = std::enable_if_t<C <= 0x7F || std::is_same_v<CharT, char32_t>
-                                      || std::is_same_v<CharT, unsigned char>>>
+template <typename CharT, CharT C>
+requires (C <= 0x7F) || std::is_same_v<CharT, char32_t> || std::is_same_v<CharT, unsigned char>
 constexpr auto _make_char_class(_lit<CharT, C>)
 {
     if constexpr (std::is_same_v<CharT, unsigned char>)

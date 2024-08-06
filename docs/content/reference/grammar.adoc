@@ -38,7 +38,7 @@ namespace lexy
     template <typename T>
     constexpr bool is_literal_set_rule; <7>
     template <typename T>
-    constexpr bool is_char_class_rule; <8>
+    concept is_char_class_rule; <8>
 
     template <typename T>
     constexpr bool is_separator; <9>

@@ -53,7 +53,7 @@ template <typename T>
 concept is_token_rule = std::is_base_of_v<dsl::_token_base, T>;
 
 template <typename T>
-constexpr bool is_char_class_rule = std::is_base_of_v<dsl::_char_class_base, T>;
+concept is_char_class_rule = std::is_base_of_v<dsl::_char_class_base, T>;
 template <typename T>
 constexpr bool is_literal_rule = std::is_base_of_v<dsl::_lit_base, T>;
 template <typename T>
