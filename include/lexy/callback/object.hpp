@@ -36,8 +36,8 @@ struct _construct
     }
 
     template <typename... Args>
-    constexpr auto operator()(Args&&... args) const
-        -> std::enable_if_t<_detail::is_constructible<T, Args&&...>, T>
+    requires _detail::is_constructible<T, Args&&...>
+    constexpr auto operator()(Args&&... args) const -> T
     {
         if constexpr (std::is_constructible_v<T, Args&&...>)
             return T(std::forward<Args>(args)...);
@@ -74,8 +74,8 @@ struct _new
     }
 
     template <typename... Args>
-    constexpr auto operator()(Args&&... args) const
-        -> std::enable_if_t<_detail::is_constructible<T, Args&&...>, PtrT>
+    requires _detail::is_constructible<T, Args&&...>
+    constexpr auto operator()(Args&&... args) const -> PtrT
     {
         if constexpr (std::is_constructible_v<T, Args&&...>)
         {
