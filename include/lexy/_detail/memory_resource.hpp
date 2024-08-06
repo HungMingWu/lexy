@@ -140,8 +140,8 @@ using memory_resource_ptr
                 _memory_resource_ptr<MemoryResource>>>;
 // clang-format on
 
-template <typename MemoryResource, typename = std::enable_if_t<std::is_void_v<MemoryResource>
-                                                               || std::is_empty_v<MemoryResource>>>
+template <typename MemoryResource>
+requires std::is_void_v<MemoryResource> || std::is_empty_v<MemoryResource>
 constexpr MemoryResource* get_memory_resource()
 {
     return nullptr;
