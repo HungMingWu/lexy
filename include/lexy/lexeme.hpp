@@ -30,8 +30,8 @@ public:
     : _begin(begin), _end(reader.position())
     {}
 
-    template <typename OtherReader, typename = std::enable_if_t<std::is_same_v<
-                                        typename Reader::iterator, typename OtherReader::iterator>>>
+    template <typename OtherReader>
+    requires std::is_same_v<typename Reader::iterator, typename OtherReader::iterator>
     constexpr operator lexeme<OtherReader>() const noexcept
     {
         return lexeme<OtherReader>(this->begin(), this->end());
