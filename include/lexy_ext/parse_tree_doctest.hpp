@@ -24,7 +24,7 @@ public:
     {
         production(root_name);
     }
-    template <typename RootProduction, typename = lexy::production_rule<RootProduction>>
+    template <lexy::is_production RootProduction>
     parse_tree_desc(RootProduction) : parse_tree_desc(lexy::production_name<RootProduction>())
     {}
 
@@ -104,7 +104,7 @@ public:
 
         return *this;
     }
-    template <typename Production, typename = lexy::production_rule<Production>>
+    template <lexy::is_production Production>
     parse_tree_desc& production(Production)
     {
         return production(lexy::production_name<Production>());

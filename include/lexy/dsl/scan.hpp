@@ -210,7 +210,7 @@ public:
             _state = _state_failed;
     }
 
-    template <typename Production, typename = lexy::production_rule<Production>>
+    template <is_production Production>
     constexpr auto parse(Production = {})
     {
         using context_t = LEXY_DECAY_DECLTYPE(static_cast<Derived&>(*this).context());
@@ -253,7 +253,7 @@ public:
         return true; // branch was taken
     }
 
-    template <typename Production, typename T, typename = lexy::production_rule<Production>>
+    template <is_production Production, typename T>
     constexpr bool branch(scan_result<T>& result, Production = {})
     {
         return branch(result, lexyd::_prd<Production>{});
