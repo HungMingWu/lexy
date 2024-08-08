@@ -4,7 +4,6 @@
 set(tests
         detail/any_ref.cpp
         detail/buffer_builder.cpp
-        detail/invoke.cpp
         detail/lazy_init.cpp
         detail/nttp_string.cpp
         detail/stateless_lambda.cpp

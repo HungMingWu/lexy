@@ -4,8 +4,8 @@
 #ifndef LEXY_CALLBACK_BASE_HPP_INCLUDED
 #define LEXY_CALLBACK_BASE_HPP_INCLUDED
 
+#include <functional>
 #include <lexy/_detail/config.hpp>
-#include <lexy/_detail/invoke.hpp>
 
 namespace lexy
 {
@@ -56,9 +56,9 @@ struct _fn_holder
 
     template <typename... Args>
     constexpr auto operator()(Args&&... args) const
-        -> decltype(_detail::invoke(fn, std::forward<Args>(args)...))
+        -> decltype(std::invoke(fn, std::forward<Args>(args)...))
     {
-        return _detail::invoke(fn, std::forward<Args>(args)...);
+        return std::invoke(fn, std::forward<Args>(args)...);
     }
 };
 

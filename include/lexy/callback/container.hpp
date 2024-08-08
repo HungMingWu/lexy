@@ -70,7 +70,7 @@ struct _list_alloc
         }
         constexpr Container operator()(nullopt&&) const
         {
-            return Container(_detail::invoke(_alloc, _state));
+            return Container(std::invoke(_alloc, _state));
         }
 
         template <typename... Args>
@@ -78,7 +78,7 @@ struct _list_alloc
             -> LEXY_DECAY_DECLTYPE((std::declval<Container&>().push_back(std::forward<Args>(args)), ...),
                                    std::declval<Container>())
         {
-            Container result(_detail::invoke(_alloc, _state));
+            Container result(std::invoke(_alloc, _state));
             if constexpr (_has_reserve<Container>)
                 result.reserve(sizeof...(args));
             (result.emplace_back(std::forward<Args>(args)), ...);
@@ -95,7 +95,7 @@ struct _list_alloc
     template <typename State>
     constexpr auto sink(State& state) const
     {
-        return _list_sink<Container>{Container(_detail::invoke(_alloc, state))};
+        return _list_sink<Container>{Container(std::invoke(_alloc, state))};
     }
 };
 
@@ -210,7 +210,7 @@ struct _collection_alloc
         }
         constexpr Container operator()(nullopt&&) const
         {
-            return Container(_detail::invoke(_alloc, _state));
+            return Container(std::invoke(_alloc, _state));
         }
 
         template <typename... Args>
@@ -218,7 +218,7 @@ struct _collection_alloc
             -> LEXY_DECAY_DECLTYPE((std::declval<Container&>().insert(std::forward<Args>(args)), ...),
                                    std::declval<Container>())
         {
-            Container result(_detail::invoke(_alloc, _state));
+            Container result(std::invoke(_alloc, _state));
             if constexpr (_has_reserve<Container>)
                 result.reserve(sizeof...(args));
             (result.emplace(std::forward<Args>(args)), ...);
@@ -235,7 +235,7 @@ struct _collection_alloc
     template <typename State>
     constexpr auto sink(State& state) const
     {
-        return _collection_sink<Container>{Container(_detail::invoke(_alloc, state))};
+        return _collection_sink<Container>{Container(std::invoke(_alloc, state))};
     }
 };
 

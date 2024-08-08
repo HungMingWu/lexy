@@ -4,7 +4,7 @@
 #ifndef LEXY_ACTION_PARSE_HPP_INCLUDED
 #define LEXY_ACTION_PARSE_HPP_INCLUDED
 
-#include <lexy/_detail/invoke.hpp>
+#include <functional>
 #include <lexy/action/base.hpp>
 #include <lexy/action/validate.hpp>
 #include <lexy/callback/base.hpp>

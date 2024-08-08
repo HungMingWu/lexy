@@ -150,9 +150,9 @@ struct _mem_fn<MemFn T::*>
 
     template <typename... Args>
     constexpr auto operator()(Args&&... args) const
-        -> decltype(_detail::_mem_invoker<MemFn T::*>::invoke(_fn, std::forward<Args>(args)...))
+        -> decltype(std::invoke(_fn, std::forward<Args>(args)...))
     {
-        return _detail::_mem_invoker<MemFn T::*>::invoke(_fn, std::forward<Args>(args)...);
+        return std::invoke(_fn, std::forward<Args>(args)...);
     }
 };
 

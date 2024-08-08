@@ -129,7 +129,7 @@ struct _nth_value : _detail::placeholder_base // fallback + map
             if constexpr (_detail::is_decayed_same<arg_t, nullopt>)
                 return _fallback; // Argument is nullopt.
             else
-                return _detail::invoke(_fn, std::get<N - 1>(args));
+                return std::invoke(_fn, std::get<N - 1>(args));
         }
     }
 };
@@ -170,7 +170,7 @@ struct _nth_value<N, void, Fn> : _detail::placeholder_base // map only
                                                           const std::tuple<Args...>& args) const
     {
         static_assert(N <= sizeof...(Args), "not enough arguments for nth_value<N>");
-        return _detail::invoke(_fn, std::get<N - 1>(args));
+        return std::invoke(_fn, std::get<N - 1>(args));
     }
 
     template <typename Arg>
@@ -252,7 +252,7 @@ struct _parse_state : _detail::placeholder_base
     {
         static_assert(!std::is_same_v<State, _detail::no_bind_state>,
                       "lexy::parse_state requires that a state is passed to lexy::parse()");
-        return _detail::invoke(_fn, state);
+        return std::invoke(_fn, state);
     }
 };
 template <>

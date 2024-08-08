@@ -26,9 +26,9 @@ struct _fold
         constexpr decltype(auto) operator()(Args&&... args)
         {
             if constexpr (Inplace)
-                _detail::invoke(_op, _result, std::forward<Args>(args)...);
+                std::invoke(_op, _result, std::forward<Args>(args)...);
             else
-                _result = _detail::invoke(_op, std::move(_result), std::forward<Args>(args)...);
+                _result = std::invoke(_op, std::move(_result), std::forward<Args>(args)...);
         }
 
         constexpr T finish() &&
