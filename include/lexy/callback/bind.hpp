@@ -242,38 +242,50 @@ inline namespace placeholders
     constexpr auto _8 = nth_value<8>;
 } // namespace placeholders
 
-template <typename Fn>
+template <typename Derived = void>
 struct _parse_state : _detail::placeholder_base
 {
-    LEXY_EMPTY_MEMBER Fn _fn;
-
     template <typename State, typename... Args>
-    constexpr decltype(auto) operator()(State& state, const std::tuple<Args...>&) const
-    {
-        static_assert(!std::is_same_v<State, _detail::no_bind_state>,
-                      "lexy::parse_state requires that a state is passed to lexy::parse()");
-        return std::invoke(_fn, state);
-    }
-};
-template <>
-struct _parse_state<void> : _detail::placeholder_base
-{
-    template <typename State, typename... Args>
-    constexpr decltype(auto) operator()(State& state, const std::tuple<Args...>&) const
-    {
-        static_assert(!std::is_same_v<State, _detail::no_bind_state>,
-                      "lexy::parse_state requires that a state is passed to lexy::parse()");
-        return state;
-    }
+    constexpr decltype(auto) operator()(State& state, const std::tuple<Args...>&) const;
 
     template <typename Fn>
     constexpr auto map(Fn&& fn) const
-    {
-        return _parse_state<std::decay_t<Fn>>{{}, std::forward<Fn>(fn)};
-    }
+    requires std::is_void_v<Derived>;
 };
 
-constexpr auto parse_state = _parse_state<void>{};
+template <typename Fn>
+struct _parse_state_with_Fn : _parse_state<_parse_state_with_Fn<Fn>>
+{
+    LEXY_EMPTY_MEMBER Fn _fn;
+};
+
+template <typename Derived>
+template <typename State, typename... Args>
+constexpr decltype(auto) _parse_state<Derived>::operator()(State& state, const std::tuple<Args...>&) const
+{
+    static_assert(!std::is_same_v<State, _detail::no_bind_state>,
+                  "lexy::parse_state requires that a state is passed to lexy::parse()");
+    if constexpr (std::is_void_v<Derived>)
+    {
+        return state;
+    }
+    else
+    {
+        const auto& dervied = static_cast<const Derived&>(*this);
+        return std::invoke(dervied._fn, state);
+    }
+}
+
+template <typename Derived>
+template <typename Fn>
+constexpr auto _parse_state<Derived>::map(Fn&& fn) const
+requires std::is_void_v<Derived>
+{
+    return _parse_state_with_Fn<std::decay_t<Fn>>{{}, std::forward<Fn>(fn)};
+}
+
+constexpr auto parse_state = _parse_state<>{};
+
 } // namespace lexy
 
 //=== bind ===//
