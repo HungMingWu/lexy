@@ -223,16 +223,17 @@ struct automatic_ws_parser;
 
 namespace lexy
 {
-template <typename Context, typename NextParser,
-          typename = lexy::production_whitespace<typename Context::production,
-                                                 typename Context::whitespace_production>>
-struct whitespace_parser : _detail::automatic_ws_parser<NextParser>
-{};
-// If we know the whitespace rule is void, go to NextParser immediately.
-// This is both an optimization and also doesn't require inclusion of whitespace.hpp.
+
+template <typename Context>
+concept has_whitespace_production =
+    _production_defines_whitespace<typename Context::production> ||
+    _production_defines_whitespace<typename Context::whitespace_production>;
+
+// If we know the whitespace rule is absent, go to NextParser immediately
 template <typename Context, typename NextParser>
-struct whitespace_parser<Context, NextParser, void> : NextParser
-{};
+using whitespace_parser = std::conditional_t<has_whitespace_production<Context>,
+			                     _detail::automatic_ws_parser<NextParser>,
+			                     NextParser>;
 } // namespace lexy
 
 //=== token parser ===//
