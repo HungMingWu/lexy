@@ -31,7 +31,7 @@ struct _ctx_icreate : rule_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             _ctx_id<Id, Reader> var({});
             var.link(context);
@@ -49,7 +49,7 @@ struct _ctx_icap : branch_base
     struct _pc
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             // The last argument will be a lexeme.
             _ctx_id<Id, Reader>::get(context.control_block) = (args, ...);
@@ -94,7 +94,7 @@ struct _ctx_irem : branch_base
         {}
 
         template <typename NextParser, typename Context, typename... Args>
-        LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
+        constexpr bool finish(Context& context, Reader& reader, Args&&... args)
         {
             // Finish parsing the token.
             context.on(_ev::token{}, lexy::identifier_token_kind, reader.position(),
@@ -112,7 +112,7 @@ struct _ctx_irem : branch_base
         struct _cont
         {
             template <typename Context, typename Reader>
-            LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, PrevArgs&&... args,
+            constexpr static bool parse(Context& context, Reader& reader, PrevArgs&&... args,
                                                lexy::lexeme<Reader> lexeme)
             {
                 if (!lexy::_detail::equal_lexemes(_ctx_id<Id, Reader>::get(context.control_block),
@@ -132,7 +132,7 @@ struct _ctx_irem : branch_base
         };
 
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             // Capture the pattern and continue with special continuation.
             return lexy::parser_for<_cap<_pattern>, _cont<Args...>>::parse(context, reader,

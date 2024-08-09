@@ -286,7 +286,7 @@ struct _sym : branch_base
         {}
 
         template <typename NextParser, typename Context, typename... Args>
-        LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
+        constexpr bool finish(Context& context, Reader& reader, Args&&... args)
         {
             // We need to consume and report the token.
             context.on(_ev::token{}, Token{}, reader.position(), end.position());
@@ -305,7 +305,7 @@ struct _sym : branch_base
         struct _cont
         {
             template <typename Context, typename Reader>
-            LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, PrevArgs&&... args,
+            constexpr static bool parse(Context& context, Reader& reader, PrevArgs&&... args,
                                                lexy::lexeme<Reader> lexeme)
             {
                 // Check whether the captured lexeme is a symbol.
@@ -326,7 +326,7 @@ struct _sym : branch_base
         };
 
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             static_assert(lexy::is_char_encoding<typename Reader::encoding>);
             // Capture the token and continue with special continuation.
@@ -375,7 +375,7 @@ struct _sym<Table, _idp<L, T>, Tag> : branch_base
         {}
 
         template <typename NextParser, typename Context, typename... Args>
-        LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
+        constexpr bool finish(Context& context, Reader& reader, Args&&... args)
         {
             // We need to consume and report the identifier pattern.
             context.on(_ev::token{}, _idp<L, T>{}, reader.position(), end.position());
@@ -391,7 +391,7 @@ struct _sym<Table, _idp<L, T>, Tag> : branch_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             static_assert(lexy::is_char_encoding<typename Reader::encoding>);
             auto begin = reader.position();
@@ -464,7 +464,7 @@ struct _sym<Table, void, Tag> : branch_base
         {}
 
         template <typename NextParser, typename Context, typename... Args>
-        LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
+        constexpr bool finish(Context& context, Reader& reader, Args&&... args)
         {
             // We need to consume and report the token.
             context.on(_ev::token{}, lexy::identifier_token_kind, reader.position(),
@@ -481,7 +481,7 @@ struct _sym<Table, void, Tag> : branch_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             static_assert(lexy::is_char_encoding<typename Reader::encoding>);
             bp<Reader> impl{};

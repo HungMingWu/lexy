@@ -145,7 +145,7 @@ struct _id : branch_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             // Parse the pattern; this does not consume whitespace, so the range is accurate.
             auto begin = reader.position();
@@ -193,7 +193,7 @@ struct _id : branch_base
         {}
 
         template <typename NextParser, typename Context, typename... Args>
-        LEXY_PARSER_FUNC auto finish(Context& context, Reader& reader, Args&&... args)
+        constexpr auto finish(Context& context, Reader& reader, Args&&... args)
         {
             auto begin = reader.position();
 

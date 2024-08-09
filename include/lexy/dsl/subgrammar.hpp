@@ -66,7 +66,7 @@ struct _subg : rule_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             using control_block_type = LEXY_DECAY_DECLTYPE(*context.control_block);
             using handler_type       = typename control_block_type::handler_type;

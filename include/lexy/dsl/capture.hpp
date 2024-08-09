@@ -31,7 +31,7 @@ struct _cap : _copy_base<Token>
         {}
 
         template <typename NextParser, typename Context, typename... Args>
-        LEXY_PARSER_FUNC auto finish(Context& context, Reader& reader, Args&&... args)
+        constexpr auto finish(Context& context, Reader& reader, Args&&... args)
         {
             auto begin = reader.position();
 
@@ -48,7 +48,7 @@ struct _cap : _copy_base<Token>
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             auto begin = reader.position();
             if (!Token::token_parse(context, reader))
@@ -69,7 +69,7 @@ struct _capr : _copy_base<Rule>
     struct _pc : lexy::_detail::disable_whitespace_skipping
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader,
+        constexpr static bool parse(Context& context, Reader& reader,
                                            PrevArgs&&... prev_args, typename Reader::iterator begin,
                                            Args&&... args)
         {
@@ -97,7 +97,7 @@ struct _capr : _copy_base<Rule>
         }
 
         template <typename NextParser, typename Context, typename... Args>
-        LEXY_PARSER_FUNC auto finish(Context& context, Reader& reader, Args&&... args)
+        constexpr auto finish(Context& context, Reader& reader, Args&&... args)
         {
             // Forward to the rule, but remember the current reader position.
             using continuation = _pc<NextParser, Args...>;
@@ -110,7 +110,7 @@ struct _capr : _copy_base<Rule>
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             // Forward to the rule, but remember the current reader position.
             using parser = lexy::parser_for<Rule, _pc<NextParser, Args...>>;

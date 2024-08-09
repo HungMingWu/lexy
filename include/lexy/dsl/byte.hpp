@@ -182,7 +182,7 @@ struct _pb : branch_base
         {}
 
         template <typename NextParser, typename Context, typename... Args>
-        LEXY_PARSER_FUNC auto finish(Context& context, Reader& reader, Args&&... args)
+        constexpr auto finish(Context& context, Reader& reader, Args&&... args)
         {
             auto begin = reader.position();
             context.on(_ev::token{}, lexy::any_token_kind, begin, end.position());
@@ -198,7 +198,7 @@ struct _pb : branch_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             static_assert(lexy::is_byte_encoding<typename Reader::encoding>);
             auto begin = reader.position();
@@ -277,7 +277,7 @@ struct _bint : branch_base
     struct _pc<NextParser, std::index_sequence<Idx...>>
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader,
+        constexpr static bool parse(Context& context, Reader& reader,
                                            typename Reader::iterator begin,
                                            typename Reader::iterator end, Args&&... args)
         {
@@ -336,7 +336,7 @@ struct _bint : branch_base
         {}
 
         template <typename NextParser, typename Context, typename... Args>
-        LEXY_PARSER_FUNC auto finish(Context& context, Reader& reader, Args&&... args)
+        constexpr auto finish(Context& context, Reader& reader, Args&&... args)
         {
             auto begin = reader.position();
             context.on(_ev::token{}, _rule{}, begin, end.position());
@@ -351,7 +351,7 @@ struct _bint : branch_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             static_assert(lexy::is_byte_encoding<typename Reader::encoding>);
             auto begin = reader.position();

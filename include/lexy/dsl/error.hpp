@@ -25,7 +25,7 @@ struct _err : unconditional_branch_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&...)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&...)
         {
             auto begin = reader.position();
             auto end   = reader.position();
@@ -74,7 +74,7 @@ struct _must : branch_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             // Try and parse the branch.
             lexy::branch_parser_for<Branch, Reader> branch{};

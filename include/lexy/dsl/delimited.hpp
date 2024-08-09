@@ -207,7 +207,7 @@ struct _del : rule_base
                                       _del_limit<Limit>, Limit>;
 
     template <typename CloseParser, typename Context, typename Reader, typename Sink>
-    LEXY_PARSER_FUNC static bool _loop(CloseParser& close, Context& context, Reader& reader,
+    constexpr static bool _loop(CloseParser& close, Context& context, Reader& reader,
                                        Sink& sink)
     {
         auto                     del_begin = reader.position();
@@ -253,7 +253,7 @@ struct _del : rule_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             static_assert(lexy::is_char_encoding<typename Reader::encoding>);
             auto sink = context.value_callback().sink();

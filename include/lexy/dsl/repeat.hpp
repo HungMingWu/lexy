@@ -78,7 +78,7 @@ struct _repd : rule_base // repeat, discard
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, std::size_t count,
+        constexpr static bool parse(Context& context, Reader& reader, std::size_t count,
                                            Args&&... args)
         {
             if (!_rep_impl<Item, Sep>::loop(context, reader, count))
@@ -95,7 +95,7 @@ struct _repl : rule_base // repeat, list
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, std::size_t count,
+        constexpr static bool parse(Context& context, Reader& reader, std::size_t count,
                                            Args&&... args)
         {
             auto sink = context.value_callback().sink();
@@ -114,7 +114,7 @@ struct _repc : rule_base // repeat, capture
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, std::size_t count,
+        constexpr static bool parse(Context& context, Reader& reader, std::size_t count,
                                            Args&&... args)
         {
             auto begin = reader.position();

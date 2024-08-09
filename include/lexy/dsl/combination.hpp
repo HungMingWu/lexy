@@ -44,7 +44,7 @@ struct _comb_it : rule_base
     struct p
     {
         template <typename Context, typename Reader, typename Sink, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context&, Reader&, _comb_control<Sink>& ctrl,
+        constexpr static bool parse(Context&, Reader&, _comb_control<Sink>& ctrl,
                                            Args&&... args)
         {
             ctrl.idx = Idx;
@@ -76,7 +76,7 @@ struct _comb : rule_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             constexpr auto N = sizeof...(R);
 

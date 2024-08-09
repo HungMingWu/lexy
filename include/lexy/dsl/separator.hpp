@@ -31,7 +31,7 @@ struct _nsep : rule_base
         struct _pc
         {
             template <typename Context, typename Reader, typename... Args>
-            LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader,
+            constexpr static bool parse(Context& context, Reader& reader,
                                                typename Reader::iterator sep_begin, Args&&... args)
             {
                 auto sep_end = reader.position();
@@ -46,7 +46,7 @@ struct _nsep : rule_base
         };
 
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             if (lexy::branch_parser_for<Branch, Reader> parser{};
                 !parser.try_parse(context.control_block, reader))

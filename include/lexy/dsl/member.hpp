@@ -51,7 +51,7 @@ struct _mem : _copy_base<Rule>
         }
 
         template <typename NextParser, typename Context, typename... Args>
-        LEXY_PARSER_FUNC auto finish(Context& context, Reader& reader, Args&&... args)
+        constexpr auto finish(Context& context, Reader& reader, Args&&... args)
         {
             // Add member tag here.
             return rule.template finish<NextParser>(context, reader, std::forward<Args>(args)...,
@@ -63,7 +63,7 @@ struct _mem : _copy_base<Rule>
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             // Forward to the rule, but add member tag.
             using parser = lexy::parser_for<Rule, NextParser>;

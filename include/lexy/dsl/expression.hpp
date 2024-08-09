@@ -266,7 +266,7 @@ struct _expr : rule_base
         struct _op_cont
         {
             template <typename Context, typename Reader, typename... Args>
-            LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, _state& state,
+            constexpr static bool parse(Context& context, Reader& reader, _state& state,
                                                Args&&... op_args)
             {
                 using namespace lexy::_detail;
@@ -528,7 +528,7 @@ struct _expr : rule_base
     struct p
     {
         template <typename Context, typename Reader>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader)
+        constexpr static bool parse(Context& context, Reader& reader)
         {
             static_assert(std::is_same_v<NextParser, lexy::_detail::final_parser>);
 

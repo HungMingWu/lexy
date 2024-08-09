@@ -91,7 +91,7 @@ struct _look : branch_base
         }
 
         template <typename NextParser, typename Context, typename... Args>
-        LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
+        constexpr bool finish(Context& context, Reader& reader, Args&&... args)
         {
             context.on(_ev::backtracked{}, begin, end);
             return NextParser::parse(context, reader, std::forward<Args>(args)...);
@@ -102,7 +102,7 @@ struct _look : branch_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             static_assert(lexy::is_char_encoding<typename Reader::encoding>);
             bp<Reader> impl{};

@@ -24,7 +24,7 @@ struct _nr : branch_base
     struct _cont
     {
         template <typename Context, typename ChildReader, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, ChildReader& child_reader,
+        constexpr static bool parse(Context& context, ChildReader& child_reader,
                                            bool& rule_succeded, Reader& reader, Args&&... args)
         {
             rule_succeded = true;
@@ -45,7 +45,7 @@ struct _nr : branch_base
     };
 
     template <typename NextParser, typename Context, typename Reader, typename... Args>
-    LEXY_PARSER_FUNC static bool _parse_rule(Context& context, Reader& reader,
+    constexpr static bool _parse_rule(Context& context, Reader& reader,
                                              typename Reader::marker end, Args&&... args)
     {
         auto child_reader = Derived::node_child_reader(reader);
@@ -86,7 +86,7 @@ struct _nr : branch_base
         {}
 
         template <typename NextParser, typename Context, typename... Args>
-        LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
+        constexpr bool finish(Context& context, Reader& reader, Args&&... args)
         {
             return _parse_rule<NextParser>(context, reader, end, std::forward<Args>(args)...);
         }
@@ -96,7 +96,7 @@ struct _nr : branch_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             lexy::token_parser_for<_n<Derived>, Reader> parser(reader);
             if (!parser.try_parse(reader))

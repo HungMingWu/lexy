@@ -32,7 +32,7 @@ struct _ctx_ccreate : rule_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             _ctx_counter<Id> var(InitialValue);
             var.link(context);
@@ -50,7 +50,7 @@ struct _ctx_cadd : rule_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             _ctx_counter<Id>::get(context.control_block) += Delta;
             return NextParser::parse(context, reader, std::forward<Args>(args)...);
@@ -65,7 +65,7 @@ struct _ctx_cpush : _copy_base<Rule>
     struct _pc
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader,
+        constexpr static bool parse(Context& context, Reader& reader,
                                            typename Reader::iterator begin, Args&&... args)
         {
             auto end    = reader.position();
@@ -95,7 +95,7 @@ struct _ctx_cpush : _copy_base<Rule>
         }
 
         template <typename NextParser, typename Context, typename... Args>
-        LEXY_PARSER_FUNC auto finish(Context& context, Reader& reader, Args&&... args)
+        constexpr auto finish(Context& context, Reader& reader, Args&&... args)
         {
             // Forward to the rule, but remember the current reader position.
             return rule.template finish<_pc<NextParser>>(context, reader, reader.position(),
@@ -107,7 +107,7 @@ struct _ctx_cpush : _copy_base<Rule>
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             // Forward to the rule, but remember the current reader position.
             using parser = lexy::parser_for<Rule, _pc<NextParser>>;
@@ -133,7 +133,7 @@ struct _ctx_cis : branch_base
         {}
 
         template <typename NextParser, typename Context, typename... Args>
-        LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
+        constexpr bool finish(Context& context, Reader& reader, Args&&... args)
         {
             return NextParser::parse(context, reader, std::forward<Args>(args)...);
         }
@@ -150,7 +150,7 @@ struct _ctx_cvalue : rule_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             return NextParser::parse(context, reader, std::forward<Args>(args)...,
                                      _ctx_counter<Id>::get(context.control_block));
@@ -178,7 +178,7 @@ struct _ctx_ceq<H, T...> : branch_base
         {}
 
         template <typename NextParser, typename Context, typename... Args>
-        LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
+        constexpr bool finish(Context& context, Reader& reader, Args&&... args)
         {
             return NextParser::parse(context, reader, std::forward<Args>(args)...);
         }
@@ -188,7 +188,7 @@ struct _ctx_ceq<H, T...> : branch_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             auto value = _ctx_counter<H>::get(context.control_block);
             if (((value != _ctx_counter<T>::get(context.control_block)) || ...))

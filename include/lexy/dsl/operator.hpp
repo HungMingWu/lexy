@@ -106,7 +106,7 @@ struct _op : branch_base
     using op_literals = lexy::_detail::op_lit_list<Literal>;
 
     template <typename NextParser, typename Context, typename Reader, typename... Args>
-    LEXY_PARSER_FUNC static bool op_finish(Context& context, Reader& reader,
+    constexpr static bool op_finish(Context& context, Reader& reader,
                                            lexy::_detail::parsed_operator<Reader> op,
                                            Args&&... args)
     {
@@ -145,7 +145,7 @@ struct _op : branch_base
         }
 
         template <typename NextParser, typename Context, typename... Args>
-        LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
+        constexpr bool finish(Context& context, Reader& reader, Args&&... args)
         {
             using continuation = lexy::parser_for<_seq_impl<R...>, NextParser>;
 
@@ -169,7 +169,7 @@ struct _op : branch_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             [[maybe_unused]] auto pos = reader.position();
 
@@ -240,7 +240,7 @@ struct _opc : branch_base
     using op_literals = decltype((typename Ops::op_literals{} + ...));
 
     template <typename NextParser, typename Context, typename Reader, typename... Args>
-    LEXY_PARSER_FUNC static bool op_finish(Context& context, Reader& reader,
+    constexpr static bool op_finish(Context& context, Reader& reader,
                                            lexy::_detail::parsed_operator<Reader> op,
                                            Args&&... args)
     {
@@ -275,7 +275,7 @@ struct _opc : branch_base
         {}
 
         template <typename NextParser, typename Context, typename... Args>
-        LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
+        constexpr bool finish(Context& context, Reader& reader, Args&&... args)
         {
             reader.reset(end);
             return op_finish<NextParser>(context, reader, op, std::forward<Args>(args)...);
@@ -286,7 +286,7 @@ struct _opc : branch_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             bp<Reader> impl{};
             if (!impl.try_parse(context.control_block, reader))

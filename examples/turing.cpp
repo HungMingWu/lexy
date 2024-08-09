@@ -30,7 +30,7 @@ namespace dsl_ext
             struct continuation
             {
                 template <typename Context, typename Reader, typename... Args>
-                LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader,
+                constexpr static bool parse(Context& context, Reader& reader,
                                                    typename Reader::marker old, Args&&... args)
                 {
                     reader.reset(old);
@@ -39,7 +39,7 @@ namespace dsl_ext
             };
 
             template <typename Context, typename Reader, typename... Args>
-            LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+            constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
             {
                 auto cur = reader.current();
                 return lexy::parser_for<Rule, continuation>::parse(context, reader, cur,

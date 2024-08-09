@@ -164,7 +164,7 @@ namespace lexy::_detail
 struct final_parser
 {
     template <typename Context, typename Reader, typename... Args>
-    LEXY_PARSER_FUNC static bool parse(Context& context, Reader&, Args&&... args)
+    constexpr static bool parse(Context& context, Reader&, Args&&... args)
     {
         context.value.emplace_result(context.value_callback(), std::forward<Args>(args)...);
         return true;
@@ -175,7 +175,7 @@ template <typename NextParser>
 struct context_finish_parser
 {
     template <typename Context, typename Reader, typename SubContext, typename... Args>
-    LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, SubContext& sub_context,
+    constexpr static bool parse(Context& context, Reader& reader, SubContext& sub_context,
                                        Args&&... args)
     {
         // Might need to skip whitespace, according to the original context.

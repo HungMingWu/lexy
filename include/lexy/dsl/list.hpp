@@ -15,7 +15,7 @@ template <typename Item, typename Sep>
 struct _lst : _copy_base<Item>
 {
     template <typename Context, typename Reader, typename Sink>
-    LEXY_PARSER_FUNC static bool _loop(Context& context, Reader& reader, Sink& sink)
+    constexpr static bool _loop(Context& context, Reader& reader, Sink& sink)
     {
         while (true)
         {
@@ -70,7 +70,7 @@ struct _lst : _copy_base<Item>
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             // Construct the sink.
             auto sink = context.value_callback().sink();
@@ -108,7 +108,7 @@ struct _lst : _copy_base<Item>
         }
 
         template <typename NextParser, typename Context, typename... Args>
-        LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
+        constexpr bool finish(Context& context, Reader& reader, Args&&... args)
         {
             // At this point, we have a list so construct a sink.
             auto sink = context.value_callback().sink();
@@ -183,7 +183,7 @@ struct _lstt : rule_base
     };
 
     template <typename TermParser, typename Context, typename Reader, typename Sink>
-    LEXY_PARSER_FUNC static bool _loop(_state initial_state, TermParser& term, Context& context,
+    constexpr static bool _loop(_state initial_state, TermParser& term, Context& context,
                                        Reader& reader, Sink& sink)
     {
         auto state = initial_state;
@@ -415,7 +415,7 @@ struct _lstt : rule_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             lexy::branch_parser_for<Term, Reader> term{};
             auto                                  sink = context.value_callback().sink();

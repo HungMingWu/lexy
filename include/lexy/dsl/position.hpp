@@ -14,7 +14,7 @@ struct _pos : rule_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             auto pos = reader.position();
             context.on(_ev::token{}, lexy::position_token_kind, pos, pos);
@@ -44,7 +44,7 @@ struct _posr : _copy_base<Rule>
         }
 
         template <typename NextParser, typename Context, typename... Args>
-        LEXY_PARSER_FUNC auto finish(Context& context, Reader& reader, Args&&... args)
+        constexpr auto finish(Context& context, Reader& reader, Args&&... args)
         {
             auto pos = reader.position();
             context.on(_ev::token{}, lexy::position_token_kind, pos, pos);
@@ -56,7 +56,7 @@ struct _posr : _copy_base<Rule>
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             auto pos = reader.position();
             context.on(_ev::token{}, lexy::position_token_kind, pos, pos);

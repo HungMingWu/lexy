@@ -16,7 +16,7 @@ struct _eff : rule_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             if constexpr (requires { Fn(*context.control_block->parse_state); })
             {

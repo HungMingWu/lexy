@@ -44,7 +44,7 @@ struct _nullopt : rule_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             return NextParser::parse(context, reader, std::forward<Args>(args)..., lexy::nullopt{});
         }
@@ -63,7 +63,7 @@ struct _opt : rule_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             lexy::branch_parser_for<Branch, Reader> branch{};
             if (branch.try_parse(context.control_block, reader))
@@ -102,7 +102,7 @@ struct _optt : rule_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             // Try to parse the terminator.
             lexy::branch_parser_for<Term, Reader> term{};

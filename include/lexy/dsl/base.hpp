@@ -104,9 +104,6 @@ template <typename Rule>
 using _copy_base = decltype(_copy_base_impl<Rule>());
 } // namespace lexyd
 
-//=== parser ===//
-#define LEXY_PARSER_FUNC inline constexpr
-
 namespace lexy
 {
 template <typename Rule, typename NextParser>
@@ -136,7 +133,7 @@ struct unconditional_branch_parser
     {}
 
     template <typename NextParser, typename Context, typename... Args>
-    LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
+    constexpr bool finish(Context& context, Reader& reader, Args&&... args)
     {
         return parser_for<Rule, NextParser>::parse(context, reader, std::forward<Args>(args)...);
     }
@@ -161,7 +158,7 @@ struct continuation_branch_parser
     }
 
     template <typename NextParser, typename Context, typename... Args>
-    LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
+    constexpr bool finish(Context& context, Reader& reader, Args&&... args)
     {
         return impl.template finish<Continuation<NextParser>>(context, reader, std::forward<Args>(args)...);
     }
@@ -172,7 +169,7 @@ template <typename... PrevArgs>
 struct pattern_parser
 {
     template <typename Context, typename Reader, typename... Args>
-    LEXY_PARSER_FUNC static std::true_type parse(Context&, Reader&, const PrevArgs&..., Args&&...)
+    constexpr static std::true_type parse(Context&, Reader&, const PrevArgs&..., Args&&...)
     {
         // A rule is used inside a loop or similar situation, where it must not produce values, but
         // it did.
@@ -185,7 +182,7 @@ struct pattern_parser
 struct sink_parser
 {
     template <typename Context, typename Reader, typename Sink, typename... Args>
-    LEXY_PARSER_FUNC static std::true_type parse(Context&, Reader&, Sink& sink, Args&&... args)
+    constexpr static std::true_type parse(Context&, Reader&, Sink& sink, Args&&... args)
     {
         if constexpr (sizeof...(Args) > 0)
             sink(std::forward<Args>(args)...);
@@ -199,7 +196,7 @@ template <typename NextParser>
 struct sink_finish_parser
 {
     template <typename Context, typename Reader, typename Sink, typename... Args>
-    LEXY_PARSER_FUNC static auto parse(Context& context, Reader& reader, Sink& sink, Args&&... args)
+    constexpr static auto parse(Context& context, Reader& reader, Sink& sink, Args&&... args)
     {
         if constexpr (std::is_same_v<typename Sink::return_type, void>)
         {

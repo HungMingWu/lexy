@@ -147,14 +147,14 @@ struct scanner_input
 struct scan_final_parser
 {
     template <typename Context, typename Reader, typename T>
-    LEXY_PARSER_FUNC static bool parse(Context&, Reader&, lazy_init<T>* dest, T&& value)
+    constexpr static bool parse(Context&, Reader&, lazy_init<T>* dest, T&& value)
     {
         dest->emplace(std::move(value));
         return true;
     }
 
     template <typename Context, typename Reader>
-    LEXY_PARSER_FUNC static bool parse(Context&, Reader&, lazy_init<void>* dest)
+    constexpr static bool parse(Context&, Reader&, lazy_init<void>* dest)
     {
         dest->emplace();
         return true;
@@ -466,7 +466,7 @@ struct _scan : rule_base
     struct p
     {
         template <typename Scanner, typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool _parse(Scanner& scanner, Context& context, Reader& reader,
+        constexpr static bool _parse(Scanner& scanner, Context& context, Reader& reader,
                                             Args&&... args)
         {
             typename Context::production::scan_result result = [&] {
@@ -487,7 +487,7 @@ struct _scan : rule_base
         }
 
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             lexy::rule_scanner scanner(context, reader);
             return _parse(scanner, context, reader, std::forward<Args>(args)...);

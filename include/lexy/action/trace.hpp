@@ -28,7 +28,7 @@ struct _debug : rule_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             constexpr auto str = lexy::_detail::type_string<CharT, C...>::template c_str<>;
             context.on(_ev::debug{}, reader.position(), str);

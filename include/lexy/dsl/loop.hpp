@@ -15,7 +15,7 @@ struct _break : unconditional_branch_base
     struct p
     {
         template <typename Context, typename Reader, typename LoopControl, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context&, Reader&, LoopControl& cntrl, Args&&...)
+        constexpr static bool parse(Context&, Reader&, LoopControl& cntrl, Args&&...)
         {
             cntrl.loop_break = true;
             return true;
@@ -39,7 +39,7 @@ struct _loop : rule_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             struct loop_control_t
             {
@@ -75,7 +75,7 @@ struct _whl : rule_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             lexy::branch_parser_for<Branch, Reader> branch{};
             while (branch.try_parse(context.control_block, reader))

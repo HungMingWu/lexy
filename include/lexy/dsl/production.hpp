@@ -41,7 +41,7 @@ struct _prd
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             // Create a context for the production and parse the context there.
             auto sub_context = context.sub_context(Production{});
@@ -98,7 +98,7 @@ struct _prd
         }
 
         template <typename NextParser, typename Context, typename... Args>
-        LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
+        constexpr bool finish(Context& context, Reader& reader, Args&&... args)
         {
             static_assert(!lexy::_production_defines_whitespace<Production>);
 
@@ -168,7 +168,7 @@ struct _recb : branch_base
         }
 
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             auto control_block = context.control_block;
             --control_block->cur_depth;
@@ -197,7 +197,7 @@ struct _recb : branch_base
         }
 
         template <typename NextParser, typename Context, typename... Args>
-        LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
+        constexpr bool finish(Context& context, Reader& reader, Args&&... args)
         {
             using depth = _depth_handler<NextParser>;
             if (!depth::increment_depth(context, reader))
@@ -210,7 +210,7 @@ struct _recb : branch_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             using depth = _depth_handler<NextParser>;
             if (!depth::increment_depth(context, reader))

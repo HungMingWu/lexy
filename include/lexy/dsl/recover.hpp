@@ -25,7 +25,7 @@ struct _recovery_wrapper : _recovery_base
         struct _continuation
         {
             template <typename Context, typename Reader, typename... Args>
-            LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader,
+            constexpr static bool parse(Context& context, Reader& reader,
                                                bool& recovery_finished, Args&&... args)
             {
                 recovery_finished = true;
@@ -35,7 +35,7 @@ struct _recovery_wrapper : _recovery_base
         };
 
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             context.on(_ev::recovery_start{}, reader.position());
             auto recovery_finished = false;
@@ -67,7 +67,7 @@ struct _find : _recovery_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             // Note that we can't use lookahead() directly as it's end position includes Needle/End,
             // here we want to exclude it, however.
@@ -146,7 +146,7 @@ struct _reco : _recovery_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             auto begin = reader.position();
             context.on(_ev::recovery_start{}, begin);
@@ -221,7 +221,7 @@ struct _tryt : rule_base
     struct _pc
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader,
+        constexpr static bool parse(Context& context, Reader& reader,
                                            bool& continuation_reached, Args&&... args)
         {
             continuation_reached = true;
@@ -235,7 +235,7 @@ struct _tryt : rule_base
         }
 
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool recover(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool recover(Context& context, Reader& reader, Args&&... args)
         {
             if constexpr (std::is_void_v<Recover>)
             {
@@ -262,7 +262,7 @@ struct _tryt : rule_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             using parser = lexy::parser_for<Rule, _pc<NextParser>>;
 
@@ -303,7 +303,7 @@ struct _tryr : _copy_base<Rule>
         }
 
         template <typename NextParser, typename Context, typename... Args>
-        LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
+        constexpr bool finish(Context& context, Reader& reader, Args&&... args)
         {
             // Finish the rule and check whether it reached the continuation.
             using continuation        = typename impl::template _pc<NextParser>;

@@ -66,7 +66,7 @@ struct _flags : rule_base
         }
 
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             _int_type result{};
             if (!_parse(result, context, reader))
@@ -109,7 +109,7 @@ struct _flag : rule_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             lexy::branch_parser_for<Rule, Reader> branch{};
             if (branch.try_parse(context.control_block, reader))

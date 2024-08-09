@@ -61,7 +61,7 @@ struct token_base : _token_inherit<ImplOrTag>
         {}
 
         template <typename NextParser, typename Context, typename... Args>
-        LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
+        constexpr bool finish(Context& context, Reader& reader, Args&&... args)
         {
             context.on(_ev::token{}, Derived{}, reader.position(), end.position());
             reader.reset(end);
@@ -71,7 +71,7 @@ struct token_base : _token_inherit<ImplOrTag>
     };
 
     template <typename Context, typename Reader>
-    LEXY_PARSER_FUNC static bool token_parse(Context& context, Reader& reader)
+    constexpr static bool token_parse(Context& context, Reader& reader)
     {
         auto                                    begin = reader.position();
         lexy::token_parser_for<Derived, Reader> parser(reader);
@@ -104,7 +104,7 @@ struct token_base : _token_inherit<ImplOrTag>
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             if (!token_parse(context, reader))
                 return false;

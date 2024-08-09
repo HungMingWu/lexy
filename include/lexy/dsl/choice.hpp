@@ -75,7 +75,7 @@ struct _chc
         }
 
         template <typename NextParser, typename Context, typename... Args>
-        LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
+        constexpr bool finish(Context& context, Reader& reader, Args&&... args)
         {
             // Need to call finish on the selected branch, and cancel on all others before that.
             auto result = false;
@@ -94,7 +94,7 @@ struct _chc
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             auto result = false;
             auto try_r  = [&](auto&& parser) {

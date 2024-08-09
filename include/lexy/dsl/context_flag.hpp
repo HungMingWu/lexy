@@ -19,7 +19,7 @@ struct _ctx_fcreate : rule_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             _ctx_flag<Id> var(InitialValue);
             var.link(context);
@@ -37,7 +37,7 @@ struct _ctx_fset : rule_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             _ctx_flag<Id>::get(context.control_block) = Value;
             return NextParser::parse(context, reader, std::forward<Args>(args)...);
@@ -52,7 +52,7 @@ struct _ctx_ftoggle : rule_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             auto& flag = _ctx_flag<Id>::get(context.control_block);
             flag       = !flag;
@@ -78,7 +78,7 @@ struct _ctx_fis : branch_base
         {}
 
         template <typename NextParser, typename Context, typename... Args>
-        LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
+        constexpr bool finish(Context& context, Reader& reader, Args&&... args)
         {
             return NextParser::parse(context, reader, std::forward<Args>(args)...);
         }
@@ -95,7 +95,7 @@ struct _ctx_fvalue : rule_base
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             return NextParser::parse(context, reader, std::forward<Args>(args)...,
                                      _ctx_flag<Id>::get(context.control_block));

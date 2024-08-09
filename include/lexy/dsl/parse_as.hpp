@@ -40,7 +40,7 @@ struct _pas_handler
 struct _pas_final_parser
 {
     template <typename Context, typename Reader, typename T, typename... Args>
-    LEXY_PARSER_FUNC static bool parse(Context&, Reader&, lexy::_detail::lazy_init<T>& value,
+    constexpr static bool parse(Context&, Reader&, lexy::_detail::lazy_init<T>& value,
                                        Args&&... args)
     {
         value.emplace_result(lexy::construct<T>, std::forward<Args>(args)...);
@@ -82,7 +82,7 @@ struct _pas : _copy_base<Rule>
         }
 
         template <typename NextParser, typename Context, typename... Args>
-        LEXY_PARSER_FUNC bool finish(Context& context, Reader& reader, Args&&... args)
+        constexpr bool finish(Context& context, Reader& reader, Args&&... args)
         {
             auto handler = _make_pas_handler(context.control_block->parse_handler);
             lexy::_detail::parse_context_control_block cb(std::move(handler), context.control_block);
@@ -115,7 +115,7 @@ struct _pas : _copy_base<Rule>
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             auto handler = _make_pas_handler(context.control_block->parse_handler);
             lexy::_detail::parse_context_control_block cb(std::move(handler), context.control_block);

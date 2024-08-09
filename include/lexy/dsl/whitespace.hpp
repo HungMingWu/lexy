@@ -175,7 +175,7 @@ template <typename NextParser>
 struct automatic_ws_parser
 {
     template <typename Context, typename Reader, typename... Args>
-    LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+    constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
     {
         if (!std::is_base_of_v<disable_whitespace_skipping, NextParser> //
             && context.control_block->enable_whitespace_skipping)
@@ -241,7 +241,7 @@ struct _wsn : _copy_base<Rule>
     struct _pc
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             // Enable automatic whitespace skipping again.
             context.control_block->enable_whitespace_skipping = true;
@@ -271,7 +271,7 @@ struct _wsn : _copy_base<Rule>
         }
 
         template <typename NextParser, typename Context, typename... Args>
-        LEXY_PARSER_FUNC auto finish(Context& context, Reader& reader, Args&&... args)
+        constexpr auto finish(Context& context, Reader& reader, Args&&... args)
         {
             // Finish the rule with whitespace skipping disabled.
             context.control_block->enable_whitespace_skipping = false;
@@ -283,7 +283,7 @@ struct _wsn : _copy_base<Rule>
     struct p
     {
         template <typename Context, typename Reader, typename... Args>
-        LEXY_PARSER_FUNC static bool parse(Context& context, Reader& reader, Args&&... args)
+        constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
             using whitespace = lexy::production_whitespace<typename Context::production,
                                                            typename Context::whitespace_production>;
