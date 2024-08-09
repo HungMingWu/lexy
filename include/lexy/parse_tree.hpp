@@ -248,10 +248,10 @@ public:
 
     pt_buffer& operator=(pt_buffer&& other) noexcept
     {
-        lexy::_detail::swap(_resource, other._resource);
-        lexy::_detail::swap(_head, other._head);
-        lexy::_detail::swap(_cur_block, other._cur_block);
-        lexy::_detail::swap(_cur_pos, other._cur_pos);
+        std::swap(_resource, other._resource);
+        std::swap(_head, other._head);
+        std::swap(_cur_block, other._cur_block);
+        std::swap(_cur_pos, other._cur_pos);
         return *this;
     }
 

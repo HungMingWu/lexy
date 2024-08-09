@@ -229,8 +229,8 @@ public:
         {
             // We have the same resource; we can just steal other's memory.
             // We do that by swapping - when other is destroyed it will free our memory.
-            _detail::swap(_data, other._data);
-            _detail::swap(_size, other._size);
+            std::swap(_data, other._data);
+            std::swap(_size, other._size);
             return *this;
         }
         else
@@ -239,8 +239,8 @@ public:
 
             // We create a copy using the right resource and swap the ownership.
             buffer copy(other, _resource.get());
-            _detail::swap(_data, copy._data);
-            _detail::swap(_size, copy._size);
+            std::swap(_data, copy._data);
+            std::swap(_size, copy._size);
             return *this;
         }
     }

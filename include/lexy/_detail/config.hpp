@@ -42,14 +42,6 @@ namespace lexy::_detail
 template <typename T>
 std::add_rvalue_reference_t<T> declval();
 
-template <typename T>
-constexpr void swap(T& lhs, T& rhs)
-{
-    T tmp = std::move(lhs);
-    lhs   = std::move(rhs);
-    rhs   = std::move(tmp);
-}
-
 template <typename T, typename U>
 constexpr bool is_decayed_same = std::is_same_v<std::decay_t<T>, std::decay_t<U>>;
 
