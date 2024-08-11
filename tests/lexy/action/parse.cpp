@@ -22,8 +22,8 @@ namespace parse_value
 //=== AST ===//
 struct string_pair
 {
-    lexy::_detail::string_view a;
-    lexy::_detail::string_view b;
+    std::string_view a;
+    std::string_view b;
 };
 
 //=== grammar ===//
@@ -33,7 +33,7 @@ struct string_p
 {
     static constexpr auto rule = dsl::identifier(dsl::ascii::alnum);
 
-    static constexpr auto value = lexy::as_string<lexy::_detail::string_view>;
+    static constexpr auto value = lexy::as_string<std::string_view>;
 };
 
 struct string_pair_p
@@ -57,7 +57,7 @@ struct string_list_p
 {
     static constexpr auto rule = dsl::parenthesized.opt_list(dsl::p<string_p>, sep(dsl::comma));
 
-    static constexpr auto value = lexy::as_list<std::vector<lexy::_detail::string_view>>;
+    static constexpr auto value = lexy::as_list<std::vector<std::string_view>>;
 };
 
 using prod = string_list_p;
@@ -74,10 +74,10 @@ struct string_list_p
     static constexpr auto rule = dsl::parenthesized.opt_list(dsl::p<string_p>, sep(dsl::comma));
 
     static constexpr auto value = [] {
-        auto sink = lexy::as_list<std::vector<lexy::_detail::string_view>>;
+        auto sink = lexy::as_list<std::vector<std::string_view>>;
         auto cb
             = lexy::callback<std::size_t>([](lexy::nullopt) { return 0u; },
-                                          [](const std::vector<lexy::_detail::string_view>& vec) {
+                                          [](const std::vector<std::string_view>& vec) {
                                               return vec.size();
                                           });
 
@@ -208,8 +208,8 @@ namespace dsl = lexy::dsl;
 struct string_pair
 {
     int                        state;
-    lexy::_detail::string_view a;
-    lexy::_detail::string_view b;
+    std::string_view a;
+    std::string_view b;
 };
 
 using parse_value::string_p;

@@ -66,7 +66,7 @@ TEST_CASE("validate")
         SUBCASE("missing abc")
         {
             constexpr auto callback = [](auto ctx, auto error) {
-                CHECK(ctx.production() == lexy::_detail::string_view("prod_a"));
+                CHECK(ctx.production() == std::string_view("prod_a"));
                 CHECK(*error.position() == ')');
             };
 
@@ -77,7 +77,7 @@ TEST_CASE("validate")
         SUBCASE("invalid abc")
         {
             constexpr auto callback = [](auto ctx, auto error) {
-                CHECK(ctx.production() == lexy::_detail::string_view("prod_a"));
+                CHECK(ctx.production() == std::string_view("prod_a"));
                 CHECK(*error.position() == 'a');
             };
 
@@ -88,7 +88,7 @@ TEST_CASE("validate")
         SUBCASE("missing )")
         {
             constexpr auto callback = [](auto ctx, auto error) {
-                CHECK(ctx.production() == lexy::_detail::string_view("prod_b"));
+                CHECK(ctx.production() == std::string_view("prod_b"));
                 CHECK(*error.position() == ']');
             };
 
@@ -103,7 +103,7 @@ TEST_CASE("validate")
             [](lexy::string_error_context<> ctx, lexy::string_error<lexy::expected_literal> error) {
                 if (ctx.production() == doctest::String("prod_a"))
                 {
-                    if (error.string() != lexy::_detail::string_view("abc"))
+                    if (error.string() != std::string_view("abc"))
                         throw 0;
                     return -1;
                 }

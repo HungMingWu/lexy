@@ -33,22 +33,22 @@ TEST_CASE("symbol_table")
 
         auto iter = table.begin();
         CHECK(iter != table.end());
-        CHECK(iter->symbol == lexy::_detail::string_view("a"));
+        CHECK(iter->symbol == std::string_view("a"));
         CHECK(iter->value == 0);
 
         ++iter;
         CHECK(iter != table.end());
-        CHECK(iter->symbol == lexy::_detail::string_view("b"));
+        CHECK(iter->symbol == std::string_view("b"));
         CHECK(iter->value == 1);
 
         ++iter;
         CHECK(iter != table.end());
-        CHECK(iter->symbol == lexy::_detail::string_view("c"));
+        CHECK(iter->symbol == std::string_view("c"));
         CHECK(iter->value == 2);
 
         ++iter;
         CHECK(iter != table.end());
-        CHECK(iter->symbol == lexy::_detail::string_view("abc"));
+        CHECK(iter->symbol == std::string_view("abc"));
         CHECK(iter->value == 3);
 
         ++iter;

@@ -27,7 +27,7 @@ TEST_CASE("error_context")
         auto input   = lexy::zstring_input("abc");
         auto context = lexy::error_context(production{}, input, input.data());
         CHECK(&context.input() == &input);
-        CHECK(context.production() == lexy::_detail::string_view("production"));
+        CHECK(context.production() == std::string_view("production"));
         CHECK(context.position() == input.data());
     }
     SUBCASE("lexeme input")
@@ -37,7 +37,7 @@ TEST_CASE("error_context")
         auto context = lexy::error_context(production{}, input, parent.data() + 1);
         CHECK(context.input().data() == parent.data());
         CHECK(context.input().size() == parent.size());
-        CHECK(context.production() == lexy::_detail::string_view("production"));
+        CHECK(context.production() == std::string_view("production"));
         CHECK(context.position() == parent.data() + 1);
     }
 }

@@ -4,21 +4,44 @@
 #ifndef LEXY_DETAIL_TYPE_NAME_HPP_INCLUDED
 #define LEXY_DETAIL_TYPE_NAME_HPP_INCLUDED
 
+#include <string_view>
 #include <lexy/_detail/config.hpp>
-#include <lexy/_detail/string_view.hpp>
 
 namespace lexy::_detail
 {
 
 template <typename T>
 concept _detect_name_f = requires {
-    { T::name() } -> std::convertible_to<string_view>;
+    { T::name() } -> std::convertible_to<std::string_view>;
 };
 
 template <typename T>
 concept _detect_name_v = requires {
     T::name;
 };
+
+constexpr std::string_view try_remove_prefix(std::string_view src, std::string_view prefix)
+{
+    std::string_view dst(src);
+    if (dst.starts_with(prefix)) {
+        dst.remove_prefix(prefix.length());
+    }
+    return dst;
+}
+
+template <auto FnPtr, typename Indices = std::make_index_sequence<FnPtr().size()>>
+struct _string_view_holder;
+
+template <auto FnPtr, std::size_t... Indices>
+struct _string_view_holder<FnPtr, std::index_sequence<Indices...>>
+{
+    static constexpr auto view = FnPtr();
+
+    static constexpr typename decltype(view)::value_type value[] = {view[Indices]..., {}};
+};
+
+template <auto FnPtr>
+inline constexpr const auto* make_cstr = _string_view_holder<FnPtr>::value;
 
 template <typename T>
 constexpr auto _full_type_name()
@@ -27,13 +50,13 @@ constexpr auto _full_type_name()
 #    define LEXY_HAS_AUTOMATIC_TYPE_NAME 1
 #    define LEXY_HAS_CONSTEXPR_AUTOMATIC_TYPE_NAME 1
 
-    constexpr auto prefix = string_view("auto lexy::_detail::_full_type_name() [T = ");
-    constexpr auto suffix = string_view("]");
+    constexpr auto prefix = std::string_view("auto lexy::_detail::_full_type_name() [T = ");
+    constexpr auto suffix = std::string_view("]");
 
-    auto function = string_view(__PRETTY_FUNCTION__);
+    auto function = std::string_view(__PRETTY_FUNCTION__);
     function.remove_prefix(prefix.length());
     function.remove_suffix(suffix.length());
-    function.try_remove_prefix("(anonymous namespace)::");
+    function = try_remove_prefix(function, "(anonymous namespace)::");
     return function;
 
 #elif defined(__GNUC__)
@@ -45,49 +68,50 @@ constexpr auto _full_type_name()
 #    endif
 
     constexpr auto prefix
-        = string_view("constexpr auto lexy::_detail::_full_type_name() [with T = ");
-    constexpr auto suffix = string_view("]");
+        = std::string_view("constexpr auto lexy::_detail::_full_type_name() [with T = ");
+    constexpr auto suffix = std::string_view("]");
 
-    auto function = string_view(__PRETTY_FUNCTION__);
+    auto function = std::string_view(__PRETTY_FUNCTION__);
     function.remove_prefix(prefix.length());
     function.remove_suffix(suffix.length());
-    function.try_remove_prefix("{anonymous}::");
+    function = try_remove_prefix(function, "{anonymous}::");
     return function;
 
 #elif defined(_MSC_VER)
 #    define LEXY_HAS_AUTOMATIC_TYPE_NAME 1
 #    define LEXY_HAS_CONSTEXPR_AUTOMATIC_TYPE_NAME 1
 
-    constexpr auto prefix = string_view("auto __cdecl lexy::_detail::_full_type_name<");
-    constexpr auto suffix = string_view(">(void)");
+    constexpr auto prefix = std::string_view("auto __cdecl lexy::_detail::_full_type_name<");
+    constexpr auto suffix = std::string_view(">(void)");
 
-    auto function = string_view(__FUNCSIG__);
+    auto function = std::string_view(__FUNCSIG__);
     function.remove_prefix(prefix.length());
     function.remove_suffix(suffix.length());
-    function.try_remove_prefix("struct ") || function.try_remove_prefix("class ");
-    function.try_remove_prefix("`anonymous-namespace'::");
+    function = try_remove_prefix(function, "struct ");
+    function = try_remove_prefix(function, "class ");
+    function = try_remove_prefix(function, "`anonymous-namespace'::");
     return function;
 
 #else
 #    define LEXY_HAS_AUTOMATIC_TYPE_NAME 0
 #    define LEXY_HAS_CONSTEXPR_AUTOMATIC_TYPE_NAME 0
 
-    return string_view("unknown-type");
+    return std::string_view("unknown-type");
 
 #endif
 }
 
 template <typename T, int NsCount>
-constexpr string_view _type_name()
+constexpr std::string_view _type_name()
 {
     auto name = _full_type_name<T>();
-    if (name.find('<') != string_view::npos && NsCount != 0)
+    if (name.find('<') != std::string_view::npos && NsCount != 0)
         return name;
 
     for (auto namespace_count = NsCount; namespace_count > 0; --namespace_count)
     {
         auto pos = name.find("::");
-        if (pos == string_view::npos)
+        if (pos == std::string_view::npos)
             break;
         name.remove_prefix(pos + 2);
     }

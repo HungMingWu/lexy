@@ -38,7 +38,7 @@ struct prod_depth
 
 TEST_CASE("production traits simple")
 {
-    CHECK(lexy::production_name<prod>() == lexy::_detail::string_view("prod"));
+    CHECK(lexy::production_name<prod>() == std::string_view("prod"));
 
     CHECK(std::is_same_v<const lexy::production_rule<prod>, decltype(lexy::dsl::any)>);
 }

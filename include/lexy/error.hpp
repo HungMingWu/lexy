@@ -48,7 +48,7 @@ public:
     template <typename Tag>
     constexpr bool is(Tag = {}) const noexcept
     {
-        return _detail::string_view(_msg) == _detail::type_name<Tag>();
+        return std::string_view(_msg) == _detail::type_name<Tag>();
     }
 
     constexpr auto begin() const noexcept

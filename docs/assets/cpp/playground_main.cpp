@@ -32,7 +32,7 @@ int main(int, char* argv[])
 {
     auto input = lexy_ext::compiler_explorer_input();
 
-    if (argv[1] == lexy::_detail::string_view("tree"))
+    if (argv[1] == std::string_view("tree"))
     {
         lexy::parse_tree_for<decltype(input)> tree;
         auto                                  result
@@ -89,7 +89,7 @@ int main(int, char* argv[])
         else if (result.is_fatal_error())
             return 2;
     }
-    else if (argv[1] == lexy::_detail::string_view("trace"))
+    else if (argv[1] == std::string_view("trace"))
     {
         lexy::trace<LEXY_PLAYGROUND_PRODUCTION>(stdout, input, {lexy::visualize_fancy});
         return 0;
