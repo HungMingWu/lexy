@@ -17,7 +17,7 @@ struct label
     static constexpr auto id   = Id;
     static constexpr auto name = "label";
 
-    static constexpr auto rule = dsl::try_(LEXY_LIT("!"));
+    static constexpr auto rule = dsl::try_(dsl::lit<"!">);
 };
 } // namespace
 
@@ -31,7 +31,7 @@ TEST_CASE("dsl::operator|")
     SUBCASE("simple")
     {
         constexpr auto rule
-            = LEXY_LIT("abc") >> dsl::p<label<0>> | LEXY_LIT("def") >> dsl::p<label<1>>;
+            = dsl::lit<"abc"> >> dsl::p<label<0>> | dsl::lit<"def"> >> dsl::p<label<1>>;
         CHECK(lexy::is_branch_rule<decltype(rule)>);
 
         auto empty = LEXY_VERIFY("");
@@ -61,7 +61,7 @@ TEST_CASE("dsl::operator|")
     SUBCASE("branches are ordered")
     {
         constexpr auto rule
-            = LEXY_LIT("a") >> dsl::p<label<0>> | LEXY_LIT("abc") >> dsl::p<label<1>>;
+            = dsl::lit<"a"> >> dsl::p<label<0>> | dsl::lit<"abc"> >> dsl::p<label<1>>;
         CHECK(lexy::is_branch_rule<decltype(rule)>);
 
         auto empty = LEXY_VERIFY("");
@@ -85,8 +85,8 @@ TEST_CASE("dsl::operator|")
     }
     SUBCASE("with else")
     {
-        constexpr auto rule = LEXY_LIT("abc") >> dsl::p<label<0>>   //
-                              | LEXY_LIT("def") >> dsl::p<label<1>> //
+        constexpr auto rule = dsl::lit<"abc"> >> dsl::p<label<0>>   //
+                              | dsl::lit<"def"> >> dsl::p<label<1>> //
                               | dsl::else_ >> dsl::p<label<2>>;
         CHECK(lexy::is_rule<decltype(rule)>);
 
@@ -126,8 +126,8 @@ TEST_CASE("dsl::operator|")
             }
         };
 
-        constexpr auto rule = LEXY_LIT("abc") >> dsl::p<label<0>>   //
-                              | LEXY_LIT("def") >> dsl::p<label<1>> //
+        constexpr auto rule = dsl::lit<"abc"> >> dsl::p<label<0>>   //
+                              | dsl::lit<"def"> >> dsl::p<label<1>> //
                               | dsl::error<my_error>;
         CHECK(lexy::is_rule<decltype(rule)>);
 
@@ -159,7 +159,7 @@ TEST_CASE("dsl::operator|")
     SUBCASE("as branch")
     {
         constexpr auto rule
-            = dsl::if_(LEXY_LIT("abc") >> dsl::p<label<0>> | LEXY_LIT("def") >> dsl::p<label<1>>);
+            = dsl::if_(dsl::lit<"abc"> >> dsl::p<label<0>> | dsl::lit<"def"> >> dsl::p<label<1>>);
         CHECK(lexy::is_rule<decltype(rule)>);
 
         auto empty = LEXY_VERIFY("");

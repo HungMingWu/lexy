@@ -16,24 +16,24 @@ TEST_CASE("dsl::brackets()")
     CHECK(equivalent_rules(brackets.as_terminator(), dsl::terminator(dsl::lit_c<')'>)));
     CHECK(equivalent_rules(brackets.recovery_rule(), dsl::recover(dsl::lit_c<')'>)));
 
-    CHECK(equivalent_rules(brackets(LEXY_LIT("abc")),
-                           brackets.open() >> brackets.as_terminator()(LEXY_LIT("abc"))));
-    CHECK(equivalent_rules(brackets.try_(LEXY_LIT("abc")),
-                           brackets.open() >> brackets.as_terminator().try_(LEXY_LIT("abc"))));
-    CHECK(equivalent_rules(brackets.opt(LEXY_LIT("abc")),
-                           brackets.open() >> brackets.as_terminator().opt(LEXY_LIT("abc"))));
-    CHECK(equivalent_rules(brackets.list(LEXY_LIT("abc")),
-                           brackets.open() >> brackets.as_terminator().list(LEXY_LIT("abc"))));
-    CHECK(equivalent_rules(brackets.list(LEXY_LIT("abc"), dsl::sep(LEXY_LIT(","))),
+    CHECK(equivalent_rules(brackets(dsl::lit<"abc">),
+                           brackets.open() >> brackets.as_terminator()(dsl::lit<"abc">)));
+    CHECK(equivalent_rules(brackets.try_(dsl::lit<"abc">),
+                           brackets.open() >> brackets.as_terminator().try_(dsl::lit<"abc">)));
+    CHECK(equivalent_rules(brackets.opt(dsl::lit<"abc">),
+                           brackets.open() >> brackets.as_terminator().opt(dsl::lit<"abc">)));
+    CHECK(equivalent_rules(brackets.list(dsl::lit<"abc">),
+                           brackets.open() >> brackets.as_terminator().list(dsl::lit<"abc">)));
+    CHECK(equivalent_rules(brackets.list(dsl::lit<"abc">, dsl::sep(dsl::lit<",">)),
                            brackets.open()
-                               >> brackets.as_terminator().list(LEXY_LIT("abc"),
-                                                                dsl::sep(LEXY_LIT(",")))));
-    CHECK(equivalent_rules(brackets.opt_list(LEXY_LIT("abc")),
-                           brackets.open() >> brackets.as_terminator().opt_list(LEXY_LIT("abc"))));
-    CHECK(equivalent_rules(brackets.opt_list(LEXY_LIT("abc"), dsl::sep(LEXY_LIT(","))),
+                               >> brackets.as_terminator().list(dsl::lit<"abc">,
+                                                                dsl::sep(dsl::lit<",">))));
+    CHECK(equivalent_rules(brackets.opt_list(dsl::lit<"abc">),
+                           brackets.open() >> brackets.as_terminator().opt_list(dsl::lit<"abc">)));
+    CHECK(equivalent_rules(brackets.opt_list(dsl::lit<"abc">, dsl::sep(dsl::lit<",">)),
                            brackets.open()
-                               >> brackets.as_terminator().opt_list(LEXY_LIT("abc"),
-                                                                    dsl::sep(LEXY_LIT(",")))));
+                               >> brackets.as_terminator().opt_list(dsl::lit<"abc">,
+                                                                    dsl::sep(dsl::lit<",">))));
 
     CHECK(equivalent_rules(brackets.limit(dsl::lit_c<'!'>).recovery_rule(),
                            dsl::recover(dsl::lit_c<')'>).limit(dsl::lit_c<'!'>)));

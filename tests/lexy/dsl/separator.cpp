@@ -15,10 +15,10 @@ TEST_CASE("dsl::sep()")
         }
     };
 
-    constexpr auto basic = dsl::sep(LEXY_LIT("abc"));
-    CHECK(equivalent_rules(decltype(basic)::rule{}, LEXY_LIT("abc")));
+    constexpr auto basic = dsl::sep(dsl::lit<"abc">);
+    CHECK(equivalent_rules(decltype(basic)::rule{}, dsl::lit<"abc">));
     constexpr auto specify_error = basic.trailing_error<tag>;
-    CHECK(equivalent_rules(decltype(specify_error)::rule{}, LEXY_LIT("abc")));
+    CHECK(equivalent_rules(decltype(specify_error)::rule{}, dsl::lit<"abc">));
 
     SUBCASE("trailing rule, default error")
     {
@@ -63,8 +63,8 @@ TEST_CASE("dsl::sep()")
 
 TEST_CASE("dsl::trailing_sep()")
 {
-    constexpr auto sep = dsl::trailing_sep(LEXY_LIT("abc"));
-    CHECK(equivalent_rules(decltype(sep)::rule{}, LEXY_LIT("abc")));
-    CHECK(equivalent_rules(decltype(sep)::trailing_rule{}, dsl::if_(LEXY_LIT("abc"))));
+    constexpr auto sep = dsl::trailing_sep(dsl::lit<"abc">);
+    CHECK(equivalent_rules(decltype(sep)::rule{}, dsl::lit<"abc">));
+    CHECK(equivalent_rules(decltype(sep)::trailing_rule{}, dsl::if_(dsl::lit<"abc">)));
 }
 

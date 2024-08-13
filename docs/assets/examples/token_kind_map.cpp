@@ -20,7 +20,7 @@ struct production
     static constexpr auto whitespace = dsl::ascii::space;
 
     static constexpr auto rule = [] {
-        auto greeting = LEXY_LIT("Hello");
+        auto greeting = dsl::lit<"Hello">;
         return greeting + dsl::p<name> + dsl::exclamation_mark + dsl::eof;
     }();
 };
@@ -37,7 +37,7 @@ constexpr auto lexy::token_kind_map_for<my_token_kind>
     // Start with the empty map.
     = lexy::token_kind_map
           // Map the greeting token.
-          .map<my_token_kind::greeting>(LEXY_LIT("Hello"))
+          .map<my_token_kind::greeting>(dsl::lit<"Hello">)
           // Map the exclamation token.
           .map<my_token_kind::exclamation_mark>(dsl::exclamation_mark);
 //}

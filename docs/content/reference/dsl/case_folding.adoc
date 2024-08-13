@@ -36,7 +36,7 @@ Parse tree::
 {{% playground-example case_folding "Match a literal case-insensitively" %}}
 
 CAUTION: As all uppercase characters of the input are converted to lowercase, but `lit` itself is unchanged, `lit` must not match uppercase characters:
-`case_folding(LEXY_LIT("ABC"))` will never match.
+`case_folding(dsl::lit<"ABC">)` will never match.
 
 [#simple]
 == Literal rule `lexy::dsl::unicode::simple_case_folding`
@@ -65,5 +65,5 @@ Parse tree::
   The single token node created by `lit`; its content is the input as it was before the case folding.
 
 CAUTION: As all uppercase characters of the input are converted to lowercase, but `lit` itself is unchanged, `lit` must not match uppercase characters:
-`simple_case_folding(LEXY_LIT("ABC"))` will never match.
+`simple_case_folding(dsl::lit<"ABC">)` will never match.
 

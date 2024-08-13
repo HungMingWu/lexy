@@ -46,7 +46,7 @@ struct transparent_string_p : lexy::transparent_production
 struct abc_p : lexy::token_production
 {
     static constexpr auto name = "abc_p";
-    static constexpr auto rule = LEXY_LIT("abc").kind<token_kind::c>;
+    static constexpr auto rule = lexy::dsl::lit<"abc">.kind<token_kind::c>;
 };
 
 struct child_p
@@ -65,7 +65,7 @@ struct root_p
 {
     static constexpr auto name = "root_p";
     static constexpr auto whitespace
-        = lexy::dsl::ascii::space | LEXY_LIT("//") >> lexy::dsl::until(lexy::dsl::newline).or_eof();
+        = lexy::dsl::ascii::space | lexy::dsl::lit<"//"> >> lexy::dsl::until(lexy::dsl::newline).or_eof();
 
     static constexpr auto rule = [] {
         auto digits = lexy::dsl::digits<>.kind<token_kind::a>;

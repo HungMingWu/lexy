@@ -14,12 +14,12 @@ TEST_CASE("dsl::lit_c")
     constexpr auto rule = dsl::lit_c<'a'>;
     CHECK(lexy::is_token_rule<decltype(rule)>);
     CHECK(lexy::is_literal_rule<decltype(rule)>);
-    CHECK(equivalent_rules(rule, LEXY_LIT("a")));
+    CHECK(equivalent_rules(rule, dsl::lit<"a">));
 }
 
 TEST_CASE("dsl::lit_b")
 {
-    constexpr auto rule = dsl::lit_b<'a', 'b', 'c'>;
+    constexpr auto rule = dsl::lit_b<uint8_t, 'a', 'b', 'c'>;
     CHECK(lexy::is_token_rule<decltype(rule)>);
     CHECK(lexy::is_literal_rule<decltype(rule)>);
 
@@ -65,7 +65,7 @@ TEST_CASE("dsl::lit")
 
     SUBCASE("ASCII")
     {
-        constexpr auto rule = LEXY_LIT("abc");
+        constexpr auto rule = dsl::lit<"abc">;
         CHECK(lexy::is_token_rule<decltype(rule)>);
         CHECK(lexy::is_literal_rule<decltype(rule)>);
 
@@ -106,7 +106,7 @@ TEST_CASE("dsl::lit")
     }
     SUBCASE("UTF-16, but only in ASCII")
     {
-        constexpr auto rule = LEXY_LIT(u"abc");
+        constexpr auto rule = dsl::lit<u"abc">;
         CHECK(lexy::is_token_rule<decltype(rule)>);
         CHECK(lexy::is_literal_rule<decltype(rule)>);
 
@@ -126,7 +126,7 @@ TEST_CASE("dsl::lit")
     }
     SUBCASE("UTF-16, non ASCII")
     {
-        constexpr auto rule = LEXY_LIT(u"äöü");
+        constexpr auto rule = dsl::lit<u"äöü">;
         CHECK(lexy::is_token_rule<decltype(rule)>);
         CHECK(lexy::is_literal_rule<decltype(rule)>);
 
@@ -142,7 +142,7 @@ TEST_CASE("dsl::lit")
     }
     SUBCASE("swar")
     {
-        constexpr auto rule = LEXY_LIT("abcdefghijklmnopqrstuvwxyz");
+        constexpr auto rule = dsl::lit<"abcdefghijklmnopqrstuvwxyz">;
         CHECK(lexy::is_token_rule<decltype(rule)>);
         CHECK(lexy::is_literal_rule<decltype(rule)>);
 
@@ -326,7 +326,7 @@ TEST_CASE("dsl::literal_set")
     }
     SUBCASE("single")
     {
-        constexpr auto rule = dsl::literal_set(LEXY_LIT("abc"));
+        constexpr auto rule = dsl::literal_set(dsl::lit<"abc">);
         CHECK(lexy::is_token_rule<decltype(rule)>);
         CHECK(lexy::is_literal_set_rule<decltype(rule)>);
 
@@ -345,7 +345,7 @@ TEST_CASE("dsl::literal_set")
 
     SUBCASE("disjoint")
     {
-        constexpr auto rule = dsl::literal_set(LEXY_LIT("abc"), LEXY_LIT("123"), LEXY_LIT("hello"));
+        constexpr auto rule = dsl::literal_set(dsl::lit<"abc">, dsl::lit<"123">, dsl::lit<"hello">);
         CHECK(lexy::is_token_rule<decltype(rule)>);
         CHECK(lexy::is_literal_set_rule<decltype(rule)>);
 
@@ -369,7 +369,7 @@ TEST_CASE("dsl::literal_set")
     }
     SUBCASE("common prefix")
     {
-        constexpr auto rule = dsl::literal_set(LEXY_LIT("abc"), LEXY_LIT("abd"));
+        constexpr auto rule = dsl::literal_set(dsl::lit<"abc">, dsl::lit<"abd">);
         CHECK(lexy::is_token_rule<decltype(rule)>);
         CHECK(lexy::is_literal_set_rule<decltype(rule)>);
 
@@ -386,7 +386,7 @@ TEST_CASE("dsl::literal_set")
     }
     SUBCASE("substring")
     {
-        constexpr auto rule = dsl::literal_set(LEXY_LIT("abc"), LEXY_LIT("ab"));
+        constexpr auto rule = dsl::literal_set(dsl::lit<"abc">, dsl::lit<"ab">);
         CHECK(lexy::is_token_rule<decltype(rule)>);
         CHECK(lexy::is_literal_set_rule<decltype(rule)>);
 
@@ -403,7 +403,7 @@ TEST_CASE("dsl::literal_set")
     }
     SUBCASE("identical")
     {
-        constexpr auto rule = dsl::literal_set(LEXY_LIT("abc"), LEXY_LIT("abc"));
+        constexpr auto rule = dsl::literal_set(dsl::lit<"abc">, dsl::lit<"abc">);
         CHECK(lexy::is_token_rule<decltype(rule)>);
         CHECK(lexy::is_literal_set_rule<decltype(rule)>);
 
@@ -419,7 +419,7 @@ TEST_CASE("dsl::literal_set")
     SUBCASE("lit_b")
     {
         constexpr auto rule
-            = dsl::literal_set(dsl::lit_b<'a', 'b', 'c'>, dsl::lit_b<'a', 'b', '\0'>);
+            = dsl::literal_set(dsl::lit_b<uint8_t, 'a', 'b', 'c'>, dsl::lit_b<uint8_t, 'a', 'b', '\0'>);
         CHECK(lexy::is_token_rule<decltype(rule)>);
         CHECK(lexy::is_literal_set_rule<decltype(rule)>);
 
@@ -472,7 +472,7 @@ TEST_CASE("dsl::literal_set")
         constexpr auto id1 = dsl::identifier(dsl::ascii::alpha);
         constexpr auto id2 = dsl::identifier(dsl::ascii::alpha, dsl::ascii::digit);
         constexpr auto rule
-            = dsl::literal_set(LEXY_LIT("ab"), LEXY_KEYWORD("abc", id1), LEXY_KEYWORD("a12", id2));
+            = dsl::literal_set(dsl::lit<"ab">, dsl::keyword<"abc">(id1), dsl::keyword<"a12">(id2));
         CHECK(lexy::is_token_rule<decltype(rule)>);
         CHECK(lexy::is_literal_set_rule<decltype(rule)>);
 
@@ -501,8 +501,8 @@ TEST_CASE("dsl::literal_set")
 
     SUBCASE("case folding")
     {
-        constexpr auto rule = dsl::literal_set(dsl::ascii::case_folding(LEXY_LIT("abc")),
-                                               LEXY_LIT("123"), LEXY_LIT("hello"));
+        constexpr auto rule = dsl::literal_set(dsl::ascii::case_folding(dsl::lit<"abc">),
+                                               dsl::lit<"123">, dsl::lit<"hello">);
         CHECK(lexy::is_token_rule<decltype(rule)>);
         CHECK(lexy::is_literal_set_rule<decltype(rule)>);
 
@@ -530,7 +530,7 @@ TEST_CASE("dsl::literal_set")
 
 TEST_CASE("LEXY_LITERAL_SET")
 {
-    constexpr auto rule = LEXY_LITERAL_SET(LEXY_LIT("abc"), LEXY_LIT("abd"));
+    constexpr auto rule = LEXY_LITERAL_SET(dsl::lit<"abc">, dsl::lit<"abd">);
     CHECK(lexy::is_token_rule<decltype(rule)>);
     CHECK(lexy::is_literal_set_rule<decltype(rule)>);
 
@@ -573,7 +573,7 @@ TEST_CASE("dsl::literal_set() .kind and .error")
 
     SUBCASE(".kind")
     {
-        constexpr auto rule = dsl::literal_set(LEXY_LIT("abc")).kind<token_kind::my_kind>;
+        constexpr auto rule = dsl::literal_set(dsl::lit<"abc">).kind<token_kind::my_kind>;
         CHECK(lexy::is_literal_set_rule<decltype(rule)>);
 
         constexpr auto callback = token_callback;
@@ -588,7 +588,7 @@ TEST_CASE("dsl::literal_set() .kind and .error")
     }
     SUBCASE(".error")
     {
-        constexpr auto rule = dsl::literal_set(LEXY_LIT("abc")).error<my_error>;
+        constexpr auto rule = dsl::literal_set(dsl::lit<"abc">).error<my_error>;
         CHECK(lexy::is_literal_set_rule<decltype(rule)>);
 
         constexpr auto callback = token_callback;
@@ -604,7 +604,7 @@ TEST_CASE("dsl::literal_set() .kind and .error")
     SUBCASE(".kind.error")
     {
         constexpr auto rule
-            = dsl::literal_set(LEXY_LIT("abc")).kind<token_kind::my_kind>.error<my_error>;
+            = dsl::literal_set(dsl::lit<"abc">).kind<token_kind::my_kind>.error<my_error>;
         CHECK(lexy::is_literal_set_rule<decltype(rule)>);
 
         constexpr auto callback = token_callback;
@@ -620,7 +620,7 @@ TEST_CASE("dsl::literal_set() .kind and .error")
     SUBCASE(".error.kind")
     {
         constexpr auto rule
-            = dsl::literal_set(LEXY_LIT("abc")).error<my_error>.kind<token_kind::my_kind>;
+            = dsl::literal_set(dsl::lit<"abc">).error<my_error>.kind<token_kind::my_kind>;
         CHECK(lexy::is_literal_set_rule<decltype(rule)>);
 
         constexpr auto callback = token_callback;
@@ -637,8 +637,8 @@ TEST_CASE("dsl::literal_set() .kind and .error")
 
 TEST_CASE("dsl::literal_set() operator/")
 {
-    constexpr auto with_literals = dsl::literal_set() / LEXY_LIT("abc") / dsl::lit_c<'d'>;
-    CHECK(equivalent_rules(with_literals, dsl::literal_set(LEXY_LIT("abc"), dsl::lit_c<'d'>)));
+    constexpr auto with_literals = dsl::literal_set() / dsl::lit<"abc"> / dsl::lit_c<'d'>;
+    CHECK(equivalent_rules(with_literals, dsl::literal_set(dsl::lit<"abc">, dsl::lit_c<'d'>)));
 
     constexpr auto with_sets = dsl::literal_set()
                                / dsl::literal_set(dsl::lit_c<'a'>, dsl::lit_c<'b'>)
@@ -660,14 +660,14 @@ TEST_CASE("dsl::literal_set() operator/")
 TEST_CASE("dsl::literal_set() from symbol table")
 {
     constexpr auto basic = dsl::literal_set(
-        lexy::symbol_table<int>.map<'a'>(0).map<LEXY_SYMBOL("b")>(1).map(LEXY_LIT("c"), 2));
-    CHECK(equivalent_rules(basic, dsl::literal_set(LEXY_LIT("a"), LEXY_LIT("b"), LEXY_LIT("c"))));
+        lexy::symbol_table<int>.map<'a'>(0).map<"b">(1).map(dsl::lit<"c">, 2));
+    CHECK(equivalent_rules(basic, dsl::literal_set(dsl::lit<"a">, dsl::lit<"b">, dsl::lit<"c">)));
 
     constexpr auto case_folding = dsl::literal_set(
-        lexy::symbol_table<int>.case_folding(dsl::ascii::case_folding).map<'a'>(0).map<LEXY_SYMBOL("b")>(1).map(LEXY_LIT("c"), 2));
+        lexy::symbol_table<int>.case_folding(dsl::ascii::case_folding).map<'a'>(0).map<"b">(1).map(dsl::lit<"c">, 2));
     CHECK(
-        equivalent_rules(case_folding, dsl::literal_set(dsl::ascii::case_folding(LEXY_LIT("a")),
-                                                        dsl::ascii::case_folding(LEXY_LIT("b")),
-                                                        dsl::ascii::case_folding(LEXY_LIT("c")))));
+        equivalent_rules(case_folding, dsl::literal_set(dsl::ascii::case_folding(dsl::lit<"a">),
+                                                        dsl::ascii::case_folding(dsl::lit<"b">),
+                                                        dsl::ascii::case_folding(dsl::lit<"c">))));
 }
 

@@ -21,19 +21,19 @@ namespace
 {
 struct production
 {
-    static constexpr auto rule = lexy::dsl::capture(LEXY_LIT("abc"));
+    static constexpr auto rule = lexy::dsl::capture(lexy::dsl::lit<"abc">);
     static constexpr auto value
         = lexy::callback<int>([](auto lex) { return static_cast<int>(lex.size()); });
 };
 
 struct token_production : lexy::token_production
 {
-    static constexpr auto rule = LEXY_LIT("abc");
+    static constexpr auto rule = lexy::dsl::lit<"abc">;
 };
 
 struct control_production
 {
-    static constexpr auto whitespace = LEXY_LIT(" ");
+    static constexpr auto whitespace = lexy::dsl::lit<" ">;
 };
 } // namespace
 
@@ -78,7 +78,7 @@ TEST_CASE("lexy::scan")
         CHECK(scanner);
         check_position(scanner, true, input.data());
 
-        scanner.parse(LEXY_LIT("abc"));
+        scanner.parse(lexy::dsl::lit<"abc">);
         CHECK(!scanner);
         check_position(scanner, true, input.data());
     }
@@ -90,7 +90,7 @@ TEST_CASE("lexy::scan")
         CHECK(scanner);
         check_position(scanner, false, input.data());
 
-        scanner.parse(LEXY_LIT("abc"));
+        scanner.parse(lexy::dsl::lit<"abc">);
         CHECK(scanner);
         check_position(scanner, true, input.data() + 3);
 
@@ -98,7 +98,7 @@ TEST_CASE("lexy::scan")
         CHECK(scanner);
         check_position(scanner, true, input.data() + 3);
 
-        scanner.parse(LEXY_LIT("abc"));
+        scanner.parse(lexy::dsl::lit<"abc">);
         CHECK(!scanner);
         check_position(scanner, true, input.data() + 3);
     }
@@ -109,14 +109,14 @@ TEST_CASE("lexy::scan")
         CHECK(scanner);
         check_position(scanner, false, input.data());
 
-        auto first = scanner.parse<lexy::string_lexeme<>>(lexy::dsl::capture(LEXY_LIT("abc")));
+        auto first = scanner.parse<lexy::string_lexeme<>>(lexy::dsl::capture(lexy::dsl::lit<"abc">));
         CHECK(scanner);
         check_position(scanner, true, input.data() + 3);
         CHECK(first);
         CHECK(first.value().begin() == input.data());
         CHECK(first.value().end() == input.data() + 3);
 
-        auto second = scanner.parse<lexy::string_lexeme<>>(lexy::dsl::capture(LEXY_LIT("abc")));
+        auto second = scanner.parse<lexy::string_lexeme<>>(lexy::dsl::capture(lexy::dsl::lit<"abc">));
         CHECK(!scanner);
         check_position(scanner, true, input.data() + 3);
         CHECK(!second);
@@ -147,22 +147,22 @@ TEST_CASE("lexy::scan")
         CHECK(scanner);
         check_position(scanner, false, input.data());
 
-        auto first = scanner.branch(LEXY_LIT("a") >> LEXY_LIT("bc"));
+        auto first = scanner.branch(lexy::dsl::lit<"a"> >> lexy::dsl::lit<"bc">);
         CHECK(scanner);
         check_position(scanner, false, input.data() + 3);
         CHECK(first);
 
-        auto second = scanner.branch(LEXY_LIT("a") >> LEXY_LIT("bc"));
+        auto second = scanner.branch(lexy::dsl::lit<"a"> >> lexy::dsl::lit<"bc">);
         CHECK(scanner);
         check_position(scanner, false, input.data() + 3);
         CHECK(!second);
 
-        auto third = scanner.branch(LEXY_LIT("d") >> LEXY_LIT("ef"));
+        auto third = scanner.branch(lexy::dsl::lit<"d"> >> lexy::dsl::lit<"ef">);
         CHECK(scanner);
         check_position(scanner, false, input.data() + 6);
         CHECK(third);
 
-        auto fourth = scanner.branch(LEXY_LIT("a") >> LEXY_LIT("bc"));
+        auto fourth = scanner.branch(lexy::dsl::lit<"a"> >> lexy::dsl::lit<"bc">);
         CHECK(!scanner);
         check_position(scanner, true, input.data() + 7);
         CHECK(fourth);
@@ -178,7 +178,7 @@ TEST_CASE("lexy::scan")
             lexy::scan_result<const char*> result;
 
             auto taken
-                = scanner.branch(result, LEXY_LIT("a") >> lexy::dsl::position + LEXY_LIT("bc"));
+                = scanner.branch(result, lexy::dsl::lit<"a"> >> lexy::dsl::position + lexy::dsl::lit<"bc">);
             CHECK(scanner);
             check_position(scanner, false, input.data() + 3);
             CHECK(taken);
@@ -189,7 +189,7 @@ TEST_CASE("lexy::scan")
             lexy::scan_result<const char*> result;
 
             auto taken
-                = scanner.branch(result, LEXY_LIT("a") >> lexy::dsl::position + LEXY_LIT("bc"));
+                = scanner.branch(result, lexy::dsl::lit<"a"> >> lexy::dsl::position + lexy::dsl::lit<"bc">);
             CHECK(scanner);
             check_position(scanner, false, input.data() + 3);
             CHECK(!taken);
@@ -199,7 +199,7 @@ TEST_CASE("lexy::scan")
             lexy::scan_result<const char*> result;
 
             auto taken
-                = scanner.branch(result, LEXY_LIT("d") >> lexy::dsl::position + LEXY_LIT("ef"));
+                = scanner.branch(result, lexy::dsl::lit<"d"> >> lexy::dsl::position + lexy::dsl::lit<"ef">);
             CHECK(scanner);
             check_position(scanner, false, input.data() + 6);
             CHECK(taken);
@@ -210,7 +210,7 @@ TEST_CASE("lexy::scan")
             lexy::scan_result<const char*> result;
 
             auto taken
-                = scanner.branch(result, LEXY_LIT("a") >> lexy::dsl::position + LEXY_LIT("bc"));
+                = scanner.branch(result, lexy::dsl::lit<"a"> >> lexy::dsl::position + lexy::dsl::lit<"bc">);
             CHECK(!scanner);
             check_position(scanner, true, input.data() + 7);
             CHECK(taken);
@@ -249,16 +249,16 @@ TEST_CASE("lexy::scan")
     {
         auto input   = lexy::zstring_input("123-abc");
         auto scanner = lexy::scan(input, errors);
-        scanner.parse(LEXY_LIT("abc"));
+        scanner.parse(lexy::dsl::lit<"abc">);
         CHECK(!scanner);
         check_position(scanner, false, input.data());
 
         // Parsing is a no-op in failed state.
-        scanner.parse(LEXY_LIT("123"));
+        scanner.parse(lexy::dsl::lit<"123">);
         CHECK(!scanner);
         check_position(scanner, false, input.data());
         // Branch parsing is a no-op in failed state.
-        auto taken = scanner.branch(LEXY_LIT("123"));
+        auto taken = scanner.branch(lexy::dsl::lit<"123">);
         CHECK(!scanner);
         check_position(scanner, false, input.data());
         CHECK(!taken);
@@ -266,11 +266,11 @@ TEST_CASE("lexy::scan")
         auto recovery = scanner.error_recovery();
 
         // Parsing does something in recovery.
-        scanner.parse(LEXY_LIT("123"));
+        scanner.parse(lexy::dsl::lit<"123">);
         CHECK(!scanner);
         check_position(scanner, false, input.data() + 3);
         // Branch parsing does something in recovery.
-        taken = scanner.branch(LEXY_LIT("-"));
+        taken = scanner.branch(lexy::dsl::lit<"-">);
         CHECK(!scanner);
         check_position(scanner, false, input.data() + 4);
         CHECK(taken);
@@ -281,7 +281,7 @@ TEST_CASE("lexy::scan")
             CHECK(scanner);
             check_position(scanner, false, input.data() + 4);
 
-            scanner.parse(LEXY_LIT("abc"));
+            scanner.parse(lexy::dsl::lit<"abc">);
             CHECK(scanner);
             check_position(scanner, true, input.data() + 7);
         }
@@ -291,11 +291,11 @@ TEST_CASE("lexy::scan")
             CHECK(!scanner);
             check_position(scanner, false, input.data() + 4);
 
-            scanner.parse(LEXY_LIT("abc"));
+            scanner.parse(lexy::dsl::lit<"abc">);
             CHECK(!scanner);
             check_position(scanner, false, input.data() + 4);
 
-            auto taken = scanner.branch(LEXY_LIT("abc"));
+            auto taken = scanner.branch(lexy::dsl::lit<"abc">);
             CHECK(!scanner);
             check_position(scanner, false, input.data() + 4);
             CHECK(!taken);
@@ -308,17 +308,17 @@ TEST_CASE("lexy::scan")
         CHECK(scanner);
         check_position(scanner, false, input.data());
 
-        auto result = scanner.discard(LEXY_LIT("abcd"));
+        auto result = scanner.discard(lexy::dsl::lit<"abcd">);
         CHECK(scanner);
         check_position(scanner, false, input.data());
         CHECK(!result);
 
-        result = scanner.discard(LEXY_LIT("abc"));
+        result = scanner.discard(lexy::dsl::lit<"abc">);
         CHECK(scanner);
         check_position(scanner, true, input.data() + 3);
         CHECK(result);
 
-        result = scanner.discard(LEXY_LIT("abc"));
+        result = scanner.discard(lexy::dsl::lit<"abc">);
         CHECK(scanner);
         check_position(scanner, true, input.data() + 3);
         CHECK(!result);
@@ -334,7 +334,7 @@ TEST_CASE("lexy::scan")
         CHECK(scanner);
         check_position(scanner, false, input.data());
 
-        scanner.parse(LEXY_LIT("123"));
+        scanner.parse(lexy::dsl::lit<"123">);
         CHECK(!scanner);
         check_position(scanner, false, input.data());
 
@@ -367,12 +367,12 @@ TEST_CASE("lexy::scan")
         CHECK(scanner);
         check_position(scanner, false, input.data());
 
-        auto result = scanner.peek(LEXY_LIT("abc"));
+        auto result = scanner.peek(lexy::dsl::lit<"abc">);
         CHECK(scanner);
         check_position(scanner, false, input.data());
         CHECK(result);
 
-        result = scanner.peek(LEXY_LIT("123"));
+        result = scanner.peek(lexy::dsl::lit<"123">);
         CHECK(scanner);
         check_position(scanner, false, input.data());
         CHECK(!result);
@@ -385,11 +385,11 @@ TEST_CASE("lexy::scan")
         CHECK(scanner);
         check_position(scanner, false, input.data());
 
-        scanner.parse(LEXY_LIT("abc"));
+        scanner.parse(lexy::dsl::lit<"abc">);
         CHECK(scanner);
         check_position(scanner, false, input.data() + 4);
 
-        scanner.parse(LEXY_LIT("abc"));
+        scanner.parse(lexy::dsl::lit<"abc">);
         CHECK(scanner);
         check_position(scanner, true, input.data() + 7);
     }
@@ -401,7 +401,7 @@ TEST_CASE("lexy::scan")
         CHECK(scanner);
         check_position(scanner, false, input.data());
 
-        auto lexeme = scanner.capture(LEXY_LIT("abc"));
+        auto lexeme = scanner.capture(lexy::dsl::lit<"abc">);
         CHECK(scanner);
         check_position(scanner, false, input.data() + 3);
         CHECK(lexeme);

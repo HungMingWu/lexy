@@ -18,7 +18,7 @@ namespace
 struct prod_a
 {
     static constexpr auto name = "prod_a";
-    static constexpr auto rule = lexy::dsl::list(lexy::dsl::ascii::case_folding(LEXY_LIT("abc")));
+    static constexpr auto rule = lexy::dsl::list(lexy::dsl::ascii::case_folding(lexy::dsl::lit<"abc">));
 };
 
 struct prod_trans : lexy::transparent_production
@@ -30,7 +30,7 @@ struct prod_trans : lexy::transparent_production
 struct prod_b
 {
     static constexpr auto name = "prod_b";
-    static constexpr auto rule = LEXY_LIT("(") + lexy::dsl::p<prod_trans> + LEXY_LIT(")");
+    static constexpr auto rule = lexy::dsl::lit<"("> + lexy::dsl::p<prod_trans> + lexy::dsl::lit<")">;
 };
 } // namespace
 

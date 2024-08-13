@@ -159,7 +159,7 @@ Remove `lexy_ext/input_location.hpp`: use `lexy/input_location.hpp` instead, whi
 
 == 2021-11-23
 
-* Added more pre-defined token kinds: for example, tokens created by `LEXY_LIT()` now have their own literal token kind.
+* Added more pre-defined token kinds: for example, tokens created by `dsl::lit` now have their own literal token kind.
   This breaks code that does not use user-defined token kinds and does matching on `lexy::parse_tree`.
 * `dsl::delimited()` now merges adjacent characters into a single `lexy::lexeme` that is passed to the sink.
 * `lexy::token_production` now longer merges adjacent tokens, but `dsl::delimited()` merges character tokens.

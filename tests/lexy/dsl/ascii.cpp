@@ -265,7 +265,7 @@ TEST_CASE("dsl::ascii::character")
 
 TEST_CASE("dsl::ascii::one_of")
 {
-    constexpr auto rule = LEXY_ASCII_ONE_OF("abc");
+    constexpr auto rule = lexyd::ascii::one_of<"abc">;
     CHECK(lexy::is_token_rule<decltype(rule)>);
 
     CHECK(equivalent_rules(rule, dsl::ascii::one_of<"abc">));

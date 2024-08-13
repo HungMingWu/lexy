@@ -12,7 +12,7 @@ namespace
 {
 struct production
 {
-    static constexpr auto rule = list(LEXY_LIT("abc"));
+    static constexpr auto rule = list(lexyd::lit<"abc">);
 };
 } // namespace
 

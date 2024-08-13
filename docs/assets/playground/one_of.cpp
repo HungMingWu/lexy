@@ -1,5 +1,5 @@
 // INPUT:B
 struct production
 {
-    static constexpr auto rule = LEXY_ASCII_ONE_OF("CDEFGB");
+    static constexpr auto rule = lexyd::ascii::one_of<"CDEFGB">;
 };

@@ -149,7 +149,7 @@ namespace grammar
     // The json value null.
     struct null : lexy::token_production
     {
-        static constexpr auto rule  = LEXY_LIT("null");
+        static constexpr auto rule  = dsl::lit<"null">;
         static constexpr auto value = lexy::construct<ast::json_null>;
     };
 
@@ -158,12 +158,12 @@ namespace grammar
     {
         struct true_ : lexy::transparent_production
         {
-            static constexpr auto rule  = LEXY_LIT("true");
+            static constexpr auto rule  = dsl::lit<"true">;
             static constexpr auto value = lexy::constant(true);
         };
         struct false_ : lexy::transparent_production
         {
-            static constexpr auto rule  = LEXY_LIT("false");
+            static constexpr auto rule  = dsl::lit<"false">;
             static constexpr auto value = lexy::constant(false);
         };
 
@@ -237,7 +237,7 @@ namespace grammar
         {
             // We parse the integer value of a UTF-16 code unit.
             static constexpr auto rule
-                = LEXY_LIT("u") >> dsl::code_unit_id<lexy::utf16_encoding, 4>;
+                = dsl::lit<"u"> >> dsl::code_unit_id<lexy::utf16_encoding, 4>;
             // And convert it into a code point, which might be a surrogate.
             static constexpr auto value = lexy::construct<lexy::code_point>;
         };

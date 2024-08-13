@@ -5,7 +5,7 @@ struct statement
         // A statement is terminated by a semicolon.
         // Error recovery fails when we've reached the } of the scope.
         auto terminator = dsl::terminator(dsl::semicolon).limit(dsl::lit_c<'}'>);
-        return terminator.opt(LEXY_LIT("foo()") | LEXY_LIT("bar()"));
+        return terminator.opt(dsl::lit<"foo()"> | dsl::lit<"bar()">);
     }();
 };
 

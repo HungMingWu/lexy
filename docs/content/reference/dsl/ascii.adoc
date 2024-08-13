@@ -21,7 +21,6 @@ entities:
   "lexy::dsl::ascii::print": class
   "lexy::dsl::ascii::character": class
   "lexy::dsl::ascii::one_of": one_of
-  "LEXY_ASCII_ONE_OF": one_of
 ---
 :toc: left
 
@@ -122,16 +121,6 @@ namespace lexy::dsl::ascii
     template <auto Str>
     constexpr _char-class-rule_ auto one_of;
 }
-
-#define LEXY_ASCII_ONE_OF(Str) lexy::dsl::ascii::one_of<Str>
-----
-
-[.lead]
-`one_of` is a {{% char-class-rule %}} that matches one of the specified ASCII characters.
-Its name is `Str`.
-
-The macro `LEXY_ASCII_ONE_OF(Str)` is equivalent to `one_of<Str>`, except that it also works on older compilers that do not support C++20's extended NTTPs.
-Use this instead of `one_of<Str>` if you need to support them.
 
 {{% playground-example "one_of" "Match the name of a musical note." %}}
 

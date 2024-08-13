@@ -341,14 +341,14 @@ constexpr auto delimited(Delim)
     return _delim_dsl<Delim, Delim>{};
 }
 
-constexpr auto quoted        = delimited(LEXY_LIT("\""));
-constexpr auto triple_quoted = delimited(LEXY_LIT("\"\"\""));
+constexpr auto quoted        = delimited(lit<"\"">);
+constexpr auto triple_quoted = delimited(lit<"\"\"\"">);
 
-constexpr auto single_quoted = delimited(LEXY_LIT("'"));
+constexpr auto single_quoted = delimited(lit<"'">);
 
-constexpr auto backticked        = delimited(LEXY_LIT("`"));
-constexpr auto double_backticked = delimited(LEXY_LIT("``"));
-constexpr auto triple_backticked = delimited(LEXY_LIT("```"));
+constexpr auto backticked        = delimited(lit<"`">);
+constexpr auto double_backticked = delimited(lit<"``">);
+constexpr auto triple_backticked = delimited(lit<"```">);
 } // namespace lexyd
 
 namespace lexy

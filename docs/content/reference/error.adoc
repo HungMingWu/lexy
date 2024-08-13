@@ -145,7 +145,7 @@ If the remaining input contained fewer code units than `string()`, `index()` ind
 
 It is raised by {{% docref "lexy::dsl::lit" %}} and related rules.
 
-{{% playground-example "expected_literal" "`LEXY_LIT()` raises an expected literal error" %}}
+{{% playground-example "expected_literal" "`dsl::lit()` raises an expected literal error" %}}
 
 [#expected_keyword]
 === `lexy::expected_keyword` error
@@ -182,8 +182,6 @@ but it was a different identifier.
 The `position()` is also `begin()`.
 
 It is raised by {{% docref "lexy::dsl::keyword" %}}.
-
-{{% playground-example "keyword" "`LEXY_KEYWORD()` raises an expected keyword error" %}}
 
 [#expected_char_class]
 === `lexy::expected_char_class` error

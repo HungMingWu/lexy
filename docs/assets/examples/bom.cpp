@@ -12,7 +12,7 @@ struct production
         auto bom = dsl::bom<lexy::utf8_encoding,
                             // Doesn't matter for UTF-8.
                             lexy::encoding_endianness::little>;
-        return dsl::opt(bom) + LEXY_LIT("Hello!") + dsl::eof;
+        return dsl::opt(bom) + dsl::lit<"Hello!"> + dsl::eof;
     }();
 };
 //}

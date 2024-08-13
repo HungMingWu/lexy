@@ -14,7 +14,7 @@ namespace lexy_subgrammar_test
 struct production
 {
     static constexpr auto name  = "production";
-    static constexpr auto rule  = LEXY_LIT("abc");
+    static constexpr auto rule  = dsl::lit<"abc">;
     static constexpr auto value = lexy::constant(static_cast<production*>(nullptr));
 };
 } // namespace lexy_subgrammar_test

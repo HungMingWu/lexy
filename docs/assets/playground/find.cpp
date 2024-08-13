@@ -1,13 +1,13 @@
 // INPUT:type Id = <error>;\nfunction foo(...) {\n  ...\n}\n
 constexpr auto id          = dsl::identifier(dsl::ascii::alpha);
-constexpr auto kw_function = LEXY_KEYWORD("function", id);
-constexpr auto kw_type     = LEXY_KEYWORD("type", id);
+constexpr auto kw_function = dsl::keyword<"function">(id);
+constexpr auto kw_type     = dsl::keyword<"type">(id);
 
 struct function_decl
 {
     static constexpr auto rule = [] {
-        auto arguments = dsl::parenthesized(LEXY_LIT("..."));
-        auto body      = dsl::curly_bracketed(LEXY_LIT("..."));
+        auto arguments = dsl::parenthesized(dsl::lit<"...">);
+        auto body      = dsl::curly_bracketed(dsl::lit<"...">);
 
         return kw_function >> id + arguments + body;
     }();

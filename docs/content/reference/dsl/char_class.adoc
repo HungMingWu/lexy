@@ -3,7 +3,7 @@ header: "lexy/dsl/char_class.hpp"
 entities:
   "char-class-rule": doc
   "literal-char-class-rule": doc
-  "LEXY_CHAR_CLASS": macro
+  "define_char_class": function
   "lexy::dsl::operator/ (char class)": union
   "lexy::dsl::operator- (unary)": complement
   "lexy::dsl::operator-": minus
@@ -61,16 +61,16 @@ Literal char class rules can be used with the char class operators.
 If they specify a non-ASCII character, the input {{% encoding %}} must be ASCII, UTF-8, UTF-16, or UTF-32 (if it is ASCII, the character will never be matched).
 The exception is {{% docref "lexy::dsl::lit_b" %}} where the encoding must be {{% docref "lexy::default_encoding" %}} or {{% docref "lexy::byte_encoding" %}}.
 
-[#macro]
-== Char class `LEXY_CHAR_CLASS`
+[#function]
+== Char class `define_char_class`
 
 {{% interface %}}
 ----
-#define LEXY_CHAR_CLASS(Name, CharClassRule)
+define_char_class<Name>(CharClassRule)
 ----
 
 [.lead]
-`LEXY_CHAR_CLASS` is a {{% char-class-rule %}} that is a (re)named version of `CharClassRule`.
+`define_char_class` is a {{% char-class-rule %}} that is a (re)named version of `CharClassRule`.
 
 It is equivalent to `CharClassRule`, but overrides its name (in the error) to be the string literal `Name`.
 It also type-erases the type of `CharClassRule` to shorten it, which can improve error messages and compilation times.

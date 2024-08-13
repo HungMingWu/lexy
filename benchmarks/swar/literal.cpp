@@ -27,7 +27,7 @@ LEXY_NOINLINE std::size_t bm_abcd(Reader reader)
     auto count = 0u;
     while (reader.peek() != Reader::encoding::eof())
     {
-        if (lexy::try_match_token(LEXY_LIT("abcd"), reader))
+        if (lexy::try_match_token(dsl::lit1<"abcd">, reader))
             ++count;
         else
             reader.bump();
@@ -41,7 +41,7 @@ LEXY_NOINLINE std::size_t bm_alphabet(Reader reader)
     auto count = 0u;
     while (reader.peek() != Reader::encoding::eof())
     {
-        if (lexy::try_match_token(LEXY_LIT("abcdefghijklmnopqrstuvwxyz"), reader))
+        if (lexy::try_match_token(dsl::lit1<"abcdefghijklmnopqrstuvwxyz">, reader))
             ++count;
         else
             reader.bump();

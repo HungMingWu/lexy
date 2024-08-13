@@ -45,7 +45,7 @@ TEST_CASE("dsl::position")
 
 TEST_CASE("dsl::position rule")
 {
-    constexpr auto pos = dsl::position(LEXY_LIT("abc"));
+    constexpr auto pos = dsl::position(dsl::lit<"abc">);
 
     constexpr auto callback = lexy::callback<int>([](const char*) { return 0; },
                                                   [](const char* begin, const char* pos) {

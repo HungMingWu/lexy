@@ -11,11 +11,11 @@ struct production
 {
     // Map names of the entities to their replacement value.
     static constexpr auto entities = lexy::symbol_table<char>
-                                         .map<LEXY_SYMBOL("quot")>('"')
-                                         .map<LEXY_SYMBOL("amp")>('&')
-                                         .map<LEXY_SYMBOL("apos")>('\'')
-                                         .map<LEXY_SYMBOL("lt")>('<')
-                                         .map<LEXY_SYMBOL("gt")>('>');
+                                         .map<"quot">('"')
+                                         .map<"amp">('&')
+                                         .map<"apos">('\'')
+                                         .map<"lt">('<')
+                                         .map<"gt">('>');
 
     static constexpr auto rule = [] {
         auto name      = dsl::identifier(dsl::ascii::alpha);

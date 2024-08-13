@@ -133,7 +133,7 @@ the other rule does not have access to context variables, and any context modifi
   match Unicode char classes
 {{% docref "lexy::dsl::operator/ (char class)" %}}, {{% docref "lexy::dsl::operator- (unary)" %}}, {{% docref "lexy::dsl::operator-" %}}, {{% docref "lexy::dsl::operator&" %}}::
   combine char classes
-{{% docref "LEXY_CHAR_CLASS" %}}::
+{{% docref "define_char_class" %}}::
   create a named char class
 ====
 

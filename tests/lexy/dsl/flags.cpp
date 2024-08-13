@@ -98,8 +98,8 @@ TEST_CASE("dsl::flag")
 {
     SUBCASE("explicit value")
     {
-        constexpr auto rule = dsl::flag<flags::a>(LEXY_LIT("a"));
-        CHECK(equivalent_rules(rule, dsl::flag<flags::a, flags::none>(LEXY_LIT("a"))));
+        constexpr auto rule = dsl::flag<flags::a>(dsl::lit<"a">);
+        CHECK(equivalent_rules(rule, dsl::flag<flags::a, flags::none>(dsl::lit<"a">)));
 
         constexpr auto callback = [](const char*, flags value) { return int(value); };
 
@@ -122,8 +122,8 @@ TEST_CASE("dsl::flag")
     {
         // This has to be after the above version, otherwise GCC 7 gets really confused about
         // overload resolution or something.
-        constexpr auto rule = dsl::flag(LEXY_LIT("a"));
-        CHECK(equivalent_rules(rule, dsl::flag<true, false>(LEXY_LIT("a"))));
+        constexpr auto rule = dsl::flag(dsl::lit<"a">);
+        CHECK(equivalent_rules(rule, dsl::flag<true, false>(dsl::lit<"a">)));
     }
 }
 

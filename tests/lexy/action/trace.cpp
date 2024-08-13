@@ -22,7 +22,7 @@ struct id
 struct alphabet
 {
     static constexpr auto name = "alphabet";
-    static constexpr auto rule = dsl::peek(LEXY_LIT("ab")) >> LEXY_LIT("abcd");
+    static constexpr auto rule = dsl::peek(dsl::lit<"ab">) >> dsl::lit<"abcd">;
 };
 
 struct number
@@ -57,8 +57,8 @@ struct production
     static constexpr auto whitespace = dsl::ascii::space;
 
     static constexpr auto rule = [] {
-        auto greeting = LEXY_LIT("Hello");
-        return greeting + LEXY_DEBUG("greeting") + dsl::p<object>;
+        auto greeting = dsl::lit<"Hello">;
+        return greeting + dsl::debug<"greeting"> + dsl::p<object>;
     }();
 };
 } // namespace

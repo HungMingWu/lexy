@@ -12,7 +12,7 @@ struct production
         auto close_tag = dsl::angle_bracketed(dsl::lit_c<'/'> + tag_name);
 
         // Placeholder content.
-        auto content = LEXY_LIT("content");
+        auto content = dsl::lit<"content">;
 
         return open_tag + content + close_tag;
     }();

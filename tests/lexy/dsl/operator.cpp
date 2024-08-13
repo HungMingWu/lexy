@@ -49,7 +49,7 @@ TEST_CASE("dsl::op")
     }
     SUBCASE("branch")
     {
-        constexpr auto rule = dsl::op(dsl::square_bracketed(LEXY_LIT("0")));
+        constexpr auto rule = dsl::op(dsl::square_bracketed(dsl::lit<"0">));
         CHECK(lexy::is_branch_rule<decltype(rule)>);
 
         constexpr auto callback = [](const char*, LEXY_OP_OF(rule)) { return 0; };
@@ -78,7 +78,7 @@ TEST_CASE("dsl::op")
 
             constexpr explicit tag(const char* pos) : pos(pos) {}
         };
-        constexpr auto rule = dsl::op<tag>(dsl::square_bracketed(LEXY_LIT("0")));
+        constexpr auto rule = dsl::op<tag>(dsl::square_bracketed(dsl::lit<"0">));
         CHECK(std::is_same_v<LEXY_OP_OF(rule), tag>);
 
         constexpr auto callback = [](const char* pos, LEXY_OP_OF(rule) t) {
@@ -103,7 +103,7 @@ TEST_CASE("dsl::op")
     }
     SUBCASE("custom tag with state")
     {
-        constexpr auto rule = dsl::op<tag_with_state>(dsl::square_bracketed(LEXY_LIT("0")));
+        constexpr auto rule = dsl::op<tag_with_state>(dsl::square_bracketed(dsl::lit<"0">));
         CHECK(std::is_same_v<LEXY_OP_OF(rule), tag_with_state>);
 
         constexpr auto callback = [](const char* pos, LEXY_OP_OF(rule) t) {
@@ -128,7 +128,7 @@ TEST_CASE("dsl::op")
     }
     SUBCASE("custom tag value")
     {
-        constexpr auto rule = dsl::op<42>(dsl::square_bracketed(LEXY_LIT("0")));
+        constexpr auto rule = dsl::op<42>(dsl::square_bracketed(dsl::lit<"0">));
 
         constexpr auto callback = [](const char*, LEXY_OP_OF(rule) t) {
             CHECK(t == 42);
@@ -152,7 +152,7 @@ TEST_CASE("dsl::op")
     }
     SUBCASE("no value")
     {
-        constexpr auto rule = dsl::op<void>(dsl::square_bracketed(LEXY_LIT("0")));
+        constexpr auto rule = dsl::op<void>(dsl::square_bracketed(dsl::lit<"0">));
 
         constexpr auto callback = [](const char*) { return 0; };
 
@@ -174,7 +174,7 @@ TEST_CASE("dsl::op")
 
     SUBCASE("as branch")
     {
-        constexpr auto op   = dsl::op(dsl::square_bracketed(LEXY_LIT("0")));
+        constexpr auto op   = dsl::op(dsl::square_bracketed(dsl::lit<"0">));
         constexpr auto rule = dsl::if_(op);
 
         constexpr auto callback
@@ -204,7 +204,7 @@ TEST_CASE("dsl::op")
 
             constexpr explicit tag(const char* pos) : pos(pos) {}
         };
-        constexpr auto op = dsl::op<tag>(dsl::square_bracketed(LEXY_LIT("0")));
+        constexpr auto op = dsl::op<tag>(dsl::square_bracketed(dsl::lit<"0">));
         CHECK(std::is_same_v<LEXY_OP_OF(op), tag>);
 
         constexpr auto rule = dsl::if_(op);
@@ -235,7 +235,7 @@ TEST_CASE("dsl::op")
 TEST_CASE("dsl::op choice")
 {
     constexpr auto op_plus        = dsl::op(dsl::lit_c<'+'>);
-    constexpr auto op_double_plus = dsl::op(LEXY_LIT("++"));
+    constexpr auto op_double_plus = dsl::op(dsl::lit<"++">);
     constexpr auto op_minus       = dsl::op(dsl::lit_c<'-'>);
 
     constexpr auto callback

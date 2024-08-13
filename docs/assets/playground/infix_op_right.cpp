@@ -6,7 +6,7 @@ struct production : lexy::expression_production
 
     struct operation : dsl::infix_op_right
     {
-        static constexpr auto op = dsl::op(LEXY_LIT("**"));
+        static constexpr auto op = dsl::op(dsl::lit<"**">);
         using operand            = dsl::atom;
     };
 };

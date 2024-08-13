@@ -11,13 +11,13 @@ struct boolean
 {
     struct true_
     {
-        static constexpr auto rule = LEXY_LIT("true");
+        static constexpr auto rule = dsl::lit<"true">;
         // Produce the value `true`.
         static constexpr auto value = lexy::constant(true);
     };
     struct false_
     {
-        static constexpr auto rule = LEXY_LIT("false");
+        static constexpr auto rule = dsl::lit<"false">;
         // Produce the value `false`.
         static constexpr auto value = lexy::constant(false);
     };

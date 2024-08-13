@@ -11,7 +11,7 @@ TEST_CASE("dsl::not_followed_by()")
 {
     SUBCASE("basic")
     {
-        constexpr auto rule = dsl::not_followed_by(LEXY_LIT("abc"), dsl::ascii::alpha);
+        constexpr auto rule = dsl::not_followed_by(dsl::lit<"abc">, dsl::ascii::alpha);
         CHECK(lexy::is_token_rule<decltype(rule)>);
 
         constexpr auto callback = token_callback;
@@ -38,7 +38,7 @@ TEST_CASE("dsl::not_followed_by()")
     SUBCASE("case folding")
     {
         constexpr auto rule
-            = dsl::not_followed_by(dsl::ascii::case_folding(LEXY_LIT("abc")), dsl::lit_c<'d'>);
+            = dsl::not_followed_by(dsl::ascii::case_folding(dsl::lit<"abc">), dsl::lit_c<'d'>);
         CHECK(lexy::is_token_rule<decltype(rule)>);
 
         constexpr auto callback = token_callback;
@@ -76,7 +76,7 @@ TEST_CASE("dsl::not_followed_by()")
 
 TEST_CASE("dsl::followed_by()")
 {
-    constexpr auto rule = dsl::followed_by(LEXY_LIT("abc"), dsl::ascii::alpha);
-    CHECK(equivalent_rules(rule, dsl::not_followed_by(LEXY_LIT("abc"), -dsl::ascii::alpha)));
+    constexpr auto rule = dsl::followed_by(dsl::lit<"abc">, dsl::ascii::alpha);
+    CHECK(equivalent_rules(rule, dsl::not_followed_by(dsl::lit<"abc">, -dsl::ascii::alpha)));
 }
 

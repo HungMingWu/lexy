@@ -20,8 +20,8 @@ struct production
 
     // Map cv-qualifiers to their value.
     static constexpr auto cv = lexy::symbol_table<cv_qualifier> //
-                                   .map<LEXY_SYMBOL("const")>(cv_qualifier::const_)
-                                   .map<LEXY_SYMBOL("volatile")>(cv_qualifier::volatile_);
+                                   .map<"const">(cv_qualifier::const_)
+                                   .map<"volatile">(cv_qualifier::volatile_);
 
     // Parse any combination of cv qualifiers.
     static constexpr auto rule = dsl::flags(dsl::symbol<cv>(dsl::identifier(dsl::ascii::alpha)));

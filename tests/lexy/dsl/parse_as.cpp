@@ -18,7 +18,7 @@ struct my_pos
 struct inner_prod
 {
     static constexpr auto name  = "inner_prod";
-    static constexpr auto rule  = LEXY_LIT("abc");
+    static constexpr auto rule  = dsl::lit<"abc">;
     static constexpr auto value = lexy::constant(42);
 };
 } // namespace
@@ -27,7 +27,7 @@ TEST_CASE("dsl::parse_as")
 {
     SUBCASE("rule")
     {
-        static constexpr auto rule = dsl::parse_as<my_pos>(LEXY_LIT("abc") + dsl::position);
+        static constexpr auto rule = dsl::parse_as<my_pos>(dsl::lit<"abc"> + dsl::position);
         CHECK(lexy::is_rule<decltype(rule)>);
 
         static constexpr auto callback = [](const char*, my_pos) { return 0; };

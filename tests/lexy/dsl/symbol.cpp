@@ -25,8 +25,8 @@ TEST_CASE("symbol_table")
     {
         auto table = lexy::symbol_table<int> //
                          .map<'a'>(0)
-                         .map(LEXY_LIT("b"), 1)
-                         .map<LEXY_SYMBOL("c")>(2)
+                         .map(dsl::lit<"b">, 1)
+                         .map<"c">(2)
                          .map<"abc">(3);
         CHECK(!table.empty());
         CHECK(table.size() == 4);
@@ -68,14 +68,14 @@ struct my_error
 
 struct with_whitespace
 {
-    static constexpr auto whitespace = LEXY_LIT(".");
+    static constexpr auto whitespace = dsl::lit<".">;
 };
 
 constexpr auto symbols = lexy::symbol_table<int> //
                              .map<'A'>(1)
                              .map<'B'>(2)
                              .map<'C'>(3)
-                             .map<LEXY_SYMBOL("Abc")>(4);
+                             .map<"Abc">(4);
 
 constexpr auto callback = lexy::callback<int>([](const char*) { return 0; },
                                               [](const char*, int value) { return value; });
@@ -419,7 +419,7 @@ constexpr auto symbols_case_folded = lexy::symbol_table<int>.case_folding(dsl::a
                              .map<'a'>(1)
                              .map<'b'>(2)
                              .map<'c'>(3)
-                             .map<LEXY_SYMBOL("abc")>(4);
+                             .map<"abc">(4);
 }
 
 TEST_CASE("dsl::symbol with case folding")

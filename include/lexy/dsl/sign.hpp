@@ -29,9 +29,9 @@ struct minus_sign : _sign<-1>
 
 namespace lexyd
 {
-struct _plus : decltype(op<lexy::plus_sign>(LEXY_LIT("+")))
+struct _plus : decltype(op<lexy::plus_sign>(lexy::dsl::lit<"+">))
 {};
-struct _minus : decltype(op<lexy::minus_sign>(LEXY_LIT("-")))
+struct _minus : decltype(op<lexy::minus_sign>(lexy::dsl::lit<"-">))
 {};
 
 /// Matches a plus sign or nothing, producing +1.

@@ -12,7 +12,7 @@ namespace
 {
 struct with_whitespace
 {
-    static constexpr auto whitespace = LEXY_LIT(".");
+    static constexpr auto whitespace = dsl::lit<".">;
 };
 } // namespace
 
@@ -20,7 +20,7 @@ TEST_CASE("dsl::capture(token)")
 {
     SUBCASE("as rule")
     {
-        constexpr auto rule = dsl::capture(LEXY_LIT("abc"));
+        constexpr auto rule = dsl::capture(dsl::lit<"abc">);
         CHECK(lexy::is_branch_rule<decltype(rule)>);
 
         constexpr auto callback = [](const char* begin, lexy::string_lexeme<> lex) {
@@ -53,7 +53,7 @@ TEST_CASE("dsl::capture(token)")
 
     SUBCASE("as branch")
     {
-        constexpr auto rule = dsl::if_(dsl::capture(LEXY_LIT("abc")));
+        constexpr auto rule = dsl::if_(dsl::capture(dsl::lit<"abc">));
         CHECK(lexy::is_rule<decltype(rule)>);
 
         constexpr auto callback
@@ -93,7 +93,7 @@ namespace
 struct prod : lexy::token_production
 {
     static constexpr auto name = "prod";
-    static constexpr auto rule = LEXY_LIT("abc");
+    static constexpr auto rule = dsl::lit<"abc">;
 };
 } // namespace
 

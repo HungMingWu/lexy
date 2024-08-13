@@ -473,39 +473,45 @@ inline constexpr auto character = _char{};
 
 namespace lexyd::ascii
 {
-template <char... C>
-struct _alt : char_class_base<_alt<C...>>
+
+template <lexy::_detail::string_literal Str>
+struct _alt : char_class_base<_alt<Str>>
 {
-    static_assert(sizeof...(C) > 0);
+    static_assert(Str.size() > 0);
 
     static consteval auto char_class_name()
     {
-        return lexy::_detail::type_string<char, C...>::template c_str<char>;
+        return lexy::_detail::type_string<Str>::template c_str<char>();
     }
 
     static consteval auto char_class_ascii()
     {
         lexy::_detail::ascii_set result;
-        (result.insert(C), ...);
+	for (size_t i = 0; i < Str.size(); i++)
+            result.insert(Str.data[i]);
         return result;
     }
 };
 
-template <typename CharT, CharT... C>
+template <lexy::_detail::string_literal Str>
+consteval bool isAsciiLiteral() {
+    if (!std::is_same_v<lexy::_detail::char_type_t<Str>, char>) return false;
+    for (size_t i = 0; i < Str.size(); i++)
+        if (!lexy::_detail::is_ascii(Str.data[i])) return false;
+    return true;
+}
+
+template <lexy::_detail::string_literal Str>
 struct _one_of
 {
-    static_assert((std::is_same_v<CharT, char> && ... && lexy::_detail::is_ascii(C)),
-                  "only ASCII characters are supported");
-
-    using rule = _alt<C...>;
+    static_assert(isAsciiLiteral<Str>(), "only ASCII characters are supported");
+    using rule = _alt<Str>;
 };
 
 /// Matches one of the ASCII characters.
 template <lexy::_detail::string_literal Str>
-constexpr auto one_of = typename lexy::_detail::to_type_string<_one_of, Str>::rule{};
+constexpr auto one_of = typename _one_of<Str>::rule{};
 
-#define LEXY_ASCII_ONE_OF(Str)                                                                     \
-    LEXY_NTTP_STRING(::lexyd::ascii::_one_of, Str)::rule {}
 } // namespace lexyd::ascii
 
 #endif // LEXY_DSL_ASCII_HPP_INCLUDED

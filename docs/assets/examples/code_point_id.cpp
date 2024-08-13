@@ -12,8 +12,8 @@ namespace dsl = lexy::dsl;
 struct production
 {
     static constexpr auto rule = [] {
-        return LEXY_LIT("\\u") >> dsl::code_point_id<4>    // \uXXXX
-               | LEXY_LIT("\\U") >> dsl::code_point_id<8>; // \uXXXXXXXX
+        return dsl::lit<"\\u"> >> dsl::code_point_id<4>    // \uXXXX
+               | dsl::lit<"\\U"> >> dsl::code_point_id<8>; // \uXXXXXXXX
     }();
 
     // Encode the resulting code point as UTF-8.

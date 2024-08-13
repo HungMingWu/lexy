@@ -13,7 +13,7 @@ struct production
         auto escaped_nl = dsl::backslash >> dsl::newline;
         auto sep        = dsl::must(blank | escaped_nl).error<expected_sep>;
 
-        return LEXY_LIT("echo") + sep
+        return dsl::lit<"echo"> + sep
                + dsl::identifier(dsl::ascii::alnum)
                // Allow an optional separator before EOL.
                + dsl::if_(sep) + dsl::eol;

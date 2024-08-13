@@ -5,6 +5,7 @@
 #define LEXY_DSL_CHAR_CLASS_HPP_INCLUDED
 
 #include <lexy/_detail/code_point.hpp>
+#include <lexy/_detail/nttp_string.hpp>
 #include <lexy/_detail/swar.hpp>
 #include <lexy/dsl/base.hpp>
 #include <lexy/dsl/token.hpp>
@@ -269,36 +270,38 @@ struct char_class_base : token_base<Derived>, _char_class_base
 };
 } // namespace lexyd
 
-#define LEXY_CHAR_CLASS(Name, Rule)                                                                \
-    [] {                                                                                           \
-        static_assert(::lexy::is_char_class_rule<LEXY_DECAY_DECLTYPE(Rule)>);                      \
-        struct c : ::lexyd::char_class_base<c>                                                     \
-        {                                                                                          \
-            static constexpr auto char_class_unicode()                                             \
-            {                                                                                      \
-                return (Rule).char_class_unicode();                                                \
-            }                                                                                      \
-            static consteval auto char_class_name()                                           \
-            {                                                                                      \
-                return Name;                                                                       \
-            }                                                                                      \
-            static consteval auto char_class_ascii()                                          \
-            {                                                                                      \
-                return (Rule).char_class_ascii();                                                  \
-            }                                                                                      \
-            static constexpr auto char_class_match_cp(char32_t cp)                                 \
-            {                                                                                      \
-                return (Rule).char_class_match_cp(cp);                                             \
-            }                                                                                      \
-        };                                                                                         \
-        return c{};                                                                                \
-    }()
+template <lexy::_detail::string_literal Name>
+constexpr auto define_char_class(auto rule) {
+    using T = decltype(rule);
+    static_assert(::lexy::is_char_class_rule<T>);
+    struct c : ::lexyd::char_class_base<c>
+    {
+        static constexpr auto char_class_unicode()
+        {
+            return T::char_class_unicode();
+        }
+        static consteval auto char_class_name()
+        {
+            return lexy::_detail::type_string<Name>::c_str();
+        }
+        static consteval auto char_class_ascii()
+        {
+            return T::char_class_ascii();
+        }
+        static constexpr auto char_class_match_cp(char32_t cp)
+        {
+            return T::char_class_match_cp(cp);
+        }
+    };
+    return c{};
+}
 
 namespace lexyd
 {
-template <typename CharT, CharT... C>
+template <lexy::_detail::string_literal Str>
 struct _lit;
-template <char32_t... Cp>
+
+template <lexy::_detail::string_literal Str>
 struct _lcp;
 
 // Implementation helper for the literal overloads.
@@ -361,19 +364,31 @@ constexpr auto _make_char_class(C c)
 {
     return c;
 }
-template <typename CharT, CharT C>
-requires (C <= 0x7F) || std::is_same_v<CharT, char32_t> || std::is_same_v<CharT, unsigned char>
-constexpr auto _make_char_class(_lit<CharT, C>)
+
+template <lexy::_detail::string_literal Str>
+consteval bool can_make_char_class() {
+    if (Str.size() != 1)
+        return false;
+    using CharT = lexy::_detail::char_type_t<Str>;
+    constexpr auto C = Str.data[0];
+    return (C <= 0x7F) || std::is_same_v<CharT, char32_t> || std::is_same_v<CharT, unsigned char>;
+}
+
+
+template <lexy::_detail::string_literal Str>
+constexpr auto _make_char_class(_lit<Str>)
 {
-    if constexpr (std::is_same_v<CharT, unsigned char>)
+    constexpr auto C = Str.data[0];
+    if constexpr (std::is_same_v<lexy::_detail::char_type_t<Str>, unsigned char>)
         return _cb<C>{};
     else
         return _ccp<static_cast<char32_t>(C)>{};
 }
-template <char32_t CP>
-constexpr auto _make_char_class(_lcp<CP>)
+
+template <lexy::_detail::string_literal Str>
+constexpr auto _make_char_class(_lcp<Str>)
 {
-    return _ccp<CP>{};
+    return _ccp<Str.data[0]>{};
 }
 } // namespace lexyd
 
@@ -419,19 +434,35 @@ struct _calt : char_class_base<_calt<Cs...>>
     }
 };
 
-template <typename R1, typename R2>
+template <typename R>
+constexpr bool _is_class_rule = false;
+
+template <lexy::is_char_class_rule C>
+constexpr bool _is_class_rule<C> = true;
+
+template <lexy::_detail::string_literal Str>
+constexpr bool _is_class_rule<_lit<Str>> = can_make_char_class<Str>();
+
+template <lexy::_detail::string_literal Str>
+constexpr bool _is_class_rule<_lcp<Str>> =
+    (Str.size() == 1) && std::is_same_v<lexy::_detail::char_type_t<Str>, char32_t>;
+
+template <typename R>
+concept is_class_rule = _is_class_rule<R>;
+
+template <is_class_rule R1, is_class_rule R2>
 constexpr auto operator/(R1 r1, R2 r2)
     -> _calt<decltype(_make_char_class(r1)), decltype(_make_char_class(r2))>
 {
     return {};
 }
 
-template <typename... Cs, typename C>
+template <typename... Cs, is_class_rule C>
 constexpr auto operator/(_calt<Cs...>, C c) -> _calt<Cs..., decltype(_make_char_class(c))>
 {
     return {};
 }
-template <typename C, typename... Cs>
+template <is_class_rule C, typename... Cs>
 constexpr auto operator/(C c, _calt<Cs...>) -> _calt<decltype(_make_char_class(c)), Cs...>
 {
     return {};
@@ -480,7 +511,7 @@ struct _ccomp : char_class_base<_ccomp<C>>
     }
 };
 
-template <typename C>
+template <is_class_rule C>
 constexpr auto operator-(C c) -> _ccomp<decltype(_make_char_class(c))>
 {
     return {};
@@ -530,13 +561,13 @@ struct _cminus : char_class_base<_cminus<Set, Minus>>
     }
 };
 
-template <typename Set, typename Minus>
+template <typename Set, is_class_rule Minus>
 constexpr auto operator-(Set, Minus minus)
 {
     return _cminus<Set, decltype(_make_char_class(minus))>{};
 }
 
-template <typename Set, typename Minus, typename OtherMinus>
+template <typename Set, typename Minus, is_class_rule OtherMinus>
 constexpr auto operator-(_cminus<Set, Minus>, OtherMinus other)
 {
     return Set{} - _calt<Minus, decltype(_make_char_class(other))>{};
@@ -580,19 +611,19 @@ struct _cand : char_class_base<_cand<Cs...>>
     }
 };
 
-template <typename C1, typename C2>
+template <is_class_rule C1, is_class_rule C2>
 constexpr auto operator&(C1 c1, C2 c2)
     -> _cand<decltype(_make_char_class(c1)), decltype(_make_char_class(c2))>
 {
     return {};
 }
 
-template <typename... Cs, typename C>
+template <typename... Cs, is_class_rule C>
 constexpr auto operator&(_cand<Cs...>, C c) -> _cand<Cs..., decltype(_make_char_class(c))>
 {
     return {};
 }
-template <typename C, typename... Cs>
+template <is_class_rule C, typename... Cs>
 constexpr auto operator&(C c, _cand<Cs...>) -> _cand<decltype(_make_char_class(c)), Cs...>
 {
     return {};

@@ -9,7 +9,7 @@
 
 TEST_CASE("dsl::times<N>(rule)")
 {
-    constexpr auto rule = dsl::times<3>(dsl::capture(LEXY_LIT("abc")));
+    constexpr auto rule = dsl::times<3>(dsl::capture(dsl::lit<"abc">));
     CHECK(lexy::is_rule<decltype(rule)>);
 
     constexpr auto callback = [](const char* begin, lexy::string_lexeme<> a,
@@ -56,7 +56,7 @@ TEST_CASE("dsl::times<N>(rule)")
 
 TEST_CASE("dsl::times<N>(rule, dsl::sep())")
 {
-    constexpr auto rule = dsl::times<3>(dsl::capture(LEXY_LIT("abc")), dsl::sep(LEXY_LIT(",")));
+    constexpr auto rule = dsl::times<3>(dsl::capture(dsl::lit<"abc">), dsl::sep(dsl::lit<",">));
     CHECK(lexy::is_rule<decltype(rule)>);
 
     constexpr auto callback = [](const char* begin, lexy::string_lexeme<> a,
@@ -135,7 +135,7 @@ TEST_CASE("dsl::times<N>(rule, dsl::sep())")
 TEST_CASE("dsl::times<N>(rule, dsl::trailing_sep())")
 {
     constexpr auto rule
-        = dsl::times<3>(dsl::capture(LEXY_LIT("abc")), dsl::trailing_sep(LEXY_LIT(",")));
+        = dsl::times<3>(dsl::capture(dsl::lit<"abc">), dsl::trailing_sep(dsl::lit<",">));
     CHECK(lexy::is_rule<decltype(rule)>);
 
     constexpr auto callback = [](const char* begin, lexy::string_lexeme<> a,
@@ -213,7 +213,7 @@ TEST_CASE("dsl::times<N>(rule, dsl::trailing_sep())")
 TEST_CASE("dsl::times<N>(rule, dsl::ignore_trailing_sep())")
 {
     constexpr auto rule
-        = dsl::times<3>(dsl::capture(LEXY_LIT("abc")), dsl::ignore_trailing_sep(LEXY_LIT(",")));
+        = dsl::times<3>(dsl::capture(dsl::lit<"abc">), dsl::ignore_trailing_sep(dsl::lit<",">));
     CHECK(lexy::is_rule<decltype(rule)>);
 
     constexpr auto callback = [](const char* begin, lexy::string_lexeme<> a,
@@ -285,12 +285,12 @@ TEST_CASE("dsl::times<N>(rule, dsl::ignore_trailing_sep())")
 
 TEST_CASE("dsl::twice()")
 {
-    constexpr auto no_sep = dsl::twice(LEXY_LIT("abc"));
+    constexpr auto no_sep = dsl::twice(dsl::lit<"abc">);
     CHECK(lexy::is_rule<decltype(no_sep)>);
-    CHECK(equivalent_rules(no_sep, dsl::times<2>(LEXY_LIT("abc"))));
+    CHECK(equivalent_rules(no_sep, dsl::times<2>(dsl::lit<"abc">)));
 
-    constexpr auto sep = dsl::twice(LEXY_LIT("abc"), dsl::sep(LEXY_LIT(",")));
+    constexpr auto sep = dsl::twice(dsl::lit<"abc">, dsl::sep(dsl::lit<",">));
     CHECK(lexy::is_rule<decltype(no_sep)>);
-    CHECK(equivalent_rules(sep, dsl::times<2>(LEXY_LIT("abc"), dsl::sep(LEXY_LIT(",")))));
+    CHECK(equivalent_rules(sep, dsl::times<2>(dsl::lit<"abc">, dsl::sep(dsl::lit<",">))));
 }
 

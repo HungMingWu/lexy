@@ -12,10 +12,10 @@
 
 TEST_CASE("dsl::find()")
 {
-    constexpr auto rule = dsl::find(LEXY_LIT("!"), LEXY_LIT("."), LEXY_LIT(";"));
+    constexpr auto rule = dsl::find(dsl::lit<"!">, dsl::lit<".">, dsl::lit<";">);
     CHECK(lexy::is_rule<decltype(rule)>);
-    CHECK(equivalent_rules(rule, dsl::find(dsl::literal_set(LEXY_LIT("!"), LEXY_LIT("."),
-                                                            LEXY_LIT(";")))));
+    CHECK(equivalent_rules(rule, dsl::find(dsl::literal_set(dsl::lit<"!">, dsl::lit<".">,
+                                                            dsl::lit<";">))));
 
     constexpr auto callback = token_callback;
 
@@ -49,10 +49,10 @@ TEST_CASE("dsl::find()")
 TEST_CASE("dsl::find().limit()")
 {
     constexpr auto rule
-        = dsl::find(LEXY_LIT("!"), LEXY_LIT(".")).limit(LEXY_LIT(";"), LEXY_LIT(","));
+        = dsl::find(dsl::lit<"!">, dsl::lit<".">).limit(dsl::lit<";">, dsl::lit<",">);
     CHECK(lexy::is_rule<decltype(rule)>);
-    CHECK(equivalent_rules(rule, dsl::find(dsl::literal_set(LEXY_LIT("!"), LEXY_LIT(".")))
-                                     .limit(LEXY_LIT(";"), LEXY_LIT(","))));
+    CHECK(equivalent_rules(rule, dsl::find(dsl::literal_set(dsl::lit<"!">, dsl::lit<".">))
+                                     .limit(dsl::lit<";">, dsl::lit<",">)));
 
     constexpr auto callback = token_callback;
 
@@ -89,7 +89,7 @@ TEST_CASE("dsl::find().limit()")
 
 TEST_CASE("dsl::recover()")
 {
-    constexpr auto rule = dsl::recover(LEXY_LIT("!"), LEXY_LIT("."), LEXY_LIT(";"));
+    constexpr auto rule = dsl::recover(dsl::lit<"!">, dsl::lit<".">, dsl::lit<";">);
     CHECK(lexy::is_rule<decltype(rule)>);
 
     constexpr auto callback = token_callback;
@@ -124,10 +124,10 @@ TEST_CASE("dsl::recover()")
 TEST_CASE("dsl::recover().limit()")
 {
     constexpr auto rule
-        = dsl::recover(LEXY_LIT("!"), LEXY_LIT(".")).limit(LEXY_LIT(";"), LEXY_LIT(","));
+        = dsl::recover(dsl::lit<"!">, dsl::lit<".">).limit(dsl::lit<";">, dsl::lit<",">);
     CHECK(lexy::is_rule<decltype(rule)>);
-    CHECK(equivalent_rules(rule, dsl::recover(LEXY_LIT("!"), LEXY_LIT("."))
-                                     .limit(LEXY_LIT(";"), LEXY_LIT(","))));
+    CHECK(equivalent_rules(rule, dsl::recover(dsl::lit<"!">, dsl::lit<".">)
+                                     .limit(dsl::lit<";">, dsl::lit<",">)));
 
     constexpr auto callback = token_callback;
 
@@ -174,8 +174,8 @@ TEST_CASE("dsl::try_(rule)")
 {
     SUBCASE("token")
     {
-        constexpr auto try_ = dsl::try_(LEXY_LIT("abc"));
-        constexpr auto rule = try_ + LEXY_LIT("!");
+        constexpr auto try_ = dsl::try_(dsl::lit<"abc">);
+        constexpr auto rule = try_ + dsl::lit<"!">;
         CHECK(lexy::is_branch_rule<decltype(try_)>);
 
         constexpr auto callback = token_callback;
@@ -236,8 +236,8 @@ TEST_CASE("dsl::try_(rule)")
     }
     SUBCASE("rule")
     {
-        constexpr auto try_ = dsl::try_(LEXY_LIT("ab") + dsl::position + LEXY_LIT("c"));
-        constexpr auto rule = try_ + LEXY_LIT("!");
+        constexpr auto try_ = dsl::try_(dsl::lit<"ab"> + dsl::position + dsl::lit<"c">);
+        constexpr auto rule = try_ + dsl::lit<"!">;
         CHECK(lexy::is_rule<decltype(try_)>);
 
         constexpr auto callback = lexy::callback<int>([](const char*) { return 0; },
@@ -312,8 +312,8 @@ TEST_CASE("dsl::try_(rule)")
 
     SUBCASE("as branch")
     {
-        constexpr auto try_ = dsl::try_(LEXY_LIT("ab") >> dsl::position + LEXY_LIT("c"));
-        constexpr auto rule = dsl::if_(try_) + LEXY_LIT("!");
+        constexpr auto try_ = dsl::try_(dsl::lit<"ab"> >> dsl::position + dsl::lit<"c">);
+        constexpr auto rule = dsl::if_(try_) + dsl::lit<"!">;
         CHECK(lexy::is_branch_rule<decltype(try_)>);
 
         constexpr auto callback = lexy::callback<int>([](const char*) { return 0; },
@@ -373,7 +373,7 @@ TEST_CASE("dsl::try_(rule)")
     }
     SUBCASE("with whitespace")
     {
-        constexpr auto try_ = dsl::try_(LEXY_LIT("abc"));
+        constexpr auto try_ = dsl::try_(dsl::lit<"abc">);
 
         struct production : test_production_for<decltype(try_ + dsl::lit_c<'!'>)>, with_whitespace
         {};
@@ -463,8 +463,8 @@ TEST_CASE("dsl::try_(rule, recover)")
     SUBCASE("recover using find")
     {
         constexpr auto try_
-            = dsl::try_(LEXY_LIT("ab") + dsl::position + LEXY_LIT("c"), dsl::find(LEXY_LIT("!")));
-        constexpr auto rule = try_ + LEXY_LIT("!");
+            = dsl::try_(dsl::lit<"ab"> + dsl::position + dsl::lit<"c">, dsl::find(dsl::lit<"!">));
+        constexpr auto rule = try_ + dsl::lit<"!">;
         CHECK(lexy::is_rule<decltype(try_)>);
 
         constexpr auto callback = lexy::callback<int>([](const char*) { return 0; },
@@ -531,10 +531,10 @@ TEST_CASE("dsl::try_(rule, recover)")
     }
     SUBCASE("recover using custom rule")
     {
-        constexpr auto my_find = dsl::until(dsl::token(dsl::peek(LEXY_LIT("!"))));
+        constexpr auto my_find = dsl::until(dsl::token(dsl::peek(dsl::lit<"!">)));
 
-        constexpr auto try_ = dsl::try_(LEXY_LIT("ab") + dsl::position + LEXY_LIT("c"), my_find);
-        constexpr auto rule = try_ + LEXY_LIT("!");
+        constexpr auto try_ = dsl::try_(dsl::lit<"ab"> + dsl::position + dsl::lit<"c">, my_find);
+        constexpr auto rule = try_ + dsl::lit<"!">;
         CHECK(lexy::is_rule<decltype(try_)>);
 
         constexpr auto callback = lexy::callback<int>([](const char*) { return 0; },

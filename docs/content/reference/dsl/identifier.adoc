@@ -3,7 +3,6 @@ header: "lexy/dsl/identifier.hpp"
 entities:
   "lexy::dsl::identifier": identifier
   "lexy::dsl::keyword": keyword
-  "LEXY_KEYWORD": keyword
 ---
 :toc: left
 
@@ -168,28 +167,6 @@ namespace lexy::dsl
     template <auto Str>
     constexpr _literal-rule_ auto keyword(_identifier-dsl_ identifier);
 }
-
-#define LEXY_KEYWORD(Str, Identifier) lexy::dsl::keyword<Str>(Identifier)
-----
-
-[.lead]
-`keyword` is a {{% literal-rule %}} that matches a keyword.
-
-Matching::
-  Tries to match and consume `identifier.pattern()`,
-  i.e. the basic pattern of an identifier ignoring any reserved identifiers.
-  Then creates a partial input that covers everything just consumed (without the trailing whitespace)
-  and matches {{% docref "lexy::dsl::lit" %}}`<Str>` on that input.
-  Succeeds only if that consumes the entire partial input.
-Errors::
-  {{% docref "lexy::expected_keyword" %}}: if either `identifier.pattern()` or the `lit` rule failed.
-  Its range covers the everything consumed by `identifier.pattern()` and its `.string()` is `Str`.
-Parse tree::
-  Single token node with the {{% docref "lexy::predefined_token_kind" %}} `lexy::literal_token_kind`.
-
-The macro `LEXY_KEYWORD(Str, Identifier)` is equivalent to `keyword<Str>(Identifier)`,
-except that it also works on older compilers that do not support C++20's extended NTTPs.
-Use this instead of `keyword<Str>(identifier)` if you need to support them.
 
 {{% playground-example keyword "Parse a keyword" %}}
 

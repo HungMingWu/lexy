@@ -538,8 +538,8 @@ struct _digits : token_base<_digits<Base>>
 template <typename Base = decimal>
 constexpr auto digits = _digits<Base>{};
 
-constexpr auto digit_sep_underscore = LEXY_LIT("_");
-constexpr auto digit_sep_tick       = LEXY_LIT("'");
+constexpr auto digit_sep_underscore = lit<"_">;
+constexpr auto digit_sep_tick       = lit<"'">;
 } // namespace lexyd
 
 namespace lexy

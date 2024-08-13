@@ -35,7 +35,7 @@ struct simple_scan : lexy::scan_production<int>, test_production
     template <typename Reader, typename Context>
     static constexpr scan_result scan(lexy::rule_scanner<Context, Reader>& scanner)
     {
-        if (scanner.branch(LEXY_LIT("abc")) || scanner.peek(dsl::digit<>))
+        if (scanner.branch(dsl::lit<"abc">) || scanner.peek(dsl::digit<>))
         {
             auto begin   = scanner.position();
             auto integer = scanner.parse(simple_scan::integer{});
@@ -80,13 +80,13 @@ struct state_scan : lexy::scan_production<int>, test_production
 struct branch_scan : lexy::scan_production<const char*>, test_production
 {
     static constexpr auto name = "branch_scan";
-    static constexpr auto rule = dsl::capture(LEXY_LIT("abc")) >> dsl::scan;
+    static constexpr auto rule = dsl::capture(dsl::lit<"abc">) >> dsl::scan;
 
     template <typename Reader, typename Context>
     static constexpr scan_result scan(lexy::rule_scanner<Context, Reader>& scanner,
                                       lexy::lexeme<Reader>                 lexeme)
     {
-        scanner.parse(LEXY_LIT("def"));
+        scanner.parse(dsl::lit<"def">);
         return lexeme.end();
     }
 };
@@ -97,7 +97,7 @@ struct recursive_scan : lexy::scan_production<int>, test_production
     static constexpr scan_result scan(lexy::rule_scanner<Context, Reader>& scanner)
     {
         if (scan_result result;
-            scanner.branch(result, LEXY_LIT("(") >> dsl::recurse<recursive_scan> + LEXY_LIT(")")))
+            scanner.branch(result, dsl::lit<"("> >> dsl::recurse<recursive_scan> + dsl::lit<")">))
             return result.value() + 1;
         else
         {
@@ -112,7 +112,7 @@ struct token : lexy::token_production
     static constexpr auto name = "token";
 
     static constexpr auto whitespace = dsl::lit_c<'-'>;
-    static constexpr auto rule       = LEXY_LIT("abc");
+    static constexpr auto rule       = dsl::lit<"abc">;
     static constexpr auto value      = lexy::forward<void>;
 };
 

@@ -990,10 +990,10 @@ TEST_CASE("expression - nested operations")
 
 namespace groups
 {
-constexpr auto op_a = dsl::op(LEXY_LIT("a"));
-constexpr auto op_b = dsl::op(LEXY_LIT("b"));
-constexpr auto op_c = dsl::op(LEXY_LIT("c"));
-constexpr auto op_d = dsl::op(LEXY_LIT("d"));
+constexpr auto op_a = dsl::op(dsl::lit<"a">);
+constexpr auto op_b = dsl::op(dsl::lit<"b">);
+constexpr auto op_c = dsl::op(dsl::lit<"c">);
+constexpr auto op_d = dsl::op(dsl::lit<"d">);
 
 struct top_level : lexy::expression_production, test_production
 {

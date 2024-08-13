@@ -14,19 +14,19 @@ namespace
 {
 struct with_whitespace
 {
-    static constexpr auto whitespace = LEXY_LIT(".");
+    static constexpr auto whitespace = dsl::lit<".">;
 };
 } // namespace
 
 TEST_CASE("dsl::inline_")
 {
-    struct production : production_for<decltype(LEXY_LIT("abc"))>
+    struct production : production_for<decltype(dsl::lit<"abc">)>
     {};
 
     constexpr auto rule = dsl::inline_<production>;
     CHECK(lexy::is_branch_rule<decltype(rule)>);
 
-    CHECK(equivalent_rules(rule, LEXY_LIT("abc")));
+    CHECK(equivalent_rules(rule, dsl::lit<"abc">));
 }
 
 TEST_CASE("dsl::p")
@@ -36,8 +36,8 @@ TEST_CASE("dsl::p")
 
     SUBCASE("as rule")
     {
-        struct production : production_for<decltype(dsl::capture(LEXY_LIT("a")) + dsl::position
-                                                    + dsl::try_(LEXY_LIT("bc")))>
+        struct production : production_for<decltype(dsl::capture(dsl::lit<"a">) + dsl::position
+                                                    + dsl::try_(dsl::lit<"bc">))>
         {
             static constexpr auto name()
             {
@@ -85,8 +85,8 @@ TEST_CASE("dsl::p")
     }
     SUBCASE("as branch")
     {
-        struct production : production_for<decltype(dsl::capture(LEXY_LIT("a"))
-                                                    >> dsl::position + dsl::try_(LEXY_LIT("bc")))>
+        struct production : production_for<decltype(dsl::capture(dsl::lit<"a">)
+                                                    >> dsl::position + dsl::try_(dsl::lit<"bc">))>
         {
             static constexpr auto name()
             {
@@ -134,8 +134,8 @@ TEST_CASE("dsl::p")
     }
     SUBCASE("as nested branch")
     {
-        struct production : production_for<decltype(dsl::capture(LEXY_LIT("a"))
-                                                    >> dsl::position + dsl::try_(LEXY_LIT("bc")))>
+        struct production : production_for<decltype(dsl::capture(dsl::lit<"a">)
+                                                    >> dsl::position + dsl::try_(dsl::lit<"bc">))>
         {
             static constexpr auto name()
             {
@@ -199,7 +199,7 @@ TEST_CASE("dsl::p")
 
     SUBCASE("token production")
     {
-        struct inner : production_for<decltype(LEXY_LIT("ab") + LEXY_LIT("c"))>,
+        struct inner : production_for<decltype(dsl::lit<"ab"> + dsl::lit<"c">)>,
                        lexy::token_production
         {
             static constexpr auto name()
@@ -258,7 +258,7 @@ TEST_CASE("dsl::recurse")
     SUBCASE("direct recursion")
     {
         struct production
-        : test_production_for<decltype(dsl::if_(LEXY_LIT("a") >> dsl::recurse<production>))>
+        : test_production_for<decltype(dsl::if_(dsl::lit<"a"> >> dsl::recurse<production>))>
         {};
 
         constexpr auto callback
@@ -298,7 +298,7 @@ TEST_CASE("dsl::recurse")
                 return "inner";
             }
         };
-        struct production : test_production_for<decltype(dsl::if_(LEXY_LIT("a") >> dsl::p<inner>))>
+        struct production : test_production_for<decltype(dsl::if_(dsl::lit<"a"> >> dsl::p<inner>))>
         {};
 
         constexpr auto callback = lexy::callback<int>([](const char*) { return 0; },
@@ -333,7 +333,7 @@ TEST_CASE("dsl::recurse")
 
     SUBCASE("token production")
     {
-        struct inner : production_for<decltype(LEXY_LIT("ab") + LEXY_LIT("c"))>,
+        struct inner : production_for<decltype(dsl::lit<"ab"> + dsl::lit<"c">)>,
                        lexy::token_production
         {
             static constexpr auto name()
@@ -387,7 +387,7 @@ TEST_CASE("dsl::recurse")
                 return "inner";
             }
         };
-        struct production : test_production_for<decltype(dsl::if_(LEXY_LIT("a") >> dsl::p<inner>))>,
+        struct production : test_production_for<decltype(dsl::if_(dsl::lit<"a"> >> dsl::p<inner>))>,
                             with_max_depth<3>
         {};
 
@@ -494,8 +494,8 @@ TEST_CASE("dsl::recurse_branch")
     SUBCASE("direct recursion")
     {
         struct production
-        : test_production_for<decltype(LEXY_LIT("b") >> dsl::if_(dsl::recurse_branch<production>)
-                                       | LEXY_LIT("a"))>
+        : test_production_for<decltype(dsl::lit<"b"> >> dsl::if_(dsl::recurse_branch<production>)
+                                       | dsl::lit<"a">)>
         {};
 
         constexpr auto callback

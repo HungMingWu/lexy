@@ -111,9 +111,6 @@ Adds a mapping to the symbol table.
 The result is a new symbol table that contains all the current mappings,
 as well as a new mapping of `SymbolString`/`C` to `T(std::forward<Args>(args)...)`.
 
-If your compiler does not support C++20's extended NTTPs,
-use `LEXY_SYMBOL("Str")` instead of `"Str"` as the template parameter for `SymbolString`.
-
 === Access
 
 {{% interface %}}

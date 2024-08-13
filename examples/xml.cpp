@@ -137,7 +137,7 @@ namespace grammar
     // Comment.
     struct comment
     {
-        static constexpr auto rule  = LEXY_LIT("<!--") >> dsl::until(LEXY_LIT("-->"));
+        static constexpr auto rule  = dsl::lit<"<!--"> >> dsl::until(dsl::lit<"-->">);
         static constexpr auto value = lexy::forward<void>;
     };
 
@@ -175,11 +175,11 @@ namespace grammar
 
         // The predefined XML entities and their replacement values.
         static constexpr auto entities = lexy::symbol_table<char>
-                                         .map<LEXY_SYMBOL("quot")>('"')
-                                         .map<LEXY_SYMBOL("amp")>('&')
-                                         .map<LEXY_SYMBOL("apos")>('\'')
-                                         .map<LEXY_SYMBOL("lt")>('<')
-                                         .map<LEXY_SYMBOL("gt")>('>');
+                                         .map<"quot">('"')
+                                         .map<"amp">('&')
+                                         .map<"apos">('\'')
+                                         .map<"lt">('<')
+                                         .map<"gt">('>');
 
         static constexpr auto rule = [] {
             // The actual reference parses a name and performs a lookup to produce the replacement
@@ -195,7 +195,7 @@ namespace grammar
     {
         static constexpr auto rule = [] {
             // We define a string with custom delimiters.
-            auto delim = dsl::delimited(LEXY_LIT("<![CDATA["), LEXY_LIT("]]>"));
+            auto delim = dsl::delimited(dsl::lit<"<![CDATA[">, dsl::lit<"]]>">);
             return delim(dsl::code_point);
         }();
 
@@ -217,8 +217,8 @@ namespace grammar
 
         static constexpr auto rule = [] {
             // The brackets for surrounding the opening and closing tag.
-            auto open_tagged  = dsl::brackets(LEXY_LIT("<"), LEXY_LIT(">"));
-            auto close_tagged = dsl::brackets(LEXY_LIT("</"), LEXY_LIT(">"));
+            auto open_tagged  = dsl::brackets(dsl::lit<"<">, dsl::lit<">">);
+            auto close_tagged = dsl::brackets(dsl::lit<"</">, dsl::lit<">">);
 
             // To check that the name is equal for the opening and closing tag,
             // we use a variable that can store one name.
@@ -228,7 +228,7 @@ namespace grammar
             // The open tag parses a name and captures it in the variable.
             // It also checks for an empty tag (<name/>), in which case we're done and immediately
             // return.
-            auto empty    = dsl::if_(LEXY_LIT("/") >> LEXY_LIT(">") + dsl::return_);
+            auto empty    = dsl::if_(dsl::lit<"/"> >> dsl::lit<">"> + dsl::return_);
             auto open_tag = open_tagged(name_var.capture() + ws + empty);
 
             // The closing tag matches the name again and requires that it matches the one we've
@@ -237,7 +237,7 @@ namespace grammar
 
             // The content of the element.
             auto content = dsl::p<comment> | dsl::p<cdata>                     //
-                           | dsl::peek(LEXY_LIT("<")) >> dsl::recurse<element> //
+                           | dsl::peek(dsl::lit<"<">) >> dsl::recurse<element> //
                            | dsl::p<reference> | dsl::else_ >> dsl::p<text>;
 
             // We match a (possibly empty) list of content surrounded itself by the open and close

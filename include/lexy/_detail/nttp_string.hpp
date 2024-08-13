@@ -4,34 +4,17 @@
 #ifndef LEXY_DETAIL_NTTP_STRING_HPP_INCLUDED
 #define LEXY_DETAIL_NTTP_STRING_HPP_INCLUDED
 
+#include <array>
 #include <lexy/_detail/assert.hpp>
 #include <lexy/_detail/config.hpp>
 #include <lexy/encoding.hpp>
 
 namespace lexy::_detail
 {
-// Note: we can't use type_string<auto...>, it doesn't work on older GCC.
-template <typename CharT, CharT... Cs>
-struct type_string
-{
-    using char_type = CharT;
-
-    template <template <typename C, C...> typename T>
-    using rename = T<CharT, Cs...>;
-
-    static constexpr auto size = sizeof...(Cs);
-
-    template <typename T = char_type>
-    static constexpr T c_str[sizeof...(Cs) + 1] = {transcode_char<T>(Cs)..., T()};
-};
-} // namespace lexy::_detail
-
-namespace lexy::_detail
-{
 template <std::size_t N, typename CharT>
 struct string_literal
 {
-    CharT data[N];
+    std::array<CharT, N> data;
 
     using char_type = CharT;
 
@@ -40,6 +23,13 @@ struct string_literal
         for (auto i = 0u; i != N; ++i)
             data[i] = str[i];
     }
+
+    consteval string_literal(const std::array<CharT, N> str) : data{}
+    {
+        for (auto i = 0u; i != N; ++i)
+            data[i] = str[i];
+    }
+
     consteval string_literal(CharT c) : data{}
     {
         data[0] = c;
@@ -50,23 +40,39 @@ struct string_literal
         return N;
     }
 };
+
 template <std::size_t N, typename CharT>
 string_literal(const CharT (&)[N]) -> string_literal<N - 1, CharT>;
 template <typename CharT>
 string_literal(CharT) -> string_literal<1, CharT>;
 
-template <template <typename C, C... Cs> typename T, string_literal Str, std::size_t... Idx>
-auto _to_type_string(std::index_sequence<Idx...>)
-{
-    return T<typename decltype(Str)::char_type, Str.data[Idx]...>{};
-}
-template <template <typename C, C... Cs> typename T, string_literal Str>
-using to_type_string
-    = decltype(_to_type_string<T, Str>(std::make_index_sequence<decltype(Str)::size()>{}));
-} // namespace lexy::_detail
+template <string_literal Str>
+using char_type_t = typename decltype(Str)::char_type;
 
-#    define LEXY_NTTP_STRING(T, Str)                                                               \
-        ::lexy::_detail::to_type_string<T, ::lexy::_detail::string_literal(Str)>
+template <string_literal str>
+struct type_string
+{
+    template <typename T>
+    static consteval auto build() {
+        std::array<T, str.size() + 1> result {};
+        for (size_t i = 0 ; i < str.size(); i++)
+            result[i] = transcode_char<T>(str.data[i]);
+        return result;
+    }
+
+    using char_type = decltype(str)::char_type;
+
+    static constexpr std::size_t size = str.size();
+
+    template <typename T = char_type>
+    static constexpr const T* c_str()
+    {
+        static constexpr auto result = build<T>();
+        return result.data();
+    }
+};
+
+} // namespace lexy::_detail
 
 #endif // LEXY_DETAIL_NTTP_STRING_HPP_INCLUDED
 

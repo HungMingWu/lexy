@@ -10,7 +10,7 @@ That way, you have full control over all backtracking that happens during parsin
 == lexy is not declarative
 
 To illustrate the difference, consider the regex `a|ab`, which matches `a` or `ab`.
-Writing the same rule in lexy using the {{% docref "LEXY_LIT" %}} primitive rule and the {{% docref choice %}} combinator, results in this:
+Writing the same rule in lexy using the {{% docref "dsl::lit" %}} primitive rule and the {{% docref choice %}} combinator, results in this:
 
 {{% playground-example choice_bad "Attempt to match `a` or `ab`" %}}
 
@@ -29,7 +29,7 @@ else
 
 In other words, choice attempts to match each rule in the order they were specified in.
 As `a` matches on `ab`, it will always take the first branch without considering `ab`.
-The correct way to write it would thus be `LEXY_LIT("ab") | LEXY_LIT("a")`.
+The correct way to write it would thus be `dsl::lit<"ab"> | dsl::lit<"a">`.
 
 ****
 Alternatively, in this particular case of matching one of multiple literals,
@@ -69,7 +69,7 @@ Those include:
 * branch conditions such as {{% docref "lexy::dsl::peek" %}}, {{% docref "lexy::dsl::else_" %}}
 * the branch combinator {{% docref "lexy::dsl::operator>>" %}}
 
-So the choice above `LEXY_LIT("ab") | LEXY_LIT("a")` compiled because both alternatives are literal rules, which can be efficiently checked.
+So the choice above `dsl::lit<"ab"> | dsl::lit<"a">` compiled because both alternatives are literal rules, which can be efficiently checked.
 However, if we were to match between more complex alternatives, we need to manually specify how lexy should make a decision.
 
 Let's extend our previous color parser to also allow the function call syntax `rgb(255,0,255)`:
@@ -88,7 +88,7 @@ struct color
         auto hex_color = dsl::hash_sign + dsl::times<3>(dsl::p<channel_hex>); <3>
 
         auto dec_channels = dsl::times<3>(dsl::p<channel_dec>, dsl::sep(dsl::comma)); <4>
-        auto fnc_color = LEXY_LIT("rgb") + dsl::parenthesized(dec_channels); <5>
+        auto fnc_color = dsl::lit<"rgb"> + dsl::parenthesized(dec_channels); <5>
 
         return hex_color | fnc_color; <6>
     }();
@@ -114,7 +114,7 @@ In our case, we want to match a hex color when we see a hash sign, and a functio
 Note that in a lucky coincidence of operator precedence, the syntax `condition1 >> rule1a + rule 1b | condition2 >> rule2a + rule2b | ...` has exactly the semantics we want here.
 
 Also note that once a decision to take a branch has been made using the branch condition, lexy will never backtrack again -- even if the branch later fails.
-For example, consider a call to `dsl::while_(LEXY_LIT("a") >> LEXY_LIT("b") + LEXY_LIT("c"))`.
+For example, consider a call to `dsl::while_(dsl::lit<"a"> >> dsl::lit<"b"> + dsl::lit<"c">)`.
 We've instructed lexy to try another iteration when it sees an `a`: it doesn't matter what comes after it.
 
 [source]

@@ -7,6 +7,6 @@ struct production
     };
 
     static constexpr auto rule
-        = LEXY_LIT("Hello World")
+        = dsl::lit<"Hello World">
           + dsl::peek_not(dsl::while_one(dsl::ascii::space)).error<trailing_spaces> + dsl::eof;
 };

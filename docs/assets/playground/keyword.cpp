@@ -8,6 +8,6 @@ struct production
         auto id   = dsl::identifier(head, tail);
 
         // Parse a keyword.
-        return LEXY_KEYWORD("int", id);
+        return dsl::keyword<"int">(id);
     }();
 };

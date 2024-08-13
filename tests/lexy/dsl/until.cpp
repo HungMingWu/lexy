@@ -12,7 +12,7 @@ TEST_CASE("dsl::until()")
 
     SUBCASE("basic")
     {
-        constexpr auto rule = dsl::until(LEXY_LIT("!"));
+        constexpr auto rule = dsl::until(dsl::lit<"!">);
         CHECK(lexy::is_token_rule<decltype(rule)>);
 
         auto empty = LEXY_VERIFY("");
@@ -84,7 +84,7 @@ TEST_CASE("dsl::until().or_eof()")
 
     SUBCASE("basic")
     {
-        constexpr auto rule = dsl::until(LEXY_LIT("!")).or_eof();
+        constexpr auto rule = dsl::until(dsl::lit<"!">).or_eof();
         CHECK(lexy::is_token_rule<decltype(rule)>);
 
         auto empty = LEXY_VERIFY("");

@@ -81,12 +81,12 @@ namespace grammar
 
     //=== https://tools.ietf.org/html/rfc5322#section-3.2.3 ===//
     constexpr auto atext
-        = LEXY_CHAR_CLASS("atext",
-                          dsl::ascii::alpha / dsl::ascii::digit / LEXY_LIT("!") / LEXY_LIT("#")
-                              / LEXY_LIT("$") / LEXY_LIT("%") / LEXY_LIT("&") / LEXY_LIT("'")
-                              / LEXY_LIT("*") / LEXY_LIT("+") / LEXY_LIT("-") / LEXY_LIT("/")
-                              / LEXY_LIT("=") / LEXY_LIT("?") / LEXY_LIT("^") / LEXY_LIT("_")
-                              / LEXY_LIT("`") / LEXY_LIT("{") / LEXY_LIT("|") / LEXY_LIT("}"));
+        = define_char_class<"atext">(
+                          dsl::ascii::alpha / dsl::ascii::digit / dsl::lit<"!"> / dsl::lit<"#">
+                              / dsl::lit<"$"> / dsl::lit<"%"> / dsl::lit<"&"> / dsl::lit<"'">
+                              / dsl::lit<"*"> / dsl::lit<"+"> / dsl::lit<"-"> / dsl::lit<"/">
+                              / dsl::lit<"="> / dsl::lit<"?"> / dsl::lit<"^"> / dsl::lit<"_">
+                              / dsl::lit<"`"> / dsl::lit<"{"> / dsl::lit<"|"> / dsl::lit<"}">);
 
     // Text of the specified characters.
     // In the grammar it is always surrounded by whitespace.
@@ -120,7 +120,7 @@ namespace grammar
     struct phrase
     {
         // A phrase is a list of words which starts with another text character or quote.
-        static constexpr auto rule  = dsl::list(dsl::peek(atext / LEXY_LIT("\"")) >> word);
+        static constexpr auto rule  = dsl::list(dsl::peek(atext / dsl::lit<"\"">) >> word);
         static constexpr auto value = lexy::as_string<std::string>;
     };
 
@@ -144,7 +144,7 @@ namespace grammar
 
             // We're only having a named address if we can match the optional phrase followed by an
             // angle bracket.
-            auto name_addr_condition = dsl::opt(dsl::p<phrase>) + LEXY_LIT("<");
+            auto name_addr_condition = dsl::opt(dsl::p<phrase>) + dsl::lit<"<">;
 
             // An address spec without a name.
             auto unnamed_addr = dsl::nullopt + addr_spec;
@@ -179,10 +179,10 @@ namespace grammar
     {
         static constexpr auto rule = [] {
             // Some of the fields in the header of a message.
-            auto from    = LEXY_LIT("From:") >> dsl::p<address_list> + dsl::newline;
-            auto to      = LEXY_LIT("To:") >> dsl::p<address_list> + dsl::newline;
-            auto cc      = LEXY_LIT("Cc:") >> dsl::p<address_list> + dsl::newline;
-            auto subject = LEXY_LIT("Subject:") >> dsl::p<unstructured> + dsl::newline;
+            auto from    = dsl::lit<"From:"> >> dsl::p<address_list> + dsl::newline;
+            auto to      = dsl::lit<"To:"> >> dsl::p<address_list> + dsl::newline;
+            auto cc      = dsl::lit<"Cc:"> >> dsl::p<address_list> + dsl::newline;
+            auto subject = dsl::lit<"Subject:"> >> dsl::p<unstructured> + dsl::newline;
 
             // We allow a partial combination of the fields (i.e. each field at most once in an
             // arbitrary order). Some fields are mandatory, but this verification is better done

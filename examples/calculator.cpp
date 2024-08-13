@@ -253,7 +253,7 @@ namespace grammar
     struct integer : lexy::token_production
     {
         static constexpr auto rule
-            = LEXY_LIT("0x") >> dsl::integer<int, dsl::hex> | dsl::integer<int>;
+            = dsl::lit<"0x"> >> dsl::integer<int, dsl::hex> | dsl::integer<int>;
 
         static constexpr auto value = lexy::forward<int>;
     };
@@ -307,7 +307,7 @@ namespace grammar
         // x**2
         struct math_power : dsl::infix_op_right
         {
-            static constexpr auto op = dsl::op<ast::expr_binary_arithmetic::pow>(LEXY_LIT("**"));
+            static constexpr auto op = dsl::op<ast::expr_binary_arithmetic::pow>(dsl::lit<"**">);
 
             // math_power has highest binding power, so it's operand is the atom rule.
             using operand = dsl::atom;
@@ -315,7 +315,7 @@ namespace grammar
         // -x
         struct math_prefix : dsl::prefix_op
         {
-            static constexpr auto op = dsl::op<ast::expr_unary_arithmetic::negate>(LEXY_LIT("-"));
+            static constexpr auto op = dsl::op<ast::expr_unary_arithmetic::negate>(dsl::lit<"-">);
 
             using operand = math_power;
         };
@@ -327,17 +327,17 @@ namespace grammar
                 // only matched when it is not followed by *. In the particular situation where **
                 // has higher binding power, it doesn't actually matter here, but it's better to be
                 // more resilient.
-                auto star = dsl::not_followed_by(LEXY_LIT("*"), dsl::lit_c<'*'>);
+                auto star = dsl::not_followed_by(dsl::lit<"*">, dsl::lit_c<'*'>);
                 return dsl::op<ast::expr_binary_arithmetic::times>(star)
-                       / dsl::op<ast::expr_binary_arithmetic::div>(LEXY_LIT("/"));
+                       / dsl::op<ast::expr_binary_arithmetic::div>(dsl::lit<"/">);
             }();
             using operand = math_prefix;
         };
         // x + x, x - x
         struct math_sum : dsl::infix_op_left
         {
-            static constexpr auto op = dsl::op<ast::expr_binary_arithmetic::plus>(LEXY_LIT("+"))
-                                       / dsl::op<ast::expr_binary_arithmetic::minus>(LEXY_LIT("-"));
+            static constexpr auto op = dsl::op<ast::expr_binary_arithmetic::plus>(dsl::lit<"+">)
+                                       / dsl::op<ast::expr_binary_arithmetic::minus>(dsl::lit<"-">);
 
             using operand = math_product;
         };
@@ -346,21 +346,21 @@ namespace grammar
         struct bit_prefix : dsl::prefix_op
         {
             static constexpr auto op
-                = dsl::op<ast::expr_unary_arithmetic::complement>(LEXY_LIT("~"));
+                = dsl::op<ast::expr_unary_arithmetic::complement>(dsl::lit<"~">);
             using operand = dsl::atom;
         };
         // x & x
         struct bit_and : dsl::infix_op_left
         {
-            static constexpr auto op = dsl::op<ast::expr_binary_arithmetic::bit_and>(LEXY_LIT("&"));
+            static constexpr auto op = dsl::op<ast::expr_binary_arithmetic::bit_and>(dsl::lit<"&">);
             using operand            = bit_prefix;
         };
         // x | x, x ^ x
         struct bit_or : dsl::infix_op_left
         {
             static constexpr auto op
-                = dsl::op<ast::expr_binary_arithmetic::bit_or>(LEXY_LIT("|"))
-                  / dsl::op<ast::expr_binary_arithmetic::bit_xor>(LEXY_LIT("^"));
+                = dsl::op<ast::expr_binary_arithmetic::bit_or>(dsl::lit<"|">)
+                  / dsl::op<ast::expr_binary_arithmetic::bit_xor>(dsl::lit<"^">);
             using operand = bit_and;
         };
 
@@ -369,8 +369,8 @@ namespace grammar
         struct comparison : dsl::infix_op_list
         {
             // Other comparison operators omitted for simplicity.
-            static constexpr auto op = dsl::op<ast::expr_comparison::equal>(LEXY_LIT("=="))
-                                       / dsl::op<ast::expr_comparison::less>(LEXY_LIT("<"));
+            static constexpr auto op = dsl::op<ast::expr_comparison::equal>(dsl::lit<"==">)
+                                       / dsl::op<ast::expr_comparison::less>(dsl::lit<"<">);
 
             // The use of dsl::groups ensures that an expression can either contain math or bit
             // operators. Mixing requires parenthesis.
@@ -384,7 +384,7 @@ namespace grammar
             // as a binary operator where the operator consists of ?, the inner operator, and :.
             // The <void> ensures that `dsl::op` does not produce a value.
             static constexpr auto op
-                = dsl::op<void>(LEXY_LIT("?") >> dsl::p<nested_expr> + dsl::lit_c<':'>);
+                = dsl::op<void>(dsl::lit<"?"> >> dsl::p<nested_expr> + dsl::lit_c<':'>);
             using operand = comparison;
         };
 
@@ -392,7 +392,7 @@ namespace grammar
         {
             static constexpr auto op
                 // Similar to * above, we need to prevent `=` from matching `==`.
-                = dsl::op<void>(dsl::not_followed_by(LEXY_LIT("="), dsl::lit_c<'='>));
+                = dsl::op<void>(dsl::not_followed_by(dsl::lit<"=">, dsl::lit_c<'='>));
             using operand = conditional;
         };
 

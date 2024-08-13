@@ -17,7 +17,7 @@ TEST_CASE("dsl::peek()")
         }
     };
 
-    constexpr auto condition = dsl::peek(LEXY_LIT("a") + dsl::position + LEXY_LIT("b"));
+    constexpr auto condition = dsl::peek(dsl::lit<"a"> + dsl::position + dsl::lit<"b">);
     CHECK(lexy::is_branch_rule<decltype(condition)>);
 
     constexpr auto callback = token_callback;
@@ -57,7 +57,7 @@ TEST_CASE("dsl::peek()")
 
     SUBCASE("as branch")
     {
-        constexpr auto rule = dsl::if_(condition >> LEXY_LIT("a"));
+        constexpr auto rule = dsl::if_(condition >> dsl::lit<"a">);
 
         auto empty = LEXY_VERIFY("");
         CHECK(empty.status == test_result::success);
@@ -83,7 +83,7 @@ TEST_CASE("dsl::peek_not()")
         }
     };
 
-    constexpr auto condition = dsl::peek_not(LEXY_LIT("a") + dsl::position + LEXY_LIT("b"));
+    constexpr auto condition = dsl::peek_not(dsl::lit<"a"> + dsl::position + dsl::lit<"b">);
     CHECK(lexy::is_branch_rule<decltype(condition)>);
 
     constexpr auto callback = token_callback;
@@ -123,7 +123,7 @@ TEST_CASE("dsl::peek_not()")
 
     SUBCASE("as branch")
     {
-        constexpr auto rule = dsl::if_(condition >> LEXY_LIT("a"));
+        constexpr auto rule = dsl::if_(condition >> dsl::lit<"a">);
 
         auto empty = LEXY_VERIFY("");
         CHECK(empty.status == test_result::fatal_error);

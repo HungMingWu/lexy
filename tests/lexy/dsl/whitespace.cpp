@@ -12,7 +12,7 @@ namespace
 {
 struct with_whitespace
 {
-    static constexpr auto whitespace = dsl::whitespace(LEXY_LIT("."));
+    static constexpr auto whitespace = dsl::whitespace(dsl::lit<".">);
 };
 } // namespace
 
@@ -164,7 +164,7 @@ TEST_CASE("dsl::whitespace")
 
     SUBCASE("token")
     {
-        constexpr auto rule = dsl::whitespace(LEXY_LIT("-"));
+        constexpr auto rule = dsl::whitespace(dsl::lit<"-">);
         CHECK(lexy::is_rule<decltype(rule)>);
 
         auto empty = LEXY_VERIFY("");
@@ -200,7 +200,7 @@ TEST_CASE("dsl::whitespace")
     }
     SUBCASE("branch")
     {
-        constexpr auto rule = dsl::whitespace(LEXY_LIT("a") >> LEXY_LIT("bc"));
+        constexpr auto rule = dsl::whitespace(dsl::lit<"a"> >> dsl::lit<"bc">);
         CHECK(lexy::is_rule<decltype(rule)>);
 
         auto empty = LEXY_VERIFY("");
@@ -239,7 +239,7 @@ TEST_CASE("dsl::whitespace")
     SUBCASE("choice")
     {
         constexpr auto rule
-            = dsl::whitespace(LEXY_LIT("a") >> LEXY_LIT("bc") | LEXY_LIT("b") >> LEXY_LIT("cd"));
+            = dsl::whitespace(dsl::lit<"a"> >> dsl::lit<"bc"> | dsl::lit<"b"> >> dsl::lit<"cd">);
         CHECK(lexy::is_rule<decltype(rule)>);
 
         auto empty = LEXY_VERIFY("");
@@ -287,7 +287,7 @@ TEST_CASE("dsl::whitespace")
 
 TEST_CASE("dsl::no_whitespace")
 {
-    constexpr auto no_ws = dsl::no_whitespace(LEXY_LIT("ab") >> dsl::try_(LEXY_LIT("c")));
+    constexpr auto no_ws = dsl::no_whitespace(dsl::lit<"ab"> >> dsl::try_(dsl::lit<"c">));
     CHECK(lexy::is_branch_rule<decltype(no_ws)>);
 
     constexpr auto callback = token_callback;

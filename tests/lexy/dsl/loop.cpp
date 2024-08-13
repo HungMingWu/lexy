@@ -10,7 +10,7 @@
 TEST_CASE("dsl::loop()")
 {
     constexpr auto rule
-        = dsl::loop(LEXY_LIT("a") >> dsl::try_(LEXY_LIT("bc")) | LEXY_LIT("!") >> dsl::break_);
+        = dsl::loop(dsl::lit<"a"> >> dsl::try_(dsl::lit<"bc">) | dsl::lit<"!"> >> dsl::break_);
     CHECK(lexy::is_rule<decltype(rule)>);
 
     constexpr auto callback = token_callback;
@@ -56,7 +56,7 @@ TEST_CASE("dsl::loop()")
 
 TEST_CASE("dsl::while_()")
 {
-    constexpr auto rule = dsl::while_(LEXY_LIT("a") >> dsl::try_(LEXY_LIT("bc")));
+    constexpr auto rule = dsl::while_(dsl::lit<"a"> >> dsl::try_(dsl::lit<"bc">));
     CHECK(lexy::is_rule<decltype(rule)>);
 
     constexpr auto callback = token_callback;
@@ -92,11 +92,11 @@ TEST_CASE("dsl::while_()")
 
 TEST_CASE("dsl::while_one()")
 {
-    constexpr auto rule = dsl::while_one(LEXY_LIT("a") >> LEXY_LIT("bc"));
+    constexpr auto rule = dsl::while_one(dsl::lit<"a"> >> dsl::lit<"bc">);
     CHECK(lexy::is_branch_rule<decltype(rule)>);
 
     constexpr auto equivalent
-        = LEXY_LIT("a") >> LEXY_LIT("bc") + dsl::while_(LEXY_LIT("a") >> LEXY_LIT("bc"));
+        = dsl::lit<"a"> >> dsl::lit<"bc"> + dsl::while_(dsl::lit<"a"> >> dsl::lit<"bc">);
     CHECK(equivalent_rules(rule, equivalent));
 }
 
@@ -104,19 +104,19 @@ TEST_CASE("dsl::do_while()")
 {
     SUBCASE("branch")
     {
-        constexpr auto rule = dsl::do_while(LEXY_LIT("bc"), LEXY_LIT("a"));
+        constexpr auto rule = dsl::do_while(dsl::lit<"bc">, dsl::lit<"a">);
         CHECK(lexy::is_branch_rule<decltype(rule)>);
 
-        constexpr auto equivalent = LEXY_LIT("bc") >> dsl::while_(LEXY_LIT("a") >> LEXY_LIT("bc"));
+        constexpr auto equivalent = dsl::lit<"bc"> >> dsl::while_(dsl::lit<"a"> >> dsl::lit<"bc">);
         CHECK(equivalent_rules(rule, equivalent));
     }
     SUBCASE("non-branch")
     {
-        constexpr auto rule = dsl::do_while(dsl::while_(LEXY_LIT("bc")), LEXY_LIT("a"));
+        constexpr auto rule = dsl::do_while(dsl::while_(dsl::lit<"bc">), dsl::lit<"a">);
         CHECK(lexy::is_rule<decltype(rule)>);
 
-        constexpr auto equivalent = dsl::while_(LEXY_LIT("bc"))
-                                    + dsl::while_(LEXY_LIT("a") >> dsl::while_(LEXY_LIT("bc")));
+        constexpr auto equivalent = dsl::while_(dsl::lit<"bc">)
+                                    + dsl::while_(dsl::lit<"a"> >> dsl::while_(dsl::lit<"bc">));
         CHECK(equivalent_rules(rule, equivalent));
     }
 }

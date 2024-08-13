@@ -88,7 +88,7 @@ TEST_CASE("dsl::tnode")
 
 TEST_CASE("dsl::tnode(rule)")
 {
-    constexpr auto tnode = dsl::tnode<token_kind::a>(LEXY_LIT("abc"));
+    constexpr auto tnode = dsl::tnode<token_kind::a>(dsl::lit<"abc">);
     CHECK(lexy::is_branch_rule<decltype(tnode)>);
 
     constexpr auto callback = lexy_test::token_callback;

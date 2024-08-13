@@ -214,19 +214,19 @@ namespace grammar
     //=== the commands ===//
     struct cmd_exit
     {
-        static constexpr auto rule  = LEXY_KEYWORD("exit", identifier) | dsl::eof;
+        static constexpr auto rule  = dsl::keyword<"exit">(identifier) | dsl::eof;
         static constexpr auto value = lexy::new_<shell::cmd_exit, shell::command>;
     };
 
     struct cmd_echo
     {
-        static constexpr auto rule = LEXY_KEYWORD("echo", identifier) >> arg_sep + dsl::p<argument>;
+        static constexpr auto rule = dsl::keyword<"echo">(identifier) >> arg_sep + dsl::p<argument>;
         static constexpr auto value = lexy::new_<shell::cmd_echo, shell::command>;
     };
 
     struct cmd_set
     {
-        static constexpr auto rule = LEXY_KEYWORD("set", identifier)
+        static constexpr auto rule = dsl::keyword<"set">(identifier)
                                      >> arg_sep + dsl::p<argument> + arg_sep + dsl::p<argument>;
         static constexpr auto value = lexy::new_<shell::cmd_set, shell::command>;
     };
@@ -268,9 +268,9 @@ namespace grammar
         // Map pre-defined directives.
         static constexpr auto directives
             = lexy::symbol_table<shell::directive>                        //
-                  .map<LEXY_SYMBOL("execute")>(shell::directive::execute) //
-                  .map<LEXY_SYMBOL("trace")>(shell::directive::trace)     //
-                  .map<LEXY_SYMBOL("vars")>(shell::directive::vars);
+                  .map<"execute">(shell::directive::execute) //
+                  .map<"trace">(shell::directive::trace)     //
+                  .map<"vars">(shell::directive::vars);
 
         static constexpr auto rule = [] {
             auto pattern   = dsl::identifier(dsl::ascii::alpha);

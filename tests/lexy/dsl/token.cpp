@@ -12,13 +12,13 @@ namespace
 {
 struct with_whitespace
 {
-    static constexpr auto whitespace = LEXY_LIT(".");
+    static constexpr auto whitespace = dsl::lit<".">;
 };
 } // namespace
 
 TEST_CASE("token whitespace")
 {
-    struct production : test_production_for<decltype(LEXY_LIT("abc"))>, with_whitespace
+    struct production : test_production_for<decltype(dsl::lit<"abc">)>, with_whitespace
     {};
 
     constexpr auto callback = token_callback;
@@ -56,7 +56,7 @@ struct my_error
 TEST_CASE("token.error<Tag>")
 {
     // We use literal, as it has a pre-defined kind that needs to be maintained.
-    constexpr auto rule = LEXY_LIT("abc").error<my_error>;
+    constexpr auto rule = dsl::lit<"abc">.error<my_error>;
     CHECK(lexy::is_token_rule<decltype(rule)>);
 
     constexpr auto callback = token_callback;
@@ -86,7 +86,7 @@ enum class token_kind
 TEST_CASE("token.kind<Tag>")
 {
     // We use literal, as it has a pre-defined kind that needs to be overriden.
-    constexpr auto rule = LEXY_LIT("abc").kind<token_kind::my_kind>;
+    constexpr auto rule = dsl::lit<"abc">.kind<token_kind::my_kind>;
     CHECK(lexy::is_token_rule<decltype(rule)>);
 
     constexpr auto callback = token_callback;
@@ -98,7 +98,7 @@ TEST_CASE("token.kind<Tag>")
 
 TEST_CASE("token.kind<Tag>.error<Tag>")
 {
-    constexpr auto rule = LEXY_LIT("abc").kind<token_kind::my_kind>.error<my_error>;
+    constexpr auto rule = dsl::lit<"abc">.kind<token_kind::my_kind>.error<my_error>;
     CHECK(lexy::is_token_rule<decltype(rule)>);
 
     constexpr auto callback = token_callback;
@@ -114,7 +114,7 @@ TEST_CASE("token.kind<Tag>.error<Tag>")
 
 TEST_CASE("token.error<Tag>.kind<Tag>")
 {
-    constexpr auto rule = LEXY_LIT("abc").error<my_error>.kind<token_kind::my_kind>;
+    constexpr auto rule = dsl::lit<"abc">.error<my_error>.kind<token_kind::my_kind>;
     CHECK(lexy::is_token_rule<decltype(rule)>);
 
     constexpr auto callback = token_callback;
@@ -130,7 +130,7 @@ TEST_CASE("token.error<Tag>.kind<Tag>")
 
 TEST_CASE("dsl::token()")
 {
-    constexpr auto rule = dsl::token(dsl::list(LEXY_LIT("ab") >> dsl::lit_c<'c'> + dsl::position));
+    constexpr auto rule = dsl::token(dsl::list(dsl::lit<"ab"> >> dsl::lit_c<'c'> + dsl::position));
     CHECK(lexy::is_token_rule<decltype(rule)>);
 
     constexpr auto callback = token_callback;
@@ -170,7 +170,7 @@ TEST_CASE("dsl::token()")
 
 TEST_CASE("dsl::token(token)")
 {
-    constexpr auto rule = dsl::token(LEXY_LIT("abc"));
-    CHECK(equivalent_rules(rule, LEXY_LIT("abc")));
+    constexpr auto rule = dsl::token(dsl::lit<"abc">);
+    CHECK(equivalent_rules(rule, dsl::lit<"abc">));
 }
 

@@ -21,7 +21,7 @@ TEST_CASE("dsl::lookahead()")
 
     SUBCASE("literal rules")
     {
-        constexpr auto condition = dsl::lookahead(LEXY_LIT("."), LEXY_LIT("!"));
+        constexpr auto condition = dsl::lookahead(dsl::lit<".">, dsl::lit<"!">);
         CHECK(lexy::is_branch_rule<decltype(condition)>);
 
         SUBCASE("as rule")
@@ -82,7 +82,7 @@ TEST_CASE("dsl::lookahead()")
         }
         SUBCASE("as branch")
         {
-            constexpr auto rule = dsl::if_(condition >> dsl::until(LEXY_LIT(".")));
+            constexpr auto rule = dsl::if_(condition >> dsl::until(dsl::lit<".">));
 
             auto empty = LEXY_VERIFY("");
             CHECK(empty.status == test_result::success);
@@ -109,8 +109,8 @@ TEST_CASE("dsl::lookahead()")
     }
     SUBCASE("literal set")
     {
-        constexpr auto rule = dsl::lookahead(dsl::literal_set(LEXY_LIT("."), LEXY_LIT(",")),
-                                             LEXY_LITERAL_SET(LEXY_LIT("!"), LEXY_LIT("?")));
+        constexpr auto rule = dsl::lookahead(dsl::literal_set(dsl::lit<".">, dsl::lit<",">),
+                                             LEXY_LITERAL_SET(dsl::lit<"!">, dsl::lit<"?">));
         CHECK(lexy::is_branch_rule<decltype(rule)>);
 
         auto empty = LEXY_VERIFY("");

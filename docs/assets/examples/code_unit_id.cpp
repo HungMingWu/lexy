@@ -14,7 +14,7 @@ struct production
     // String with \xNN escape sequence.
     static constexpr auto rule
         = dsl::quoted(dsl::ascii::print,
-                      dsl::backslash_escape.rule(LEXY_LIT("x")
+                      dsl::backslash_escape.rule(dsl::lit<"x">
                                                  >> dsl::code_unit_id<lexy::utf8_encoding, 2>));
 
     static constexpr auto value = lexy::as_string<std::string, lexy::utf8_encoding>;

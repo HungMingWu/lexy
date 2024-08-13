@@ -8,8 +8,8 @@ struct production
         auto id   = dsl::identifier(head, tail);
 
         // Define some keywords.
-        auto kw_int    = LEXY_KEYWORD("int", id);
-        auto kw_struct = LEXY_KEYWORD("struct", id);
+        auto kw_int    = dsl::keyword<"int">(id);
+        auto kw_struct = dsl::keyword<"struct">(id);
         // ...
 
         // Parse an identifier
@@ -19,6 +19,6 @@ struct production
             // ... doesn't start with an underscore,
             .reserve_prefix(dsl::lit_c<'_'>)
             // ... or contains a double underscore.
-            .reserve_containing(LEXY_LIT("__"));
+            .reserve_containing(dsl::lit<"__">);
     }();
 };

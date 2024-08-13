@@ -65,12 +65,12 @@ namespace grammar
     struct statement;
 
     //=== tokens ===//
-    constexpr auto comment = LEXY_LIT("//") >> dsl::until(dsl::ascii::newline);
+    constexpr auto comment = dsl::lit<"//"> >> dsl::until(dsl::ascii::newline);
 
     constexpr auto identifier = dsl::identifier(dsl::ascii::alpha);
-    constexpr auto kw_if      = LEXY_KEYWORD("if", identifier);
-    constexpr auto kw_else    = LEXY_KEYWORD("else", identifier);
-    constexpr auto kw_while   = LEXY_KEYWORD("while", identifier);
+    constexpr auto kw_if      = dsl::keyword<"if">(identifier);
+    constexpr auto kw_else    = dsl::keyword<"else">(identifier);
+    constexpr auto kw_while   = dsl::keyword<"while">(identifier);
 
     // Number literal in base 1, i.e. tally marks.
     struct number : lexy::token_production
@@ -110,10 +110,10 @@ namespace grammar
                 = dsl::loop(var<Name>.is_zero() >> dsl::break_ | dsl::else_ >> var<Name>.dec());
 
             // Once it's zero, we add the number.
-            auto assign = LEXY_LIT(":=") >> reset + var<Name>.push(dsl::p<number>);
+            auto assign = dsl::lit<":="> >> reset + var<Name>.push(dsl::p<number>);
 
-            auto add = LEXY_LIT("+=") >> var<Name>.push(dsl::p<number>);
-            auto dec = LEXY_LIT("-=") >> var<Name>.pop(dsl::p<number>);
+            auto add = dsl::lit<"+="> >> var<Name>.push(dsl::p<number>);
+            auto dec = dsl::lit<"-="> >> var<Name>.pop(dsl::p<number>);
 
             return dsl::keyword<Name>(identifier) >> (assign | add | dec) + dsl::semicolon;
         }();
@@ -142,8 +142,8 @@ namespace grammar
             auto bracket_counter = dsl::context_counter<skip_body>;
             auto check_balance   = dsl::if_(bracket_counter.is_zero() >> dsl::break_);
 
-            auto open  = LEXY_LIT("{") >> bracket_counter.inc();
-            auto close = LEXY_LIT("}") >> bracket_counter.dec();
+            auto open  = dsl::lit<"{"> >> bracket_counter.inc();
+            auto close = dsl::lit<"}"> >> bracket_counter.dec();
             auto skip  = open | close | comment | dsl::ascii::character;
 
             return bracket_counter.create() + dsl::loop(skip + check_balance);

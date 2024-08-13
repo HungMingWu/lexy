@@ -3,8 +3,8 @@ struct production
 {
     // Note that an unterminated C comment will raise an error.
     static constexpr auto whitespace
-        = dsl::ascii::space | LEXY_LIT("/*") >> dsl::until(LEXY_LIT("*/"));
+        = dsl::ascii::space | dsl::lit<"/*"> >> dsl::until(dsl::lit<"*/">);
 
     static constexpr auto rule //
-        = LEXY_LIT("Hello") + LEXY_LIT("World") + dsl::exclamation_mark;
+        = dsl::lit<"Hello"> + dsl::lit<"World"> + dsl::exclamation_mark;
 };

@@ -51,7 +51,7 @@ TEST_CASE("dsl::nullopt")
 
 TEST_CASE("dsl::opt()")
 {
-    constexpr auto rule = dsl::opt(dsl::capture(LEXY_LIT("ab")) >> dsl::capture(LEXY_LIT("cd")));
+    constexpr auto rule = dsl::opt(dsl::capture(dsl::lit<"ab">) >> dsl::capture(dsl::lit<"cd">));
     CHECK(lexy::is_rule<decltype(rule)>);
 
     constexpr auto callback //
@@ -100,9 +100,9 @@ TEST_CASE("dsl::opt()")
 
 TEST_CASE("dsl::opt(unconditional)")
 {
-    constexpr auto rule = dsl::opt(dsl::else_ >> dsl::capture(LEXY_LIT("cd")));
+    constexpr auto rule = dsl::opt(dsl::else_ >> dsl::capture(dsl::lit<"cd">));
     CHECK(lexy::is_rule<decltype(rule)>);
 
-    CHECK(equivalent_rules(rule, dsl::else_ >> dsl::capture(LEXY_LIT("cd"))));
+    CHECK(equivalent_rules(rule, dsl::else_ >> dsl::capture(dsl::lit<"cd">)));
 }
 

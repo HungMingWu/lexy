@@ -13,7 +13,7 @@
 TEST_CASE("dsl::operator>>")
 {
     constexpr auto branch
-        = dsl::capture(LEXY_LIT("abc")) >> dsl::position + dsl::try_(LEXY_LIT("!"));
+        = dsl::capture(dsl::lit<"abc">) >> dsl::position + dsl::try_(dsl::lit<"!">);
     CHECK(lexy::is_branch_rule<decltype(branch)>);
 
     constexpr auto callback
@@ -90,45 +90,45 @@ TEST_CASE("dsl::operator+ and dsl::operator>> combinations")
 {
     SUBCASE("nested operator>>")
     {
-        constexpr auto rule = LEXY_LIT("a") >> LEXY_LIT("b") >> LEXY_LIT("c");
-        CHECK(equivalent_rules(rule, LEXY_LIT("a") >> LEXY_LIT("b") + LEXY_LIT("c")));
+        constexpr auto rule = dsl::lit<"a"> >> dsl::lit<"b"> >> dsl::lit<"c">;
+        CHECK(equivalent_rules(rule, dsl::lit<"a"> >> dsl::lit<"b"> + dsl::lit<"c">));
     }
 
     SUBCASE("rule + branch")
     {
-        constexpr auto rule = LEXY_LIT("a") + (LEXY_LIT("b") >> LEXY_LIT("c"));
-        CHECK(equivalent_rules(rule, LEXY_LIT("a") + LEXY_LIT("b") + LEXY_LIT("c")));
+        constexpr auto rule = dsl::lit<"a"> + (dsl::lit<"b"> >> dsl::lit<"c">);
+        CHECK(equivalent_rules(rule, dsl::lit<"a"> + dsl::lit<"b"> + dsl::lit<"c">));
     }
     SUBCASE("sequence + branch")
     {
-        constexpr auto rule = (LEXY_LIT("a") + LEXY_LIT("b")) + (LEXY_LIT("c") >> LEXY_LIT("d"));
+        constexpr auto rule = (dsl::lit<"a"> + dsl::lit<"b">) + (dsl::lit<"c"> >> dsl::lit<"d">);
         CHECK(equivalent_rules(rule, //
-                               LEXY_LIT("a") + LEXY_LIT("b") + LEXY_LIT("c") + LEXY_LIT("d")));
+                               dsl::lit<"a"> + dsl::lit<"b"> + dsl::lit<"c"> + dsl::lit<"d">));
     }
 
     SUBCASE("branch + rule")
     {
-        constexpr auto rule = (LEXY_LIT("a") >> LEXY_LIT("b")) + LEXY_LIT("c");
-        CHECK(equivalent_rules(rule, LEXY_LIT("a") >> LEXY_LIT("b") + LEXY_LIT("c")));
+        constexpr auto rule = (dsl::lit<"a"> >> dsl::lit<"b">) + dsl::lit<"c">;
+        CHECK(equivalent_rules(rule, dsl::lit<"a"> >> dsl::lit<"b"> + dsl::lit<"c">));
     }
     SUBCASE("branch + sequence")
     {
-        constexpr auto rule = (LEXY_LIT("a") >> LEXY_LIT("b")) + (LEXY_LIT("c") + LEXY_LIT("d"));
+        constexpr auto rule = (dsl::lit<"a"> >> dsl::lit<"b">) + (dsl::lit<"c"> + dsl::lit<"d">);
         CHECK(equivalent_rules(rule, //
-                               LEXY_LIT("a") >> LEXY_LIT("b") + LEXY_LIT("c") + LEXY_LIT("d")));
+                               dsl::lit<"a"> >> dsl::lit<"b"> + dsl::lit<"c"> + dsl::lit<"d">));
     }
 
     SUBCASE("branch + branch")
     {
-        constexpr auto rule = (LEXY_LIT("a") >> LEXY_LIT("b")) + (LEXY_LIT("c") >> LEXY_LIT("d"));
+        constexpr auto rule = (dsl::lit<"a"> >> dsl::lit<"b">) + (dsl::lit<"c"> >> dsl::lit<"d">);
         CHECK(equivalent_rules(rule, //
-                               LEXY_LIT("a") >> LEXY_LIT("b") + LEXY_LIT("c") + LEXY_LIT("d")));
+                               dsl::lit<"a"> >> dsl::lit<"b"> + dsl::lit<"c"> + dsl::lit<"d">));
     }
 }
 
 TEST_CASE("dsl::else_")
 {
-    constexpr auto branch = dsl::else_ >> LEXY_LIT("abc");
+    constexpr auto branch = dsl::else_ >> dsl::lit<"abc">;
     CHECK(!lexy::is_rule<decltype(dsl::else_)>);
     CHECK(lexy::is_unconditional_branch_rule<decltype(branch)>);
 
@@ -148,7 +148,7 @@ TEST_CASE("dsl::else_")
     }
     SUBCASE("as branch")
     {
-        constexpr auto rule = branch | LEXY_LIT("123");
+        constexpr auto rule = branch | dsl::lit<"123">;
 
         auto empty = LEXY_VERIFY("");
         CHECK(empty.status == test_result::fatal_error);

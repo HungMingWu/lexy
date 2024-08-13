@@ -2,5 +2,5 @@
 struct production
 {
     static constexpr auto rule //
-        = dsl::literal_set(LEXY_LIT("a"), LEXY_LIT("abc"), LEXY_LIT("bc"));
+        = dsl::literal_set(dsl::lit<"a">, dsl::lit<"abc">, dsl::lit<"bc">);
 };

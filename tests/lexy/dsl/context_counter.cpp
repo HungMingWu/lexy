@@ -13,7 +13,7 @@ namespace
 {
 struct with_whitespace
 {
-    static constexpr auto whitespace = LEXY_LIT(".");
+    static constexpr auto whitespace = dsl::lit<".">;
 };
 } // namespace
 
@@ -88,7 +88,7 @@ TEST_CASE("dsl::context_counter")
     SUBCASE(".push()")
     {
         constexpr auto rule
-            = counter.create<11>() + counter.push(LEXY_LIT("abc")) + counter.value();
+            = counter.create<11>() + counter.push(dsl::lit<"abc">) + counter.value();
 
         auto empty = LEXY_VERIFY_RUNTIME("");
         CHECK(empty.status == test_result::fatal_error);
@@ -109,7 +109,7 @@ TEST_CASE("dsl::context_counter")
     }
     SUBCASE(".pop()")
     {
-        constexpr auto rule = counter.create<11>() + counter.pop(LEXY_LIT("abc")) + counter.value();
+        constexpr auto rule = counter.create<11>() + counter.pop(dsl::lit<"abc">) + counter.value();
 
         auto empty = LEXY_VERIFY_RUNTIME("");
         CHECK(empty.status == test_result::fatal_error);

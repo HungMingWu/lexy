@@ -10,7 +10,7 @@
 
 TEST_CASE("dsl::list(branch)")
 {
-    constexpr auto list = dsl::list(LEXY_LIT("a") >> dsl::position + dsl::try_(LEXY_LIT("bc")));
+    constexpr auto list = dsl::list(dsl::lit<"a"> >> dsl::position + dsl::try_(dsl::lit<"bc">));
     CHECK(lexy::is_branch_rule<decltype(list)>);
 
     constexpr auto callback
@@ -98,8 +98,8 @@ TEST_CASE("dsl::list(branch)")
 
 TEST_CASE("dsl::list(rule, sep)")
 {
-    constexpr auto rule = dsl::list(LEXY_LIT("a") + dsl::position + dsl::try_(LEXY_LIT("bc")),
-                                    dsl::sep(LEXY_LIT(",")));
+    constexpr auto rule = dsl::list(dsl::lit<"a"> + dsl::position + dsl::try_(dsl::lit<"bc">),
+                                    dsl::sep(dsl::lit<",">));
     CHECK(lexy::is_rule<decltype(rule)>);
 
     constexpr auto callback
@@ -161,8 +161,8 @@ TEST_CASE("dsl::list(rule, sep)")
 
 TEST_CASE("dsl::list(branch, sep)")
 {
-    constexpr auto list = dsl::list(LEXY_LIT("a") >> dsl::position + dsl::try_(LEXY_LIT("bc")),
-                                    dsl::sep(LEXY_LIT(",")));
+    constexpr auto list = dsl::list(dsl::lit<"a"> >> dsl::position + dsl::try_(dsl::lit<"bc">),
+                                    dsl::sep(dsl::lit<",">));
     CHECK(lexy::is_branch_rule<decltype(list)>);
 
     constexpr auto callback
@@ -286,8 +286,8 @@ TEST_CASE("dsl::list(branch, sep)")
 
 TEST_CASE("dsl::list(branch, trailing_sep)")
 {
-    constexpr auto list = dsl::list(LEXY_LIT("a") >> dsl::position + dsl::try_(LEXY_LIT("bc")),
-                                    dsl::trailing_sep(LEXY_LIT(",")));
+    constexpr auto list = dsl::list(dsl::lit<"a"> >> dsl::position + dsl::try_(dsl::lit<"bc">),
+                                    dsl::trailing_sep(dsl::lit<",">));
     CHECK(lexy::is_branch_rule<decltype(list)>);
 
     constexpr auto callback
@@ -401,8 +401,8 @@ TEST_CASE("dsl::list(branch, trailing_sep)")
 
 TEST_CASE("dsl::list(branch, trailing_sep)")
 {
-    constexpr auto list = dsl::list(LEXY_LIT("a") >> dsl::position + dsl::try_(LEXY_LIT("bc")),
-                                    dsl::trailing_sep(LEXY_LIT(",")));
+    constexpr auto list = dsl::list(dsl::lit<"a"> >> dsl::position + dsl::try_(dsl::lit<"bc">),
+                                    dsl::trailing_sep(dsl::lit<",">));
     CHECK(lexy::is_branch_rule<decltype(list)>);
 
     constexpr auto callback

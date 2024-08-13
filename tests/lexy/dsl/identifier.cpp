@@ -14,7 +14,7 @@ namespace
 {
 struct with_whitespace
 {
-    static constexpr auto whitespace = LEXY_LIT(".");
+    static constexpr auto whitespace = dsl::lit<".">;
 };
 } // namespace
 
@@ -24,7 +24,7 @@ TEST_CASE("dsl::identifier(leading, trailing).pattern()")
     CHECK(lexy::is_token_rule<decltype(rule)>);
 
     CHECK(equivalent_rules(rule, dsl::identifier(dsl::ascii::upper, dsl::ascii::lower)
-                                     .reserve(LEXY_LIT("Abc"))
+                                     .reserve(dsl::lit<"Abc">)
                                      .pattern()));
 
     constexpr auto callback = token_callback;
@@ -131,7 +131,7 @@ TEST_CASE("dsl::identifier(leading, trailing)")
     SUBCASE(".reserve()")
     {
         constexpr auto rule
-            = id.reserve(LEXY_LIT("Ab"), LEXY_KEYWORD("Abc", id)).reserve(LEXY_LIT("Int"));
+            = id.reserve(dsl::lit<"Ab">, dsl::keyword<"Abc">(id)).reserve(dsl::lit<"Int">);
 
         auto empty = LEXY_VERIFY("");
         CHECK(empty.status == test_result::fatal_error);
@@ -168,7 +168,7 @@ TEST_CASE("dsl::identifier(leading, trailing)")
     }
     SUBCASE(".reserve_prefix()")
     {
-        constexpr auto rule = id.reserve_prefix(LEXY_LIT("Ab"));
+        constexpr auto rule = id.reserve_prefix(dsl::lit<"Ab">);
 
         auto empty = LEXY_VERIFY("");
         CHECK(empty.status == test_result::fatal_error);
@@ -201,7 +201,7 @@ TEST_CASE("dsl::identifier(leading, trailing)")
     }
     SUBCASE(".reserve_containing()")
     {
-        constexpr auto rule = id.reserve_containing(LEXY_LIT("b"));
+        constexpr auto rule = id.reserve_containing(dsl::lit<"b">);
 
         auto empty = LEXY_VERIFY("");
         CHECK(empty.status == test_result::fatal_error);
@@ -234,7 +234,7 @@ TEST_CASE("dsl::identifier(leading, trailing)")
     }
     SUBCASE(".reserve_suffix()")
     {
-        constexpr auto rule = id.reserve_suffix(LEXY_LIT("c"));
+        constexpr auto rule = id.reserve_suffix(dsl::lit<"c">);
 
         auto empty = LEXY_VERIFY("");
         CHECK(empty.status == test_result::fatal_error);
@@ -262,7 +262,7 @@ TEST_CASE("dsl::identifier(leading, trailing)")
 
     SUBCASE("as branch")
     {
-        constexpr auto rule = dsl::if_(id.reserve(LEXY_LIT("Abc")));
+        constexpr auto rule = dsl::if_(id.reserve(dsl::lit<"Abc">));
 
         auto empty = LEXY_VERIFY("");
         CHECK(empty.status == test_result::success);
@@ -296,8 +296,8 @@ TEST_CASE("dsl::identifier(char class)")
 TEST_CASE("dsl::identifier with case folding")
 {
     constexpr auto rule = dsl::identifier(dsl::ascii::alpha)
-                              .reserve(LEXY_LIT("ab"), LEXY_LIT("abc"))
-                              .reserve(dsl::ascii::case_folding(LEXY_LIT("int")));
+                              .reserve(dsl::lit<"ab">, dsl::lit<"abc">)
+                              .reserve(dsl::ascii::case_folding(dsl::lit<"int">));
 
     constexpr auto callback = lexy::callback<int>([](const char*) { return 0; },
                                                   [](const char* begin, lexy::string_lexeme<> lex) {
@@ -351,11 +351,11 @@ TEST_CASE("dsl::identifier with case folding")
 
 TEST_CASE("dsl::keyword")
 {
-    constexpr auto id = dsl::identifier(dsl::ascii::alpha).reserve(LEXY_LIT("foo"));
+    constexpr auto id = dsl::identifier(dsl::ascii::alpha).reserve(dsl::lit<"foo">);
 
     SUBCASE("string")
     {
-        constexpr auto rule = LEXY_KEYWORD("Int", id);
+        constexpr auto rule = keyword<"Int">(id);
         CHECK(lexy::is_token_rule<decltype(rule)>);
 
         CHECK(equivalent_rules(rule, dsl::keyword<"Int">(id)));
@@ -384,11 +384,11 @@ TEST_CASE("dsl::keyword")
     SUBCASE("char")
     {
         constexpr auto rule = dsl::keyword<'a'>(id);
-        CHECK(equivalent_rules(rule, LEXY_KEYWORD("a", id)));
+        CHECK(equivalent_rules(rule, dsl::keyword<"a">(id)));
     }
     SUBCASE("case folding")
     {
-        constexpr auto rule = dsl::ascii::case_folding(LEXY_KEYWORD("int", id));
+        constexpr auto rule = dsl::ascii::case_folding(dsl::keyword<"int">(id));
         CHECK(lexy::is_token_rule<decltype(rule)>);
 
         constexpr auto callback = token_callback;

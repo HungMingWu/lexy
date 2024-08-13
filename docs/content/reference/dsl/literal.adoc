@@ -3,7 +3,6 @@ header: "lexy/dsl/literal.hpp"
 entities:
   "literal-rule": doc
   "lexy::dsl::lit": lit
-  "LEXY_LIT": lit
   "lexy::dsl::lit_c": lit_c
   "lexy::dsl::lit_b": lit_b
   "lexy::dsl::lit_cp": lit_cp
@@ -77,15 +76,6 @@ namespace lexy::dsl
     template <auto Str>
     constexpr _literal-rule_ auto lit;
 }
-
-#define LEXY_LIT(Str) lexy::dsl::lit<Str>
-----
-
-[.lead]
-`lit` is a {{% literal-rule %}} that matches the specified sequence of code units.
-
-The macro `LEXY_LIT(Str)` is equivalent to `lit<Str>`, except that it also works on older compilers that do not support C++20's extended NTTPs.
-Use this instead of `lit<Str>` if you need to support them.
 
 {{% playground-example lit "Hello World!" %}}
 

@@ -25,7 +25,7 @@ struct reserved_identifier
 
 namespace lexyd
 {
-template <typename Id, typename CharT, CharT... C>
+template <typename Id, lexy::_detail::string_literal Str>
 struct _kw;
 template <typename Literal, template <typename> typename CaseFolding>
 struct _cfl;
@@ -212,21 +212,21 @@ struct _id : branch_base
         static_assert(lexy::is_literal_rule<R> || lexy::is_literal_set_rule<R>);
         return r;
     }
-    template <typename Id, typename CharT, CharT... C>
-    constexpr auto _make_reserve(_kw<Id, CharT, C...>) const
+    template <typename Id, lexy::_detail::string_literal Str>
+    constexpr auto _make_reserve(_kw<Id, Str>) const
     {
         static_assert(std::is_same_v<decltype(Id{}.pattern()), decltype(pattern())>,
                       "must not reserve keywords from another identifier");
         // No need to remember that it was a keyword originally.
-        return _lit<CharT, C...>{};
+        return _lit<Str>{};
     }
-    template <typename Id, typename CharT, CharT... C, template <typename> typename CaseFolding>
-    constexpr auto _make_reserve(_cfl<_kw<Id, CharT, C...>, CaseFolding>) const
+    template <typename Id, lexy::_detail::string_literal Str, template <typename> typename CaseFolding>
+    constexpr auto _make_reserve(_cfl<_kw<Id, Str>, CaseFolding>) const
     {
         static_assert(std::is_same_v<decltype(Id{}.pattern()), decltype(pattern())>,
                       "must not reserve keywords from another identifier");
         // No need to remember that it was a keyword originally.
-        return _cfl<_lit<CharT, C...>, CaseFolding>{};
+        return _cfl<_lit<Str>, CaseFolding>{};
     }
 
     //=== dsl ===//
@@ -313,10 +313,11 @@ constexpr auto token_kind_of<lexy::dsl::_idp<Leading, Trailing>> = lexy::identif
 //=== keyword ===//
 namespace lexyd
 {
-template <typename Id, typename CharT, CharT... C>
-struct _kw : token_base<_kw<Id, CharT, C...>>, _lit_base
+
+template <typename Id, lexy::_detail::string_literal Str>
+struct _kw : token_base<_kw<Id, Str>>, _lit_base
 {
-    static constexpr auto lit_max_char_count = sizeof...(C);
+    static constexpr auto lit_max_char_count = Str.size();
 
     // We must not end on a trailing character.
     static constexpr auto lit_char_classes
@@ -327,16 +328,15 @@ struct _kw : token_base<_kw<Id, CharT, C...>>, _lit_base
     template <typename Encoding>
     static constexpr auto lit_first_char() -> typename Encoding::char_type
     {
-        typename Encoding::char_type result = 0;
-        (void)((result = lexy::_detail::transcode_char<decltype(result)>(C), true) || ...);
-        return result;
+        return lexy::_detail::transcode_char<typename Encoding::char_type>(Str.data[0]);
     }
 
     template <typename Trie>
-    static consteval std::size_t lit_insert(Trie& trie, std::size_t pos,
-                                                 std::size_t char_class)
+    static consteval std::size_t lit_insert(Trie& trie, std::size_t pos, std::size_t char_class)
     {
-        auto end                  = ((pos = trie.insert(pos, C)), ...);
+        auto end = pos;
+        for (size_t i = 0; i < Str.size(); i++)
+            end = trie.insert(end, Str.data[i]);
         trie.node_char_class[end] = char_class;
         return end;
     }
@@ -351,7 +351,7 @@ struct _kw : token_base<_kw<Id, CharT, C...>>, _lit_base
         constexpr bool try_parse(Reader reader)
         {
             // Need to match the literal.
-            if (!lexy::_detail::match_literal<0, CharT, C...>(reader))
+            if (!lexy::_detail::match_literal<0, Str>(reader))
                 return false;
             end = reader.current();
 
@@ -364,42 +364,31 @@ struct _kw : token_base<_kw<Id, CharT, C...>>, _lit_base
         constexpr void report_error(Context& context, Reader reader)
         {
             using char_type    = typename Reader::encoding::char_type;
-            constexpr auto str = lexy::_detail::type_string<CharT, C...>::template c_str<char_type>;
+            constexpr auto str = lexy::_detail::type_string<Str>::template c_str<char_type>();
 
             // Match the entire identifier.
             auto begin = reader.position();
             lexy::try_match_token(Id{}.pattern(), reader);
             auto end = reader.position();
 
-            auto err = lexy::error<Reader, lexy::expected_keyword>(begin, end, str, sizeof...(C));
+            auto err = lexy::error<Reader, lexy::expected_keyword>(begin, end, str, Str.size());
             context.on(_ev::error{}, err);
         }
     };
 };
 
-template <typename Id>
-struct _keyword;
-template <typename L, typename T, typename... R>
-struct _keyword<_id<L, T, R...>>
-{
-    template <typename CharT, CharT... C>
-    using get = _kw<_id<L, T>, CharT, C...>;
-};
-
 template <lexy::_detail::string_literal Str, typename L, typename T, typename... R>
 constexpr auto keyword(_id<L, T, R...>)
 {
-    return lexy::_detail::to_type_string<_keyword<_id<L, T>>::template get, Str>{};
+    return _kw<_id<L, T>, Str>{};
 }
 
-#define LEXY_KEYWORD(Str, Id)                                                                      \
-    LEXY_NTTP_STRING(::lexyd::_keyword<LEXY_DECAY_DECLTYPE(Id)>::template get, Str) {}
 } // namespace lexyd
 
 namespace lexy
 {
-template <typename Id, typename CharT, CharT... C>
-constexpr auto token_kind_of<lexy::dsl::_kw<Id, CharT, C...>> = lexy::literal_token_kind;
+template <typename Id, lexy::_detail::string_literal Str>
+constexpr auto token_kind_of<lexy::dsl::_kw<Id, Str>> = lexy::literal_token_kind;
 } // namespace lexy
 
 #endif // LEXY_DSL_IDENTIFIER_HPP_INCLUDED

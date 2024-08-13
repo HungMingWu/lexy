@@ -12,7 +12,7 @@ namespace
 {
 struct with_whitespace
 {
-    static constexpr auto whitespace = LEXY_LIT(".");
+    static constexpr auto whitespace = dsl::lit<".">;
 };
 } // namespace
 
@@ -28,7 +28,7 @@ TEST_CASE("dsl::context_identifier")
     };
 
     constexpr auto var   = dsl::context_identifier<struct id>(dsl::identifier(dsl::ascii::alpha));
-    constexpr auto setup = var.create() + var.capture() + LEXY_LIT("-");
+    constexpr auto setup = var.create() + var.capture() + dsl::lit<"-">;
 
     constexpr auto callback = [](const char*, lexy::string_lexeme<>) { return 0; };
 

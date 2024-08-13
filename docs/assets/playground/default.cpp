@@ -12,7 +12,7 @@ struct production
     static constexpr auto whitespace = dsl::ascii::space;
 
     static constexpr auto rule = [] {
-        auto greeting = LEXY_LIT("Hello");
+        auto greeting = dsl::lit<"Hello">;
         return greeting + dsl::p<name> + dsl::exclamation_mark + dsl::eof;
     }();
 };

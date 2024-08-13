@@ -9,8 +9,8 @@
 
 namespace lexyd
 {
-#define LEXY_PUNCT(Name, String)                                                                   \
-    struct _##Name : LEXY_NTTP_STRING(_lit, String)                                                \
+#define LEXY_PUNCT(Name, String)                                                                  \
+    struct _##Name : lexyd::_lit<String>                                                          \
     {};                                                                                            \
     inline constexpr auto(Name) = _##Name {}
 

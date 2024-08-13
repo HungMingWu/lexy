@@ -8,5 +8,5 @@ struct production
 
     static constexpr auto rule
         // Generate a custom error for an unknown greeting.
-        = LEXY_LIT("Hello") | LEXY_LIT("Hi") | dsl::error<unknown_greeting>;
+        = dsl::lit<"Hello"> | dsl::lit<"Hi"> | dsl::error<unknown_greeting>;
 };

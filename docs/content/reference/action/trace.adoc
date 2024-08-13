@@ -4,7 +4,6 @@ entities:
   "lexy::trace_to": trace
   "lexy::trace": trace
   "lexy::dsl::debug": debug
-  "LEXY_DEBUG": debug
 ---
 :toc: left
 
@@ -87,24 +86,4 @@ namespace lexy::dsl
     template <auto Str>
     constexpr _rule_ auto debug;
 }
-
-#define LEXY_DEBUG(Str) lexy::dsl::debug<Str>
-----
-
-[.lead]
-Creates a debug event for {{% docref "lexy::trace" %}}.
-
-Parsing::
-  Always succeeds without consuming anything.
-Errors::
-  None.
-Values::
-  None.
-
-It generates a debug event at the current input position with the associated message `Str`.
-This is only meaningful for {{% docref "lexy::trace" %}} and is ignored otherwise.
-See an example there.
-
-The macro `LEXY_DEBUG(Str)` is equivalent to `debug<Str>`, except that it also works on older compilers that do not support C++20's extended NTTPs.
-Use this instead of `debug<Str>` if you need to support them.
 

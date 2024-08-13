@@ -8,7 +8,7 @@ struct alphabet
 {
     static constexpr auto rule
         // Just something stupid, so we can see a backtrack.
-        = dsl::peek(LEXY_LIT("abc")) >> LEXY_LIT("abcdefg");
+        = dsl::peek(dsl::lit<"abc">) >> dsl::lit<"abcdefg">;
 };
 
 struct number
@@ -34,8 +34,8 @@ struct production
     static constexpr auto whitespace = dsl::ascii::space;
 
     static constexpr auto rule = [] {
-        auto greeting = LEXY_LIT("Hello");
-        return greeting + LEXY_DEBUG("finished greeting") //
+        auto greeting = dsl::lit<"Hello">;
+        return greeting + dsl::debug<"finished greeting"> //
                + dsl::p<object> + dsl::exclamation_mark;
     }();
 };

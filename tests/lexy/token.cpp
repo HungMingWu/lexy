@@ -35,7 +35,7 @@ const char* token_kind_name(token_kind k)
 
 template <>
 constexpr auto lexy::token_kind_map_for<::token_kind>
-    = lexy::token_kind_map.map<::token_kind::c>(LEXY_LIT("."));
+    = lexy::token_kind_map.map<::token_kind::c>(dsl::lit<".">);
 
 TEST_CASE("token_kind")
 {

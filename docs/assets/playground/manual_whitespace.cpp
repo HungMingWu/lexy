@@ -3,7 +3,7 @@ struct production
 {
     static constexpr auto rule = [] {
         auto ws = dsl::whitespace(dsl::ascii::space);
-        return LEXY_LIT("Hello") + ws + LEXY_LIT("World") //
+        return dsl::lit<"Hello"> + ws + dsl::lit<"World"> //
                + ws + dsl::exclamation_mark + ws + dsl::eof;
     }();
 };

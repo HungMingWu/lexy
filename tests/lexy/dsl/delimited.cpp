@@ -12,7 +12,7 @@ namespace
 {
 struct with_whitespace
 {
-    static constexpr auto whitespace = LEXY_LIT(".");
+    static constexpr auto whitespace = dsl::lit<".">;
 };
 
 struct delim_sink
@@ -140,7 +140,7 @@ TEST_CASE("dsl::delimited(open, close)")
     SUBCASE("as rule with custom char class")
     {
         constexpr auto class_
-            = LEXY_CHAR_CLASS("my class", dsl::ascii::alpha / dsl::ascii::punct / dsl::lit_b<0xE4>);
+            = define_char_class<"my class">(dsl::ascii::alpha / dsl::ascii::punct / dsl::lit_b<uint8_t, 0xE4>);
         constexpr auto rule = delimited(class_);
         CHECK(lexy::is_branch_rule<decltype(rule)>);
 
@@ -395,7 +395,7 @@ TEST_CASE("dsl::delimited(open, close)")
     }
     SUBCASE(".limit()")
     {
-        constexpr auto rule = delimited.limit(LEXY_ASCII_ONE_OF("\n!"))(dsl::ascii::character);
+        constexpr auto rule = delimited.limit(lexyd::ascii::one_of<"\n!">)(dsl::ascii::character);
         CHECK(lexy::is_branch_rule<decltype(rule)>);
 
         auto empty = LEXY_VERIFY("");
@@ -461,7 +461,7 @@ TEST_CASE("dsl::delimited(open, close)")
             }
         };
 
-        constexpr auto rule = delimited.limit<tag>(LEXY_ASCII_ONE_OF("\n!"))(dsl::ascii::character);
+        constexpr auto rule = delimited.limit<tag>(lexyd::ascii::one_of<"\n!">)(dsl::ascii::character);
         CHECK(lexy::is_branch_rule<decltype(rule)>);
 
         auto empty = LEXY_VERIFY("");
@@ -519,7 +519,7 @@ TEST_CASE("dsl::delimited(open, close)")
     }
     SUBCASE("minus")
     {
-        constexpr auto rule = delimited(dsl::ascii::character - LEXY_ASCII_ONE_OF("X"));
+        constexpr auto rule = delimited(dsl::ascii::character - lexyd::ascii::one_of<"X">);
         CHECK(lexy::is_branch_rule<decltype(rule)>);
 
         auto empty = LEXY_VERIFY("");
@@ -645,11 +645,11 @@ TEST_CASE("dsl::delimited(delim)")
     CHECK(equivalent_rules(dsl::quoted, dsl::delimited(dsl::lit_c<'"'>)));
     CHECK(equivalent_rules(dsl::single_quoted, dsl::delimited(dsl::lit_c<'\''>)));
 
-    CHECK(equivalent_rules(dsl::triple_quoted, dsl::delimited(LEXY_LIT("\"\"\""))));
+    CHECK(equivalent_rules(dsl::triple_quoted, dsl::delimited(dsl::lit<"\"\"\"">)));
 
     CHECK(equivalent_rules(dsl::backticked, dsl::delimited(dsl::lit_c<'`'>)));
-    CHECK(equivalent_rules(dsl::double_backticked, dsl::delimited(LEXY_LIT("``"))));
-    CHECK(equivalent_rules(dsl::triple_backticked, dsl::delimited(LEXY_LIT("```"))));
+    CHECK(equivalent_rules(dsl::double_backticked, dsl::delimited(dsl::lit<"``">)));
+    CHECK(equivalent_rules(dsl::triple_backticked, dsl::delimited(dsl::lit<"```">)));
 }
 
 namespace
@@ -660,8 +660,8 @@ constexpr auto symbols = lexy::symbol_table<int>;
 TEST_CASE("dsl::escape")
 {
     constexpr auto escape = dsl::escape(dsl::lit_c<'$'>);
-    CHECK(equivalent_rules(escape.capture(LEXY_LIT("abc")),
-                           escape.rule(dsl::capture(LEXY_LIT("abc")))));
+    CHECK(equivalent_rules(escape.capture(dsl::lit<"abc">),
+                           escape.rule(dsl::capture(dsl::lit<"abc">))));
     CHECK(equivalent_rules(escape.symbol<symbols>(dsl::ascii::character),
                            escape.rule(dsl::symbol<symbols>(dsl::ascii::character))));
     CHECK(equivalent_rules(escape.symbol<symbols>(), escape.rule(dsl::symbol<symbols>)));

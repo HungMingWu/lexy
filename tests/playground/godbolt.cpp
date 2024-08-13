@@ -6,7 +6,7 @@
 
 struct production
 {
-    static constexpr auto rule = LEXY_LIT("hello");
+    static constexpr auto rule = dsl::lit<"hello">;
 };
 
 #include "../../docs/assets/cpp/godbolt_main.cpp" // NOLINT

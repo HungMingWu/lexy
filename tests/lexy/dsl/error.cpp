@@ -39,7 +39,7 @@ TEST_CASE("dsl::error")
     }
     SUBCASE("as branch")
     {
-        constexpr auto rule = err | LEXY_LIT("abc");
+        constexpr auto rule = err | dsl::lit<"abc">;
 
         auto empty = LEXY_VERIFY("");
         CHECK(empty.status == test_result::fatal_error);
@@ -53,7 +53,7 @@ TEST_CASE("dsl::error")
 
 TEST_CASE("dsl::error(rule)")
 {
-    constexpr auto err = dsl::error<my_error>(LEXY_LIT("abc"));
+    constexpr auto err = dsl::error<my_error>(dsl::lit<"abc">);
     CHECK(lexy::is_unconditional_branch_rule<decltype(err)>);
 
     constexpr auto callback = token_callback;
@@ -79,7 +79,7 @@ TEST_CASE("dsl::error(rule)")
     }
     SUBCASE("as branch")
     {
-        constexpr auto rule = err | LEXY_LIT("123");
+        constexpr auto rule = err | dsl::lit<"123">;
 
         auto empty = LEXY_VERIFY("");
         CHECK(empty.status == test_result::fatal_error);
@@ -100,7 +100,7 @@ TEST_CASE("dsl::error(rule)")
 
 TEST_CASE("dsl::must().error")
 {
-    constexpr auto must = dsl::must(LEXY_LIT("a") | LEXY_LIT("b") | LEXY_LIT("c")).error<my_error>;
+    constexpr auto must = dsl::must(dsl::lit<"a"> | dsl::lit<"b"> | dsl::lit<"c">).error<my_error>;
     CHECK(lexy::is_branch_rule<decltype(must)>);
 
     constexpr auto callback = token_callback;
@@ -146,7 +146,7 @@ TEST_CASE("dsl::must().error")
 TEST_CASE("dsl::must().error(rule)")
 {
     constexpr auto must
-        = dsl::must(LEXY_LIT("a") | LEXY_LIT("b") | LEXY_LIT("c")).error<my_error>(LEXY_LIT("123"));
+        = dsl::must(dsl::lit<"a"> | dsl::lit<"b"> | dsl::lit<"c">).error<my_error>(dsl::lit<"123">);
     CHECK(lexy::is_branch_rule<decltype(must)>);
 
     constexpr auto callback = token_callback;

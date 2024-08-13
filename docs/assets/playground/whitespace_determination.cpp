@@ -5,7 +5,7 @@ struct inner_normal
     // After every token in this rule, the whitespace is '+',
     // as determined by its root production `production`.
     static constexpr auto rule //
-        = dsl::parenthesized(LEXY_LIT("inner") + LEXY_LIT("normal"));
+        = dsl::parenthesized(dsl::lit<"inner"> + dsl::lit<"normal">);
 };
 
 // An inner production that overrides the current whitespace definition.
@@ -16,7 +16,7 @@ struct inner_override
     // After every token in this rule, the whitespace is '-',
     // as determined by the `whitespace` member of the current production.
     static constexpr auto rule //
-        = dsl::parenthesized(LEXY_LIT("inner") + LEXY_LIT("override"));
+        = dsl::parenthesized(dsl::lit<"inner"> + dsl::lit<"override">);
 };
 
 // A token production that does not have inner whitespace.
@@ -26,7 +26,7 @@ struct inner_token : lexy::token_production
     {
         // No whitespace is skipped here, as its root production is `inner_token`,
         // which does not have a `whitespace` member.
-        static constexpr auto rule = LEXY_LIT("inner") + LEXY_LIT("token");
+        static constexpr auto rule = dsl::lit<"inner"> + dsl::lit<"token">;
     };
 
     // No whitespace is skipped here, as the current production inherits from
@@ -42,7 +42,7 @@ struct inner_token_whitespace : lexy::token_production
         // After every token in this rule, the whitespace is '_',
         // as determined by its root production `inner_token_whitespace`.
         static constexpr auto rule //
-            = LEXY_LIT("inner") + LEXY_LIT("token") + LEXY_LIT("whitespace");
+            = dsl::lit<"inner"> + dsl::lit<"token"> + dsl::lit<"whitespace">;
     };
 
     static constexpr auto whitespace = dsl::lit_c<'_'>;

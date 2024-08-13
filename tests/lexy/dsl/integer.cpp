@@ -475,7 +475,7 @@ TEST_CASE("dsl::integer(dsl::digits.no_leading_zero())")
 
 TEST_CASE("dsl::integer(dsl::digits.sep())")
 {
-    constexpr auto integer = dsl::integer<int>(dsl::digits<>.sep(LEXY_LIT("_")));
+    constexpr auto integer = dsl::integer<int>(dsl::digits<>.sep(dsl::lit<"_">));
     CHECK(lexy::is_rule<decltype(integer)>);
 
     constexpr auto callback = lexy::callback<int>([](const char*) { return -11; },
@@ -569,7 +569,7 @@ TEST_CASE("dsl::integer(dsl::digits.sep())")
 
 TEST_CASE("dsl::integer(dsl::digits.sep().no_leading_zero())")
 {
-    constexpr auto integer = dsl::integer<int>(dsl::digits<>.sep(LEXY_LIT("_")).no_leading_zero());
+    constexpr auto integer = dsl::integer<int>(dsl::digits<>.sep(dsl::lit<"_">).no_leading_zero());
     CHECK(lexy::is_rule<decltype(integer)>);
 
     constexpr auto callback = lexy::callback<int>([](const char*) { return -11; },
@@ -748,7 +748,7 @@ TEST_CASE("dsl::integer(dsl::n_digits)")
 
 TEST_CASE("dsl::integer(dsl::n_digits.sep())")
 {
-    constexpr auto integer = dsl::integer<int>(dsl::n_digits<3>.sep(LEXY_LIT("_")));
+    constexpr auto integer = dsl::integer<int>(dsl::n_digits<3>.sep(dsl::lit<"_">));
     CHECK(lexy::is_rule<decltype(integer)>);
 
     constexpr auto callback = lexy::callback<int>([](const char*) { return -11; },

@@ -7,7 +7,7 @@
 
 TEST_CASE("dsl::debug")
 {
-    constexpr auto rule = LEXY_DEBUG("hello");
+    constexpr auto rule = dsl::debug<"hello">;
     CHECK(lexy::is_rule<decltype(rule)>);
 
     CHECK(equivalent_rules(rule, dsl::debug<"hello">));

@@ -10,8 +10,8 @@
 
 TEST_CASE("dsl::operator+")
 {
-    constexpr auto rule = dsl::lit_c<'a'> + dsl::position + dsl::try_(LEXY_LIT("bc"))
-                          + dsl::capture(LEXY_LIT("de"));
+    constexpr auto rule = dsl::lit_c<'a'> + dsl::position + dsl::try_(dsl::lit<"bc">)
+                          + dsl::capture(dsl::lit<"de">);
     CHECK(lexy::is_rule<decltype(rule)>);
 
     constexpr auto callback = [](const char* begin, const char* pos, lexy::string_lexeme<> lexeme) {

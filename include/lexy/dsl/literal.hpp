@@ -14,22 +14,37 @@
 //=== lit_matcher ===//
 namespace lexy::_detail
 {
-template <std::size_t CurCharIndex, typename CharT, CharT... Cs, typename Reader>
+template <typename T, std::size_t N, typename F>
+consteval auto transform(const std::array<T, N>& src, F func)
+{
+    using dst_type = decltype(func(src[0]));
+    std::array<dst_type, N> dst;
+    for (size_t i = 0; i < N; i++)
+        dst[i] = func(src[i]);
+    return dst;
+}
+
+template <std::size_t CurCharIndex, lexy::_detail::string_literal Str, typename Reader>
 constexpr auto match_literal(Reader& reader)
 {
     static_assert(lexy::is_char_encoding<typename Reader::encoding>);
     using char_type = typename Reader::encoding::char_type;
-    if constexpr (CurCharIndex >= sizeof...(Cs))
+    if constexpr (CurCharIndex >= Str.size())
     {
         (void)reader;
         return std::true_type{};
     }
     // We only use SWAR if the reader supports it and we have enough to fill at least one.
-    else if constexpr (is_swar_reader<Reader> && sizeof...(Cs) >= swar_length<char_type>)
+    else if constexpr (is_swar_reader<Reader> && Str.size() >= swar_length<char_type>)
     {
+        constexpr auto transcode_string = transform(Str.data, transcode_char<char_type, char_type_t<Str>>);
+        constexpr auto transcode_tuple = std::tuple_cat(transcode_string);
         // Try and pack as many characters into a swar as possible, starting at the current
         // index.
-        constexpr auto pack = swar_pack<CurCharIndex>(transcode_char<char_type>(Cs)...);
+        constexpr auto pack = std::apply(
+            [](const auto&... args) {
+                return swar_pack<CurCharIndex>(args...);
+            }, transcode_tuple);
 
         // Do a single swar comparison.
         if ((reader.peek_swar() & pack.mask) == pack.value)
@@ -37,11 +52,11 @@ constexpr auto match_literal(Reader& reader)
             reader.bump_swar(pack.count);
 
             // Recurse with the incremented index.
-            return bool(match_literal<CurCharIndex + pack.count, CharT, Cs...>(reader));
+            return bool(match_literal<CurCharIndex + pack.count, Str>(reader));
         }
         else
         {
-            auto partial = swar_find_difference<CharT>(reader.peek_swar() & pack.mask, pack.value);
+            auto partial = swar_find_difference<char_type_t<Str>>(reader.peek_swar() & pack.mask, pack.value);
             reader.bump_swar(partial);
             return false;
         }
@@ -49,12 +64,17 @@ constexpr auto match_literal(Reader& reader)
     else
     {
         static_assert(CurCharIndex == 0);
+        static constexpr auto result
+            = transform(Str.data, transcode_int<typename Reader::encoding, char_type_t<Str>>);
 
         // Compare each code unit, bump on success, cancel on failure.
-        return ((reader.peek() == transcode_int<typename Reader::encoding>(Cs)
-                     ? (reader.bump(), true)
-                     : false)
-                && ...);
+        for (std::size_t i = 0; i < Str.size(); i++)
+        {
+            if (reader.peek() != result[i])
+                return false;
+            reader.bump();
+        }
+        return true;
     }
 }
 } // namespace lexy::_detail
@@ -123,10 +143,12 @@ struct lit_trie
         return to;
     }
 
-    template <typename CharT, CharT... C>
-    consteval std::size_t insert(std::size_t pos, type_string<CharT, C...>)
+    template <_detail::string_literal Str>
+    consteval std::size_t insert(std::size_t pos, type_string<Str>)
     {
-        return ((pos = insert(pos, C)), ...);
+        for (size_t i = 0; i < Str.size(); i++)
+            pos = insert(pos, Str.data[i]);
+        return pos;
     }
 
     consteval auto node_transitions(std::size_t node) const
@@ -324,28 +346,29 @@ struct lit_trie_matcher<Trie, CurNode>
 //=== lit ===//
 namespace lexyd
 {
-template <typename CharT, CharT... C>
+
+template <lexy::_detail::string_literal Str>
 struct _lit
-: token_base<_lit<CharT, C...>,
-             std::conditional_t<sizeof...(C) == 0, unconditional_branch_base, branch_base>>,
+: token_base<_lit<Str>,
+             std::conditional_t<Str.size() == 0, unconditional_branch_base, branch_base>>,
   _lit_base
 {
-    static constexpr auto lit_max_char_count = sizeof...(C);
+    static constexpr auto lit_max_char_count = Str.size();
     static constexpr auto lit_char_classes   = lexy::_detail::char_class_list{};
     using lit_case_folding                   = void;
 
     template <typename Encoding>
     static constexpr auto lit_first_char() -> typename Encoding::char_type
     {
-        typename Encoding::char_type result = 0;
-        (void)((result = lexy::_detail::transcode_char<decltype(result)>(C), true) || ...);
-        return result;
+        return lexy::_detail::transcode_char<typename Encoding::char_type>(Str.data[0]);
     }
 
     template <typename Trie>
     static consteval std::size_t lit_insert(Trie& trie, std::size_t pos, std::size_t)
     {
-        return ((pos = trie.insert(pos, C)), ...);
+        for (std::size_t i = 0; i < Str.size(); i++)
+            pos = trie.insert(pos, Str.data[i]);
+        return pos;
     }
 
     template <typename Reader>
@@ -357,7 +380,7 @@ struct _lit
 
         constexpr auto try_parse(Reader reader)
         {
-            auto result = lexy::_detail::match_literal<0, CharT, C...>(reader);
+            auto result = lexy::_detail::match_literal<0, Str>(reader);
             end         = reader.current();
             return result;
         }
@@ -366,57 +389,62 @@ struct _lit
         constexpr void report_error(Context& context, const Reader& reader)
         {
             using char_type    = typename Reader::encoding::char_type;
-            constexpr auto str = lexy::_detail::type_string<CharT, C...>::template c_str<char_type>;
+            constexpr auto str = lexy::_detail::type_string<Str>::template c_str<char_type>();
 
             auto begin = reader.position();
             auto index = lexy::_detail::range_size(begin, end.position());
-            auto err = lexy::error<Reader, lexy::expected_literal>(begin, str, index, sizeof...(C));
+            auto err = lexy::error<Reader, lexy::expected_literal>(begin, str, index, Str.size());
             context.on(_ev::error{}, err);
         }
     };
 };
 
 template <auto C>
-constexpr auto lit_c = _lit<LEXY_DECAY_DECLTYPE(C), C>{};
+constexpr auto lit_c = _lit<C>{};
 
-template <unsigned char... C>
-constexpr auto lit_b = _lit<unsigned char, C...>{};
+template <typename T, T... Elems>
+consteval auto make_array()
+{
+    return std::array<T, sizeof...(Elems)>{Elems...};
+}
+
+template <typename T, T... C>
+constexpr auto lit_b = _lit<make_array<T, C...>()>{};
 
 /// Matches the literal string.
 template <lexy::_detail::string_literal Str>
-constexpr auto lit = lexy::_detail::to_type_string<_lit, Str>{};
+constexpr auto lit = ::lexyd::_lit<Str>{};
 
-#define LEXY_LIT(Str)                                                                              \
-    LEXY_NTTP_STRING(::lexyd::_lit, Str) {}
 } // namespace lexyd
 
 namespace lexy
 {
-template <typename CharT, CharT... C>
-inline constexpr auto token_kind_of<lexy::dsl::_lit<CharT, C...>> = lexy::literal_token_kind;
+template <lexy::_detail::string_literal Str>
+inline constexpr auto token_kind_of<lexy::dsl::_lit<Str>> = lexy::literal_token_kind;
 } // namespace lexy
 
 //=== lit_cp ===//
 namespace lexyd
 {
-template <char32_t... Cp>
-struct _lcp : token_base<_lcp<Cp...>>, _lit_base
+template <lexy::_detail::string_literal Str>
+struct _lcp : token_base<_lcp<Str>>, _lit_base
 {
     template <typename Encoding>
     struct _string_t
     {
-        typename Encoding::char_type data[4 * sizeof...(Cp)];
+        typename Encoding::char_type data[4 * Str.size()];
         std::size_t                  length = 0;
 
         constexpr _string_t() : data{}
         {
-            ((length += lexy::_detail::encode_code_point<Encoding>(Cp, data + length, 4)), ...);
+            for (size_t i = 0; i < Str.size(); i++)
+                length += lexy::_detail::encode_code_point<Encoding>(Str.data[i], data + length, 4);
         }
     };
     template <typename Encoding>
     static constexpr _string_t<Encoding> _string = _string_t<Encoding>{};
 
-    static constexpr auto lit_max_char_count = 4 * sizeof...(Cp);
+    static constexpr auto lit_max_char_count = 4 * Str.size();
     static constexpr auto lit_char_classes   = lexy::_detail::char_class_list{};
     using lit_case_folding                   = void;
 
@@ -437,12 +465,8 @@ struct _lcp : token_base<_lcp<Cp...>>, _lit_base
         return pos;
     }
 
-    template <typename Reader,
-              typename Indices
-              = std::make_index_sequence<_string<typename Reader::encoding>.length>>
-    struct tp;
-    template <typename Reader, std::size_t... Idx>
-    struct tp<Reader, std::index_sequence<Idx...>>
+    template <typename Reader>
+    struct tp
     {
         typename Reader::marker end;
 
@@ -451,9 +475,9 @@ struct _lcp : token_base<_lcp<Cp...>>, _lit_base
         constexpr bool try_parse(Reader reader)
         {
             using encoding = typename Reader::encoding;
-
-            auto result = lexy::_detail::match_literal<0, typename encoding::char_type,
-                                                       _string<encoding>.data[Idx]...>(reader);
+            constexpr auto str = _string<encoding>;
+            auto result = lexy::_detail::match_literal<0,
+                lexy::_detail::string_literal<str.length, typename encoding::char_type>(str.data)>(reader);
             end         = reader.current();
             return result;
         }
@@ -473,13 +497,13 @@ struct _lcp : token_base<_lcp<Cp...>>, _lit_base
 };
 
 template <char32_t... CodePoint>
-constexpr auto lit_cp = _lcp<CodePoint...>{};
+constexpr auto lit_cp = _lcp<make_array<char32_t, CodePoint...>()>{};
 } // namespace lexyd
 
 namespace lexy
 {
-template <char32_t... Cp>
-constexpr auto token_kind_of<lexy::dsl::_lcp<Cp...>> = lexy::literal_token_kind;
+template <lexy::_detail::string_literal Str>
+constexpr auto token_kind_of<lexy::dsl::_lcp<Str>> = lexy::literal_token_kind;
 } // namespace lexy
 
 //=== lit_set ===//
@@ -502,13 +526,13 @@ namespace lexyd
 template <typename Literal, template <typename> typename CaseFolding>
 struct _cfl;
 
-template <template <typename> typename CaseFolding, typename CharT, CharT... C>
-constexpr auto _make_lit_rule(lexy::_detail::type_string<CharT, C...>)
+template <template <typename> typename CaseFolding, lexy::_detail::string_literal Str>
+constexpr auto _make_lit_rule(lexy::_detail::type_string<Str>)
 {
     if constexpr (std::is_same_v<CaseFolding<lexy::_pr8>, lexy::_pr8>)
-        return _lit<CharT, C...>{};
+        return _lit<Str>{};
     else
-        return _cfl<_lit<CharT, C...>, CaseFolding>{};
+        return _cfl<_lit<Str>, CaseFolding>{};
 }
 
 template <typename... Literals>

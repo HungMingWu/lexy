@@ -237,7 +237,7 @@ TEST_CASE("dsl::digits<>.no_leading_zero()")
 
 TEST_CASE("dsl::digits<>.sep()")
 {
-    constexpr auto rule = dsl::digits<>.sep(LEXY_LIT("_"));
+    constexpr auto rule = dsl::digits<>.sep(dsl::lit<"_">);
     CHECK(lexy::is_token_rule<decltype(rule)>);
 
     constexpr auto callback = token_callback;
@@ -286,9 +286,9 @@ TEST_CASE("dsl::digits<>.sep()")
 
 TEST_CASE("dsl::digits<>.sep().no_leading_zero")
 {
-    constexpr auto rule = dsl::digits<>.sep(LEXY_LIT("_")).no_leading_zero();
+    constexpr auto rule = dsl::digits<>.sep(dsl::lit<"_">).no_leading_zero();
     CHECK(lexy::is_token_rule<decltype(rule)>);
-    CHECK(equivalent_rules(rule, dsl::digits<>.no_leading_zero().sep(LEXY_LIT("_"))));
+    CHECK(equivalent_rules(rule, dsl::digits<>.no_leading_zero().sep(dsl::lit<"_">)));
 
     constexpr auto callback = token_callback;
 
@@ -341,8 +341,8 @@ TEST_CASE("dsl::digits<>.sep().no_leading_zero")
 
 TEST_CASE("digit separators")
 {
-    CHECK(equivalent_rules(dsl::digit_sep_tick, LEXY_LIT("'")));
-    CHECK(equivalent_rules(dsl::digit_sep_underscore, LEXY_LIT("_")));
+    CHECK(equivalent_rules(dsl::digit_sep_tick, dsl::lit<"'">));
+    CHECK(equivalent_rules(dsl::digit_sep_underscore, dsl::lit<"_">));
 }
 
 TEST_CASE("dsl::n_digits")
@@ -375,7 +375,7 @@ TEST_CASE("dsl::n_digits")
 
 TEST_CASE("dsl::n_digits.sep()")
 {
-    constexpr auto rule = dsl::n_digits<3>.sep(LEXY_LIT("_"));
+    constexpr auto rule = dsl::n_digits<3>.sep(dsl::lit<"_">);
     CHECK(lexy::is_token_rule<decltype(rule)>);
 
     constexpr auto callback = token_callback;

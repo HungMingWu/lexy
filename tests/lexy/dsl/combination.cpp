@@ -33,9 +33,9 @@ TEST_CASE("dsl::combination()")
 
     SUBCASE("default")
     {
-        constexpr auto rule = dsl::combination(LEXY_LIT("a") >> LEXY_LIT("a") + dsl::position,
-                                               LEXY_LIT("b") >> LEXY_LIT("b") + dsl::position,
-                                               LEXY_LIT("c") >> LEXY_LIT("c") + dsl::position);
+        constexpr auto rule = dsl::combination(dsl::lit<"a"> >> dsl::lit<"a"> + dsl::position,
+                                               dsl::lit<"b"> >> dsl::lit<"b"> + dsl::position,
+                                               dsl::lit<"c"> >> dsl::lit<"c"> + dsl::position);
         CHECK(lexy::is_rule<decltype(rule)>);
 
         auto empty = LEXY_VERIFY("");
@@ -128,9 +128,9 @@ TEST_CASE("dsl::combination()")
     }
     SUBCASE("missing_error")
     {
-        constexpr auto rule = dsl::combination(LEXY_LIT("a") >> LEXY_LIT("a") + dsl::position,
-                                               LEXY_LIT("b") >> LEXY_LIT("b") + dsl::position,
-                                               LEXY_LIT("c") >> LEXY_LIT("c") + dsl::position)
+        constexpr auto rule = dsl::combination(dsl::lit<"a"> >> dsl::lit<"a"> + dsl::position,
+                                               dsl::lit<"b"> >> dsl::lit<"b"> + dsl::position,
+                                               dsl::lit<"c"> >> dsl::lit<"c"> + dsl::position)
                                   .missing_error<my_error>;
         CHECK(lexy::is_rule<decltype(rule)>);
 
@@ -145,9 +145,9 @@ TEST_CASE("dsl::combination()")
     }
     SUBCASE("duplicate_error")
     {
-        constexpr auto rule = dsl::combination(LEXY_LIT("a") >> LEXY_LIT("a") + dsl::position,
-                                               LEXY_LIT("b") >> LEXY_LIT("b") + dsl::position,
-                                               LEXY_LIT("c") >> LEXY_LIT("c") + dsl::position)
+        constexpr auto rule = dsl::combination(dsl::lit<"a"> >> dsl::lit<"a"> + dsl::position,
+                                               dsl::lit<"b"> >> dsl::lit<"b"> + dsl::position,
+                                               dsl::lit<"c"> >> dsl::lit<"c"> + dsl::position)
                                   .duplicate_error<my_error>;
         CHECK(lexy::is_rule<decltype(rule)>);
 
@@ -209,9 +209,9 @@ TEST_CASE("dsl::partial_combination()")
     SUBCASE("default")
     {
         constexpr auto rule
-            = dsl::partial_combination(LEXY_LIT("a") >> LEXY_LIT("a") + dsl::position,
-                                       LEXY_LIT("b") >> LEXY_LIT("b") + dsl::position,
-                                       LEXY_LIT("c") >> LEXY_LIT("c") + dsl::position);
+            = dsl::partial_combination(dsl::lit<"a"> >> dsl::lit<"a"> + dsl::position,
+                                       dsl::lit<"b"> >> dsl::lit<"b"> + dsl::position,
+                                       dsl::lit<"c"> >> dsl::lit<"c"> + dsl::position);
         CHECK(lexy::is_rule<decltype(rule)>);
 
         auto empty = LEXY_VERIFY("");
@@ -305,9 +305,9 @@ TEST_CASE("dsl::partial_combination()")
     SUBCASE("duplicate_error")
     {
         constexpr auto rule
-            = dsl::partial_combination(LEXY_LIT("a") >> LEXY_LIT("a") + dsl::position,
-                                       LEXY_LIT("b") >> LEXY_LIT("b") + dsl::position,
-                                       LEXY_LIT("c") >> LEXY_LIT("c") + dsl::position)
+            = dsl::partial_combination(dsl::lit<"a"> >> dsl::lit<"a"> + dsl::position,
+                                       dsl::lit<"b"> >> dsl::lit<"b"> + dsl::position,
+                                       dsl::lit<"c"> >> dsl::lit<"c"> + dsl::position)
                   .duplicate_error<my_error>;
         CHECK(lexy::is_rule<decltype(rule)>);
 

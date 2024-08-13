@@ -7,7 +7,7 @@
 
 struct production
 {
-    static constexpr auto rule = LEXY_LIT("Hi");
+    static constexpr auto rule = lexy::dsl::lit<"Hi">;
 };
 
 //{

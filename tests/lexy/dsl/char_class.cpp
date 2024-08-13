@@ -181,9 +181,9 @@ TEST_CASE("character class .kind and .error")
     }
 }
 
-TEST_CASE("LEXY_CHAR_CLASS")
+TEST_CASE("define_char_class")
 {
-    static constexpr auto rule = LEXY_CHAR_CLASS("my class", dsl::ascii::alpha);
+    static constexpr auto rule = define_char_class<"my class">(dsl::ascii::alpha);
     CHECK(lexy::is_char_class_rule<decltype(rule)>);
 
     constexpr auto callback = token_callback;
@@ -261,7 +261,7 @@ TEST_CASE("character class alternative")
     SUBCASE("arbitrary 8-bit code points")
     {
         static constexpr auto rule
-            = LEXY_CHAR_CLASS("my class", dsl::ascii::alpha / dsl::lit_b<0xE4>);
+            = define_char_class<"my class">(dsl::ascii::alpha / dsl::lit_b<uint8_t, 0xE4>);
         constexpr auto callback = token_callback;
 
         auto default_ = LEXY_VERIFY(lexy::default_encoding{}, "\xE4");

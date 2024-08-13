@@ -7,7 +7,7 @@
 
 TEST_CASE("dsl::return_")
 {
-    constexpr auto rule = dsl::return_ + LEXY_LIT("abc");
+    constexpr auto rule = dsl::return_ + dsl::lit<"abc">;
     CHECK(lexy::is_rule<decltype(dsl::return_)>);
 
     constexpr auto callback = token_callback;

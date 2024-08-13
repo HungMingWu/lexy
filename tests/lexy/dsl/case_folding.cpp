@@ -7,7 +7,7 @@
 
 TEST_CASE("dsl::ascii::case_folding")
 {
-    constexpr auto rule = dsl::ascii::case_folding(LEXY_LIT("abc"));
+    constexpr auto rule = dsl::ascii::case_folding(dsl::lit<"abc">);
     CHECK(lexy::is_literal_rule<decltype(rule)>);
 
     auto callback = token_callback;
@@ -43,7 +43,7 @@ TEST_CASE("dsl::ascii::case_folding")
 
 TEST_CASE("dsl::unicode::simple_case_folding, UTF-32")
 {
-    constexpr auto rule = dsl::unicode::simple_case_folding(LEXY_LIT(U"abć"));
+    constexpr auto rule = dsl::unicode::simple_case_folding(dsl::lit<U"abć">);
     CHECK(lexy::is_literal_rule<decltype(rule)>);
 
     auto callback = token_callback;
@@ -80,7 +80,7 @@ TEST_CASE("dsl::unicode::simple_case_folding, UTF-32")
 TEST_CASE("dsl::unicode::simple_case_folding, UTF-8 and UTF-16")
 {
     constexpr auto rule
-        = dsl::unicode::simple_case_folding(dsl::_lit<char8_t, 'a', 'b', 0xC4, 0x87>{});
+        = dsl::unicode::simple_case_folding(dsl::lit_b<char8_t, 'a', 'b', 0xC4, 0x87>);
     CHECK(lexy::is_literal_rule<decltype(rule)>);
 
     auto callback = token_callback;

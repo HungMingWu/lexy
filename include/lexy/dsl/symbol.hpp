@@ -12,7 +12,6 @@
 
 namespace lexy
 {
-#define LEXY_SYMBOL(Str) LEXY_NTTP_STRING(::lexy::_detail::type_string, Str)
 
 template <typename T, template <typename> typename CaseFolding, typename... Strings>
 class _symbol_table
@@ -59,13 +58,13 @@ public:
     template <_detail::string_literal SymbolString, typename... Args>
     consteval auto map(Args&&... args) const
     {
-        return map<_detail::to_type_string<_detail::type_string, SymbolString>>(std::forward<Args>(args)...);
+        return map<_detail::type_string<SymbolString>>(std::forward<Args>(args)...);
     }
 
-    template <typename CharT, CharT... C, typename... Args>
-    consteval auto map(lexyd::_lit<CharT, C...>, Args&&... args) const
+    template <_detail::string_literal SymbolString, typename... Args>
+    consteval auto map(lexyd::_lit<SymbolString>, Args&&... args) const
     {
-        return map<_detail::type_string<CharT, C...>>(std::forward<Args>(args)...);
+        return map<_detail::type_string<SymbolString>>(std::forward<Args>(args)...);
     }
 
     //=== access ===//
@@ -95,7 +94,7 @@ public:
             else
             {
                 LEXY_PRECONDITION(_table);
-                constexpr const char_type* strings[] = {Strings::template c_str<char_type>...};
+                constexpr const char_type* strings[] = {Strings::template c_str<char_type>()...};
                 return value_type{strings[_idx], _table->_data[_idx]};
             }
         }
