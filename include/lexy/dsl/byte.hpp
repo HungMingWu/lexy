@@ -34,11 +34,8 @@ struct _b : token_base<_b<N, Predicate>>
         }
     }
 
-    template <typename Reader, typename Indices = std::make_index_sequence<N>>
-    struct tp;
-
-    template <typename Reader, std::size_t... Idx>
-    struct tp<Reader, std::index_sequence<Idx...>>
+    template <typename Reader>
+    struct tp
     {
         static_assert(lexy::is_byte_encoding<typename Reader::encoding>);
         typename Reader::marker end;
@@ -48,8 +45,14 @@ struct _b : token_base<_b<N, Predicate>>
         constexpr bool try_parse(Reader reader)
         {
             // Bump N times.
-            auto result
-                = ((_match(reader.peek()) ? (reader.bump(), true) : ((void)Idx, false)) && ...);
+            const bool result = [&]() {
+                for (std::size_t i = 0; i < N; i++) {
+                    if (!_match(reader.peek()))
+                        return false;
+                    reader.bump();
+                }
+                return true;
+            }();
             end = reader.current();
             return result;
         }
@@ -270,11 +273,8 @@ struct _bint : branch_base
 {
     using _rule = lexy::_detail::type_or<Rule, _b<N, void>>;
 
-    template <typename NextParser, typename Indices = std::make_index_sequence<N>>
-    struct _pc;
-
-    template <typename NextParser, std::size_t... Idx>
-    struct _pc<NextParser, std::index_sequence<Idx...>>
+    template <typename NextParser>
+    struct _pc
     {
         template <typename Context, typename Reader, typename... Args>
         constexpr static bool parse(Context& context, Reader& reader,
@@ -298,18 +298,24 @@ struct _bint : branch_base
             {
                 // In big endian, the first byte is shifted the most,
                 // so read in order.
-                ((result = static_cast<decltype(result)>(result << 8),
-                  result = static_cast<decltype(result)>(result | *begin++), (void)Idx),
-                 ...);
+                for (std::size_t i = 0; i < N; i++)
+                {
+                    result = static_cast<decltype(result)>(result << 8);
+                    result = static_cast<decltype(result)>(result | *begin++);
+                }
             }
             else
             {
                 // In little endian, we need to reverse the order,
                 // so copy into a buffer to do that.
-                unsigned char buffer[N] = {((void)Idx, *begin++)...};
-                ((result = static_cast<decltype(result)>(result << 8),
-                  result = static_cast<decltype(result)>(result | buffer[N - Idx - 1])),
-                 ...);
+                unsigned char buffer[N];
+                for (std::size_t i = 0; i < N; i++)
+                    buffer[i] = *begin++;
+                for (std::size_t i = 0; i < N; i++)
+                {
+                    result = static_cast<decltype(result)>(result << 8);
+                    result = static_cast<decltype(result)>(result | buffer[N - i - 1]);
+                }
             }
 
             return lexy::whitespace_parser<Context, NextParser>::parse(context, reader,

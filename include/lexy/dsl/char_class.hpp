@@ -12,6 +12,17 @@
 
 namespace lexy::_detail
 {
+
+template <typename T, std::size_t N, typename F>
+consteval auto transform(const T (&src)[N], F func)
+{
+    using dst_type = decltype(func(src[0]));
+    std::array<dst_type, N> dst;
+    for (size_t i = 0; i < N; i++)
+        dst[i] = func(src[i]);
+    return dst;
+}
+
 struct ascii_set
 {
     bool contains[128];
@@ -134,13 +145,8 @@ constexpr auto compress_ascii_set()
 
 namespace lexy::_detail
 {
-template <const auto& CompressedAsciiSet,
-          typename = std::make_index_sequence<CompressedAsciiSet.range_count()>,
-          typename = std::make_index_sequence<CompressedAsciiSet.single_count()>>
-struct ascii_set_matcher;
-template <const auto& CompressedAsciiSet, std::size_t... RangeIdx, std::size_t... SingleIdx>
-struct ascii_set_matcher<CompressedAsciiSet, std::index_sequence<RangeIdx...>,
-                         std::index_sequence<SingleIdx...>>
+template <const auto& CompressedAsciiSet>
+struct ascii_set_matcher
 {
     template <typename Encoding>
     static consteval auto to_int_type(char c)
@@ -151,13 +157,18 @@ struct ascii_set_matcher<CompressedAsciiSet, std::index_sequence<RangeIdx...>,
     template <typename Encoding>
     inline static constexpr bool match([[maybe_unused]] typename Encoding::int_type cur)
     {
-        return
-            // It must be in one of the ranges...
-            ((to_int_type<Encoding>(CompressedAsciiSet.range_lower[RangeIdx]) <= cur
-              && cur <= to_int_type<Encoding>(CompressedAsciiSet.range_upper[RangeIdx]))
-             || ...)
-            // or one of the single characters.
-            || ((cur == to_int_type<Encoding>(CompressedAsciiSet.singles[SingleIdx])) || ...);
+        // It must be in one of the ranges...
+        auto transform_lower = transform(CompressedAsciiSet.range_lower, to_int_type<Encoding>);
+        auto transform_upper = transform(CompressedAsciiSet.range_upper, to_int_type<Encoding>);
+        for (std::size_t i = 0; i < CompressedAsciiSet.range_count(); i++)
+            if (transform_lower[i] <= cur && cur <= transform_upper[i])
+                return true;
+        auto transform_signles = transform(CompressedAsciiSet.singles, to_int_type<Encoding>);
+        // or one of the single characters.
+        for (std::size_t i = 0; i < CompressedAsciiSet.single_count(); i++)
+            if (cur == transform_signles[i])
+                return true;
+        return false;
     }
 };
 } // namespace lexy::_detail
