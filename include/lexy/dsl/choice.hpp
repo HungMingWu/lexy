@@ -5,6 +5,7 @@
 #define LEXY_DSL_CHOICE_HPP_INCLUDED
 
 #include <tuple>
+#include <lexy/_detail/util.hpp>
 #include <lexy/dsl/base.hpp>
 #include <lexy/error.hpp>
 
@@ -30,10 +31,8 @@ struct _chc
 {
     static constexpr auto _any_unconditional = (lexy::is_unconditional_branch_rule<R> || ...);
 
-    template <typename Reader, typename Indices = std::make_index_sequence<sizeof...(R)>>
-    struct bp;
-    template <typename Reader, std::size_t... Idx>
-    struct bp<Reader, std::index_sequence<Idx...>>
+    template <typename Reader>
+    struct bp
     {
         template <typename Rule>
         using rp = lexy::branch_parser_for<Rule, Reader>;
@@ -54,7 +53,10 @@ struct _chc
             };
 
             // Need to try each possible branch.
-            auto found_branch = (try_r(Idx, std::get<Idx>(r_parsers)) || ...);
+            auto found_branch = std::apply([&](auto... Idx) {
+                return (try_r(Idx, std::get<Idx>(r_parsers)) || ...);
+            }, lexy::_detail::make_index_sequence_tuple<sizeof...(R)>());
+
             if constexpr (_any_unconditional)
             {
                 LEXY_ASSERT(found_branch,
@@ -71,7 +73,9 @@ struct _chc
         constexpr void cancel(Context& context)
         {
             // Need to cancel all branches.
-            (std::get<Idx>(r_parsers).cancel(context), ...);
+            std::apply([&](auto... Idx) {
+                (std::get<Idx>(r_parsers).cancel(context), ...);
+            }, lexy::_detail::make_index_sequence_tuple<sizeof...(R)>());
         }
 
         template <typename NextParser, typename Context, typename... Args>
@@ -79,13 +83,15 @@ struct _chc
         {
             // Need to call finish on the selected branch, and cancel on all others before that.
             auto result = false;
-            (void)((Idx == branch_idx
+            std::apply([&](auto... Idx) {
+                (void)((Idx == branch_idx
                         ? (result
                            = std::get<Idx>(r_parsers)
                                  .template finish<NextParser>(context, reader, std::forward<Args>(args)...),
                            true)
                         : (std::get<Idx>(r_parsers).cancel(context), false))
                    || ...);
+            }, lexy::_detail::make_index_sequence_tuple<sizeof...(R)>());
             return result;
         }
     };

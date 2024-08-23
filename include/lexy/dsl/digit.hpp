@@ -560,10 +560,8 @@ namespace lexyd
 template <std::size_t N, typename Base, typename Sep>
 struct _ndigits_s : token_base<_ndigits_s<N, Base, Sep>>
 {
-    template <typename Reader, typename Indices = std::make_index_sequence<N - 1>>
-    struct tp;
-    template <typename Reader, std::size_t... Idx>
-    struct tp<Reader, std::index_sequence<Idx...>>
+    template <typename Reader>
+    struct tp
     {
         typename Reader::marker end;
 
@@ -579,9 +577,15 @@ struct _ndigits_s : token_base<_ndigits_s<N, Base, Sep>>
             }
 
             // Match each other digit after a separator.
-            auto success = (((void)Idx, lexy::try_match_token(Sep{}, reader),
-                             lexy::try_match_token(digit<Base>, reader))
-                            && ...);
+            bool success = [&]() {
+                for (std::size_t Idx = 0; Idx < N - 1; Idx++)
+                {
+                    lexy::try_match_token(Sep{}, reader);
+                    if (!lexy::try_match_token(digit<Base>, reader))
+                        return false;
+                }
+                return true;
+            }();
             end          = reader.current();
             return success;
         }
@@ -601,10 +605,8 @@ struct _ndigits : token_base<_ndigits<N, Base>>
 {
     static_assert(N > 1);
 
-    template <typename Reader, typename Indices = std::make_index_sequence<N>>
-    struct tp;
-    template <typename Reader, std::size_t... Idx>
-    struct tp<Reader, std::index_sequence<Idx...>>
+    template <typename Reader>
+    struct tp
     {
         typename Reader::marker end;
 
@@ -613,7 +615,14 @@ struct _ndigits : token_base<_ndigits<N, Base>>
         constexpr bool try_parse(Reader reader)
         {
             // Match the Base N times.
-            auto success = (((void)Idx, lexy::try_match_token(digit<Base>, reader)) && ...);
+            bool success = [&]() {
+                for (std::size_t Idx = 0; Idx < N; Idx++)
+                {
+                    if (!lexy::try_match_token(digit<Base>, reader))
+                        return false;
+                }
+                return true;
+            }();
             end          = reader.current();
             return success;
         }

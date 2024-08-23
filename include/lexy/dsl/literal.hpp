@@ -8,6 +8,7 @@
 #include <lexy/_detail/iterator.hpp>
 #include <lexy/_detail/nttp_string.hpp>
 #include <lexy/_detail/swar.hpp>
+#include <lexy/_detail/util.hpp>
 #include <lexy/dsl/base.hpp>
 #include <lexy/dsl/token.hpp>
 
@@ -282,24 +283,24 @@ struct lit_trie_matcher<Trie, CurNode>
 
     static constexpr auto transitions = Trie.node_transitions(CurNode);
 
-    template <typename Indices = std::make_index_sequence<transitions.length>>
-    struct _impl;
-    template <std::size_t... Idx>
-    struct _impl<std::index_sequence<Idx...>>
+    struct _impl
     {
         template <typename Reader>
         inline static constexpr std::size_t try_match(Reader& reader)
         {
             constexpr auto cur_value = Trie.node_value[CurNode];
 
-            if constexpr (sizeof...(Idx) > 0)
+            if constexpr (transitions.length > 0)
             {
                 auto cur      = reader.current();
                 auto cur_char = reader.peek();
 
                 auto next_value = Trie.node_no_match;
-                (void)(_try_transition<transitions.index[Idx]>(next_value, reader, cur_char)
-                       || ...);
+
+                std::apply([&](auto... Idx) {
+                    (void)(_try_transition<transitions.index[Idx]>(next_value, reader, cur_char) | ...);
+                }, make_index_sequence_tuple<transitions.length>());
+
                 if (next_value != Trie.node_no_match)
                     // We prefer a longer match.
                     return next_value;
@@ -330,12 +331,12 @@ struct lit_trie_matcher<Trie, CurNode>
         static_assert(lexy::is_char_encoding<typename Reader::encoding>);
         if constexpr (std::is_same_v<CaseFolding<Reader>, Reader>)
         {
-            return _impl<>::try_match(_reader);
+            return _impl::try_match(_reader);
         }
         else
         {
             CaseFolding<Reader> reader{_reader};
-            auto                result = _impl<>::try_match(reader);
+            auto                result = _impl::try_match(reader);
             _reader.reset(reader.current());
             return result;
         }
