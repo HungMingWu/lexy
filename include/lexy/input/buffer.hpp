@@ -65,10 +65,10 @@ private:
 
 // We use aliases for the three encodings that can actually use it.
 // (i.e. where char_type == int_type).
-LEXY_INSTANTIATION_NEWTYPE(_bra, _br, lexy::ascii_encoding);
-LEXY_INSTANTIATION_NEWTYPE(_br8, _br, lexy::utf8_encoding);
-LEXY_INSTANTIATION_NEWTYPE(_brc, _br, lexy::utf8_char_encoding);
-LEXY_INSTANTIATION_NEWTYPE(_br32, _br, lexy::utf32_encoding);
+using _bra = _br<lexy::ascii_encoding>;
+using _br8 = _br<lexy::utf8_encoding>;
+using _brc = _br<lexy::utf8_char_encoding>;
+using _br32 = _br<lexy::utf32_encoding>;
 
 // Create the appropriate buffer reader.
 template <typename Encoding>

@@ -69,13 +69,13 @@ private:
 
 // A special version where the iterators are pointers.
 template <typename Encoding>
-LEXY_INSTANTIATION_NEWTYPE(_pr, _rr, Encoding, const typename Encoding::char_type*);
+using _pr = _rr<Encoding, const typename Encoding::char_type*>;
 
 // Aliases for the most common encodings.
-LEXY_INSTANTIATION_NEWTYPE(_prd, _pr, lexy::default_encoding);
-LEXY_INSTANTIATION_NEWTYPE(_pr8, _pr, lexy::utf8_encoding);
-LEXY_INSTANTIATION_NEWTYPE(_prc, _pr, lexy::utf8_char_encoding);
-LEXY_INSTANTIATION_NEWTYPE(_prb, _pr, lexy::byte_encoding);
+using _prd = _pr<lexy::default_encoding>;
+using _pr8 = _pr<lexy::utf8_encoding>;
+using _prc = _pr<lexy::utf8_char_encoding>;
+using _prb = _pr<lexy::byte_encoding>;
 
 template <typename Encoding, typename Iterator, typename Sentinel>
 constexpr auto _range_reader(Iterator begin, Sentinel end)
