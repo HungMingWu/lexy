@@ -185,8 +185,8 @@ public:
         }
 
         Iterator                    _cur;
-        LEXY_EMPTY_MEMBER Sentinel  _end;
-        LEXY_EMPTY_MEMBER Predicate _predicate;
+        [[no_unique_address]] Sentinel  _end;
+        [[no_unique_address]] Predicate _predicate;
 
         friend _filtered_node_range;
     };

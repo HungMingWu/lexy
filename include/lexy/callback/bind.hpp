@@ -114,8 +114,8 @@ struct _default
 template <std::size_t N, typename T, typename Fn>
 struct _nth_value : _detail::placeholder_base // fallback + map
 {
-    LEXY_EMPTY_MEMBER T  _fallback;
-    LEXY_EMPTY_MEMBER Fn _fn;
+    [[no_unique_address]] T  _fallback;
+    [[no_unique_address]] Fn _fn;
 
     template <typename State, typename... Args>
     inline constexpr decltype(auto) operator()(State&,
@@ -136,7 +136,7 @@ struct _nth_value : _detail::placeholder_base // fallback + map
 template <std::size_t N, typename T>
 struct _nth_value<N, T, void> : _detail::placeholder_base // fallback only
 {
-    LEXY_EMPTY_MEMBER T _fallback;
+    [[no_unique_address]] T _fallback;
 
     template <typename State, typename... Args>
     inline constexpr decltype(auto) operator()(State&,
@@ -163,7 +163,7 @@ struct _nth_value<N, T, void> : _detail::placeholder_base // fallback only
 template <std::size_t N, typename Fn>
 struct _nth_value<N, void, Fn> : _detail::placeholder_base // map only
 {
-    LEXY_EMPTY_MEMBER Fn _fn;
+    [[no_unique_address]] Fn _fn;
 
     template <typename State, typename... Args>
     inline constexpr decltype(auto) operator()(State&,
@@ -256,7 +256,7 @@ struct _parse_state : _detail::placeholder_base
 template <typename Fn>
 struct _parse_state_with_Fn : _parse_state<_parse_state_with_Fn<Fn>>
 {
-    LEXY_EMPTY_MEMBER Fn _fn;
+    [[no_unique_address]] Fn _fn;
 };
 
 template <typename Derived>
@@ -294,8 +294,8 @@ namespace lexy
 template <typename Callback, typename... BoundArgs>
 struct _bound_cb
 {
-    LEXY_EMPTY_MEMBER Callback _callback;
-    LEXY_EMPTY_MEMBER std::tuple<BoundArgs...> _bound_args;
+    [[no_unique_address]] Callback _callback;
+    [[no_unique_address]] std::tuple<BoundArgs...> _bound_args;
 
     using return_type = typename Callback::return_type;
 
@@ -355,8 +355,8 @@ struct _sink_wrapper
 template <typename Sink, typename... BoundArgs>
 struct _bound_sink
 {
-    LEXY_EMPTY_MEMBER Sink _sink;
-    LEXY_EMPTY_MEMBER std::tuple<BoundArgs...> _bound;
+    [[no_unique_address]] Sink _sink;
+    [[no_unique_address]] std::tuple<BoundArgs...> _bound;
 
     template <typename... Args>
     constexpr auto operator()(Args... args) const -> decltype(_sink(std::forward<Args>(args)...))

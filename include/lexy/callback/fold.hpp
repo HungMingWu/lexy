@@ -13,7 +13,7 @@ template <typename T, typename Arg, bool Inplace, typename Op>
 struct _fold
 {
     Arg                  _init;
-    LEXY_EMPTY_MEMBER Op _op;
+    [[no_unique_address]] Op _op;
 
     struct _sink_callback
     {

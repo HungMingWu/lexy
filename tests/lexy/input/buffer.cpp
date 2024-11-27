@@ -49,8 +49,7 @@ TEST_CASE("buffer")
         const lexy::buffer view(view_type{});
         verify(view);
 
-        if constexpr (LEXY_HAS_EMPTY_MEMBER)
-            CHECK(sizeof(ptr_size) == 2 * sizeof(void*));
+        CHECK(sizeof(ptr_size) == 2 * sizeof(void*));
 
         lexy::buffer<>::builder builder(3);
         std::memcpy(builder.data(), str, builder.size());

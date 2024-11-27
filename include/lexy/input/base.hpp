@@ -64,7 +64,7 @@ public:
 
 private:
     Iterator                   _cur;
-    LEXY_EMPTY_MEMBER Sentinel _end;
+    [[no_unique_address]] Sentinel _end;
 };
 
 // A special version where the iterators are pointers.

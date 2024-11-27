@@ -324,7 +324,7 @@ private:
         return std::size_t(_cur_block->end() - _cur_pos);
     }
 
-    LEXY_EMPTY_MEMBER resource_ptr _resource;
+    [[no_unique_address]] resource_ptr _resource;
     block*                         _head;
 
     block*         _cur_block;

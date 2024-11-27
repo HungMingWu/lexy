@@ -69,8 +69,6 @@ Those are:
   By default, they are enabled unless `NDEBUG` is defined.
 `LEXY_HAS_CHAR8_t`::
   Whether or not the compiler supports `char8_t`.
-`LEXY_EMPTY_MEMBER`::
-  The compiler specific attribute for `[[no_unique_address]]`.
 
 == Development build
 

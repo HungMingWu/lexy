@@ -437,7 +437,7 @@ public:
 
 private:
     Container                  _result;
-    LEXY_EMPTY_MEMBER Callback _callback;
+    [[no_unique_address]] Callback _callback;
 };
 template <typename Callback>
 class _collect_sink<void, Callback>
@@ -463,7 +463,7 @@ public:
 
 private:
     std::size_t                _count;
-    LEXY_EMPTY_MEMBER Callback _callback;
+    [[no_unique_address]] Callback _callback;
 };
 
 template <typename Container, typename Callback>
@@ -483,7 +483,7 @@ public:
     }
 
 private:
-    LEXY_EMPTY_MEMBER Callback _callback;
+    [[no_unique_address]] Callback _callback;
 };
 
 /// Returns a sink that invokes the void-returning callback multiple times, resulting in the number

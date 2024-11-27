@@ -68,7 +68,7 @@ namespace _detail
         using handler_type = Handler;
         using state_type   = State;
 
-        LEXY_EMPTY_MEMBER Handler parse_handler;
+        [[no_unique_address]] Handler parse_handler;
         State*                    parse_state;
 
         parse_context_var_base* vars;

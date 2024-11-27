@@ -46,28 +46,5 @@ template <typename T, typename Fallback>
 using type_or = std::conditional_t<std::is_void_v<T>, Fallback, T>;
 } // namespace lexy::_detail
 
-//=== empty_member ===//
-#ifndef LEXY_EMPTY_MEMBER
-
-#    if defined(__has_cpp_attribute)
-#        if defined(__GNUC__) && !defined(__clang__) && __GNUC__ <= 11
-//           GCC <= 11 has buggy support, see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101040
-#            define LEXY_HAS_EMPTY_MEMBER 0
-#        elif __has_cpp_attribute(no_unique_address)
-#            define LEXY_HAS_EMPTY_MEMBER 1
-#        endif
-#    endif
-#    ifndef LEXY_HAS_EMPTY_MEMBER
-#        define LEXY_HAS_EMPTY_MEMBER 0
-#    endif
-
-#    if LEXY_HAS_EMPTY_MEMBER
-#        define LEXY_EMPTY_MEMBER [[no_unique_address]]
-#    else
-#        define LEXY_EMPTY_MEMBER
-#    endif
-
-#endif
-
 #endif // LEXY_DETAIL_CONFIG_HPP_INCLUDED
 

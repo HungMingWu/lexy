@@ -44,7 +44,7 @@ public:
 
 private:
     Iterator                   _begin;
-    LEXY_EMPTY_MEMBER Sentinel _end;
+    [[no_unique_address]] Sentinel _end;
 };
 
 template <typename Iterator, typename Sentinel>

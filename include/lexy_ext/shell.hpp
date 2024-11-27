@@ -342,7 +342,7 @@ public:
         : _writer(std::move(writer))
         {}
 
-        LEXY_EMPTY_MEMBER typename Prompt::write_message_callback _writer;
+        [[no_unique_address]] typename Prompt::write_message_callback _writer;
 
         friend shell;
     };
@@ -404,7 +404,7 @@ private:
     }
 
     lexy::_detail::buffer_builder<char_type> _buffer;
-    LEXY_EMPTY_MEMBER Prompt                 _prompt;
+    [[no_unique_address]] Prompt                 _prompt;
 };
 
 //=== convenience typedefs ===//

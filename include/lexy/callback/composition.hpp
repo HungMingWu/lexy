@@ -30,8 +30,8 @@ struct _compose_state
 template <typename First, typename Second>
 struct _compose_cb
 {
-    LEXY_EMPTY_MEMBER First  _first;
-    LEXY_EMPTY_MEMBER Second _second;
+    [[no_unique_address]] First  _first;
+    [[no_unique_address]] Second _second;
 
     constexpr explicit _compose_cb(First&& first, Second&& second)
     : _first(std::move(first)), _second(std::move(second))
@@ -59,8 +59,8 @@ struct _compose_cb
 template <typename Sink, typename Callback>
 struct _compose_s
 {
-    LEXY_EMPTY_MEMBER Sink     _sink;
-    LEXY_EMPTY_MEMBER Callback _callback;
+    [[no_unique_address]] Sink     _sink;
+    [[no_unique_address]] Callback _callback;
 
     using return_type = typename Callback::return_type;
 

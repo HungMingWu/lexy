@@ -294,7 +294,7 @@ private:
         }
     }
 
-    LEXY_EMPTY_MEMBER _detail::memory_resource_ptr<MemoryResource> _resource;
+    [[no_unique_address]] _detail::memory_resource_ptr<MemoryResource> _resource;
     char_type*                                                     _data;
     std::size_t                                                    _size;
 };

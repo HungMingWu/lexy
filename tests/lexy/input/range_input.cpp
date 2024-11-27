@@ -58,7 +58,7 @@ struct test_sentinel
 TEST_CASE("range_input")
 {
     lexy::range_input<lexy::default_encoding, test_iterator, test_sentinel> input;
-    CHECK(sizeof(input) == (LEXY_HAS_EMPTY_MEMBER ? sizeof(int) : 2 * sizeof(int)));
+    CHECK(sizeof(input) == sizeof(int));
 
     CHECK(input.reader().position().count == 0);
     CHECK(input.reader().peek() == lexy::default_encoding::eof());
