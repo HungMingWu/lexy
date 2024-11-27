@@ -68,7 +68,7 @@ struct _tk_map_empty
     consteval auto map(Token) const
     {
         static_assert(lexy::is_token_rule<Token>, "cannot map non-token to token kind");
-        return _tk_map<LEXY_DECAY_DECLTYPE(TokenKind), Token>(std::index_sequence_for<>{},
+        return _tk_map<std::decay_t<decltype(TokenKind)>, Token>(std::index_sequence_for<>{},
                                                               nullptr, TokenKind);
     }
 };
@@ -88,7 +88,7 @@ namespace lexy
 {
 template <typename TokenRule>
 constexpr auto _has_special_token_kind = [] {
-    using kind = LEXY_DECAY_DECLTYPE(lexy::token_kind_of<TokenRule>);
+    using kind = std::decay_t<decltype(lexy::token_kind_of<TokenRule>)>;
     return !std::is_same_v<kind, lexy::predefined_token_kind> && std::is_enum_v<kind>;
 }();
 
@@ -214,7 +214,7 @@ token_kind(TokenKind) -> token_kind<void>;
 template <typename TokenKind> requires std::is_enum_v<TokenKind>
 token_kind(TokenKind) -> token_kind<TokenKind>;
 template <typename TokenRule> requires _has_special_token_kind<TokenRule>
-token_kind(TokenRule) -> token_kind<LEXY_DECAY_DECLTYPE(lexy::token_kind_of<TokenRule>)>;
+token_kind(TokenRule) -> token_kind<std::decay_t<decltype(lexy::token_kind_of<TokenRule>)>>;
 } // namespace lexy
 
 namespace lexy
@@ -270,7 +270,7 @@ template <typename TokenKind, typename Reader> requires std::is_enum_v<TokenKind
 token(TokenKind, lexy::lexeme<Reader>) -> token<Reader, TokenKind>;
 template <typename TokenRule, typename Reader> requires _has_special_token_kind<TokenRule>
 token(TokenRule, lexy::lexeme<Reader>)
-    -> token<Reader, LEXY_DECAY_DECLTYPE(lexy::token_kind_of<TokenRule>)>;
+    -> token<Reader, std::decay_t<decltype(lexy::token_kind_of<TokenRule>)>>;
 
 template <typename Input, typename TokenKind = void>
 using token_for = token<lexy::input_reader<Input>, TokenKind>;

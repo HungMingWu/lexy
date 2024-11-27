@@ -205,7 +205,7 @@ constexpr auto _do_action(_pc<Handler, State, Production>& context, Reader& read
 
     // We parse whitespace, theen the rule, then finish.
     using parser = lexy::whitespace_parser<
-        LEXY_DECAY_DECLTYPE(context),
+        std::decay_t<decltype(context)>,
         lexy::parser_for<lexy::production_rule<Production>, _detail::final_parser>>;
     auto rule_result = parser::parse(context, reader);
 

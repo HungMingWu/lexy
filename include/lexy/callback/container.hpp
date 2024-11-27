@@ -75,8 +75,8 @@ struct _list_alloc
 
         template <typename... Args>
         constexpr auto operator()(Args&&... args) const
-            -> LEXY_DECAY_DECLTYPE((std::declval<Container&>().push_back(std::forward<Args>(args)), ...),
-                                   std::declval<Container>())
+            -> std::decay_t<decltype((std::declval<Container&>().push_back(std::forward<Args>(args)), ...),
+                                   std::declval<Container>())>
         {
             Container result(std::invoke(_alloc, _state));
             if constexpr (_has_reserve<Container>)
@@ -115,8 +115,8 @@ struct _list
 
     template <typename... Args>
     constexpr auto operator()(Args&&... args) const
-        -> LEXY_DECAY_DECLTYPE((std::declval<Container&>().push_back(std::forward<Args>(args)), ...),
-                               std::declval<Container>())
+        -> std::decay_t<decltype((std::declval<Container&>().push_back(std::forward<Args>(args)), ...),
+                               std::declval<Container>())>
     {
         Container result;
         if constexpr (_has_reserve<Container>)
@@ -215,8 +215,8 @@ struct _collection_alloc
 
         template <typename... Args>
         constexpr auto operator()(Args&&... args) const
-            -> LEXY_DECAY_DECLTYPE((std::declval<Container&>().insert(std::forward<Args>(args)), ...),
-                                   std::declval<Container>())
+            -> std::decay_t<decltype((std::declval<Container&>().insert(std::forward<Args>(args)), ...),
+                                   std::declval<Container>())>
         {
             Container result(std::invoke(_alloc, _state));
             if constexpr (_has_reserve<Container>)
@@ -255,8 +255,8 @@ struct _collection
 
     template <typename... Args>
     constexpr auto operator()(Args&&... args) const
-        -> LEXY_DECAY_DECLTYPE((std::declval<Container&>().insert(std::forward<Args>(args)), ...),
-                               std::declval<Container>())
+        -> std::decay_t<decltype((std::declval<Container&>().insert(std::forward<Args>(args)), ...),
+                               std::declval<Container>())>
     {
         Container result;
         if constexpr (_has_reserve<Container>)

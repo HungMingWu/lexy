@@ -22,18 +22,17 @@ namespace lexy
 template <typename Literal>
 struct _op
 {};
-// GCC is buggy with auto parameters.
 template <typename T, T Value>
 struct _opv
 {
-    constexpr operator LEXY_DECAY_DECLTYPE(Value)() const
+    constexpr operator T() const
     {
         return Value;
     }
 };
 
 template <auto Operator>
-using op = typename LEXY_DECAY_DECLTYPE(Operator)::op_tag_type;
+using op = typename std::decay_t<decltype(Operator)>::op_tag_type;
 } // namespace lexy
 
 //=== op rule ===//
@@ -220,14 +219,14 @@ template <auto Tag, typename Literal>
 constexpr auto op(Literal)
 {
     static_assert(lexy::is_literal_rule<Literal>);
-    return _op<lexy::_opv<LEXY_DECAY_DECLTYPE(Tag), Tag>, Literal>{};
+    return _op<lexy::_opv<std::decay_t<decltype(Tag)>, Tag>, Literal>{};
 }
 template <auto Tag, typename Literal, typename... R>
 constexpr auto op(_br<Literal, R...>)
 {
     static_assert(lexy::is_literal_rule<Literal>,
                   "condition in the operator must be a literal rule");
-    return _op<lexy::_opv<LEXY_DECAY_DECLTYPE(Tag), Tag>, Literal, R...>{};
+    return _op<lexy::_opv<std::decay_t<decltype(Tag)>, Tag>, Literal, R...>{};
 }
 } // namespace lexyd
 

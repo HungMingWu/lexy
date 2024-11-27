@@ -68,7 +68,7 @@ struct _subg : rule_base
         template <typename Context, typename Reader, typename... Args>
         constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
-            using control_block_type = LEXY_DECAY_DECLTYPE(*context.control_block);
+            using control_block_type = std::decay_t<decltype(*context.control_block)>;
             using handler_type       = typename control_block_type::handler_type;
             using state_type         = typename control_block_type::state_type;
 

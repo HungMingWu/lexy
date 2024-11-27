@@ -16,7 +16,7 @@ namespace lexy
 struct nullopt;
 
 template <typename String>
-using _string_char_type = LEXY_DECAY_DECLTYPE(std::declval<String>()[0]);
+using _string_char_type = std::decay_t<decltype(std::declval<String>()[0])>;
 
 template <typename String, typename Encoding, typename CaseFoldingDSL = void>
 struct _as_string

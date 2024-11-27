@@ -145,7 +145,7 @@ public:
     constexpr explicit parse_tree_input(Node root) noexcept : _root(std::move(root)) {}
 
     template <typename ParseTree>
-    requires std::is_same_v<Node, LEXY_DECAY_DECLTYPE(std::declval<ParseTree>().root())>
+    requires std::is_same_v<Node, std::decay_t<decltype(std::declval<ParseTree>().root())>>
     constexpr explicit parse_tree_input(const ParseTree& tree) noexcept : _root(tree.root())
     {}
 
@@ -167,7 +167,7 @@ private:
 
 template <typename ParseTree>
 parse_tree_input(const ParseTree&)
-    -> parse_tree_input<LEXY_DECAY_DECLTYPE(std::declval<ParseTree>().root())>;
+    -> parse_tree_input<std::decay_t<decltype(std::declval<ParseTree>().root())>>;
 
 //=== convenience typedefs ===//
 template <typename Node>

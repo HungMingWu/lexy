@@ -7,9 +7,6 @@
 #include <lexy/dsl/brackets.hpp>
 #include <lexy/dsl/if.hpp>
 
-// We can't use `lexy::op`, GCC 7 doesn't like it combined with function-local statics.
-#define LEXY_OP_OF(Rule) LEXY_DECAY_DECLTYPE(Rule)::op_tag_type
-
 namespace
 {
 struct tag_with_state
@@ -30,7 +27,7 @@ TEST_CASE("dsl::op")
         constexpr auto rule = dsl::op(dsl::lit_c<'+'>);
         CHECK(lexy::is_branch_rule<decltype(rule)>);
 
-        constexpr auto callback = [](const char*, LEXY_OP_OF(rule)) { return 0; };
+        constexpr auto callback = [](const char*, lexy::op<rule>) { return 0; };
 
         auto empty = LEXY_VERIFY("");
         CHECK(empty.status == test_result::fatal_error);
@@ -52,7 +49,7 @@ TEST_CASE("dsl::op")
         constexpr auto rule = dsl::op(dsl::square_bracketed(dsl::lit<"0">));
         CHECK(lexy::is_branch_rule<decltype(rule)>);
 
-        constexpr auto callback = [](const char*, LEXY_OP_OF(rule)) { return 0; };
+        constexpr auto callback = [](const char*, lexy::op<rule>) { return 0; };
 
         auto empty = LEXY_VERIFY("");
         CHECK(empty.status == test_result::fatal_error);
@@ -79,9 +76,9 @@ TEST_CASE("dsl::op")
             constexpr explicit tag(const char* pos) : pos(pos) {}
         };
         constexpr auto rule = dsl::op<tag>(dsl::square_bracketed(dsl::lit<"0">));
-        CHECK(std::is_same_v<LEXY_OP_OF(rule), tag>);
+        CHECK(std::is_same_v<lexy::op<rule>, tag>);
 
-        constexpr auto callback = [](const char* pos, LEXY_OP_OF(rule) t) {
+        constexpr auto callback = [](const char* pos, lexy::op<rule> t) {
             CHECK(pos == t.pos);
             return 0;
         };
@@ -104,9 +101,9 @@ TEST_CASE("dsl::op")
     SUBCASE("custom tag with state")
     {
         constexpr auto rule = dsl::op<tag_with_state>(dsl::square_bracketed(dsl::lit<"0">));
-        CHECK(std::is_same_v<LEXY_OP_OF(rule), tag_with_state>);
+        CHECK(std::is_same_v<lexy::op<rule>, tag_with_state>);
 
-        constexpr auto callback = [](const char* pos, LEXY_OP_OF(rule) t) {
+        constexpr auto callback = [](const char* pos, lexy::op<rule> t) {
             CHECK(pos == t.pos);
             return 0;
         };
@@ -130,7 +127,7 @@ TEST_CASE("dsl::op")
     {
         constexpr auto rule = dsl::op<42>(dsl::square_bracketed(dsl::lit<"0">));
 
-        constexpr auto callback = [](const char*, LEXY_OP_OF(rule) t) {
+        constexpr auto callback = [](const char*, lexy::op<rule> t) {
             CHECK(t == 42);
             return 0;
         };
@@ -179,7 +176,7 @@ TEST_CASE("dsl::op")
 
         constexpr auto callback
             = lexy::callback<int>([](const char*) { return 0; },
-                                  [](const char*, LEXY_OP_OF(op)) { return 1; });
+                                  [](const char*, lexy::op<op>) { return 1; });
 
         auto empty = LEXY_VERIFY("");
         CHECK(empty.status == test_result::success);
@@ -205,12 +202,12 @@ TEST_CASE("dsl::op")
             constexpr explicit tag(const char* pos) : pos(pos) {}
         };
         constexpr auto op = dsl::op<tag>(dsl::square_bracketed(dsl::lit<"0">));
-        CHECK(std::is_same_v<LEXY_OP_OF(op), tag>);
+        CHECK(std::is_same_v<lexy::op<op>, tag>);
 
         constexpr auto rule = dsl::if_(op);
 
         constexpr auto callback = lexy::callback<int>([](const char*) { return 0; },
-                                                      [](const char* pos, LEXY_OP_OF(op) t) {
+                                                      [](const char* pos, lexy::op<op> t) {
                                                           CHECK(pos == t.pos);
                                                           return 1;
                                                       });
@@ -240,9 +237,9 @@ TEST_CASE("dsl::op choice")
 
     constexpr auto callback
         = lexy::callback<int>([](const char*) { return 0; },
-                              [](const char*, LEXY_OP_OF(op_plus)) { return 1; },
-                              [](const char*, LEXY_OP_OF(op_double_plus)) { return 2; },
-                              [](const char*, LEXY_OP_OF(op_minus)) { return 3; });
+                              [](const char*, lexy::op<op_plus>) { return 1; },
+                              [](const char*, lexy::op<op_double_plus>) { return 2; },
+                              [](const char*, lexy::op<op_minus>) { return 3; });
 
     SUBCASE("as rule")
     {

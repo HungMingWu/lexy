@@ -166,7 +166,7 @@ constexpr auto binding_power_of(Operation)
 namespace lexy::_detail
 {
 template <typename Operation>
-using op_of = LEXY_DECAY_DECLTYPE(Operation::op);
+using op_of = std::decay_t<decltype(Operation::op)>;
 
 template <typename... Operations>
 struct operation_list
@@ -457,7 +457,7 @@ struct _expr : rule_base
 
         using op_list = pre_operation_list_of<typename Context::production, MinBindingPower>;
         using atom_parser
-            = lexy::parser_for<LEXY_DECAY_DECLTYPE(Context::production::atom), final_parser>;
+            = lexy::parser_for<std::decay_t<decltype(Context::production::atom)>, final_parser>;
 
         if constexpr (op_list::size == 0)
         {

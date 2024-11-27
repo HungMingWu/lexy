@@ -144,7 +144,7 @@ namespace lexy
 {
 
 template <typename Production>
-using production_rule = LEXY_DECAY_DECLTYPE(Production::rule);
+using production_rule = std::decay_t<decltype(Production::rule)>;
 
 template <typename Production>
 concept is_production = requires {

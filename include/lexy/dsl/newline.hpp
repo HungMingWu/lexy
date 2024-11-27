@@ -22,7 +22,7 @@ struct expected_newline
 namespace lexyd
 {
 struct _nl
-: LEXY_DECAY_DECLTYPE(literal_set(lexy::dsl::lit<"\n">, lexy::dsl::lit<"\r\n">).error<lexy::expected_newline>)
+: std::decay_t<decltype(literal_set(lexy::dsl::lit<"\n">, lexy::dsl::lit<"\r\n">).error<lexy::expected_newline>)>
 {};
 
 /// Matches a newline character.

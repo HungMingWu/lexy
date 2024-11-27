@@ -26,7 +26,7 @@ struct _sym;
 template <typename FlagRule, auto Default, typename DuplicateError = void>
 struct _flags : rule_base
 {
-    using _enum_type = LEXY_DECAY_DECLTYPE(Default);
+    using _enum_type = std::decay_t<decltype(Default)>;
     using _int_type  = std::underlying_type_t<_enum_type>;
 
     template <typename NextParser>
@@ -82,8 +82,8 @@ struct _flags : rule_base
 template <auto Default, const auto& Table, typename Token, typename Tag>
 constexpr auto flags(_sym<Table, Token, Tag> flag_rule)
 {
-    using table_type = LEXY_DECAY_DECLTYPE(Table);
-    using enum_type  = LEXY_DECAY_DECLTYPE(Default);
+    using table_type = std::decay_t<decltype(Table)>;
+    using enum_type  = std::decay_t<decltype(Default)>;
     static_assert(std::is_same_v<enum_type, typename table_type::mapped_type>);
     static_assert(std::is_enum_v<enum_type>);
 
@@ -92,7 +92,7 @@ constexpr auto flags(_sym<Table, Token, Tag> flag_rule)
 template <const auto& Table, typename Token, typename Tag>
 constexpr auto flags(_sym<Table, Token, Tag> flag_rule)
 {
-    using table_type = LEXY_DECAY_DECLTYPE(Table);
+    using table_type = std::decay_t<decltype(Table)>;
     using enum_type  = typename table_type::mapped_type;
     static_assert(std::is_enum_v<enum_type>);
 
@@ -123,7 +123,7 @@ struct _flag : rule_base
     };
 };
 
-template <auto If, auto Else = LEXY_DECAY_DECLTYPE(If){}, typename Rule>
+template <auto If, auto Else = std::decay_t<decltype(If)>{}, typename Rule>
 constexpr auto flag(Rule)
 {
     LEXY_REQUIRE_BRANCH_RULE(Rule, "flag()");

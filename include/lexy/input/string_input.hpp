@@ -11,7 +11,7 @@
 namespace lexy
 {
 template <typename View>
-using _string_view_char_type = LEXY_DECAY_DECLTYPE(*std::declval<View>().data());
+using _string_view_char_type = std::decay_t<decltype(*std::declval<View>().data())>;
 
 /// An input that refers to a string.
 template <typename Encoding = default_encoding>

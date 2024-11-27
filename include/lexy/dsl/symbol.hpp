@@ -256,7 +256,7 @@ struct _sym : branch_base
     {
         static_assert(lexy::is_char_encoding<typename Reader::encoding>);
         typename Reader::marker end;
-        typename LEXY_DECAY_DECLTYPE(Table)::key_index symbol;
+        typename std::decay_t<decltype(Table)>::key_index symbol;
 
         constexpr auto value() const
         {
@@ -349,7 +349,7 @@ struct _sym<Table, _idp<L, T>, Tag> : branch_base
     struct bp
     {
         static_assert(lexy::is_char_encoding<typename Reader::encoding>);
-        typename LEXY_DECAY_DECLTYPE(Table)::key_index symbol;
+        typename std::decay_t<decltype(Table)>::key_index symbol;
         typename Reader::marker end;
 
         constexpr auto value() const
@@ -440,7 +440,7 @@ struct _sym<Table, void, Tag> : branch_base
     struct bp
     {
         static_assert(lexy::is_char_encoding<typename Reader::encoding>);
-        typename LEXY_DECAY_DECLTYPE(Table)::key_index symbol;
+        typename std::decay_t<decltype(Table)>::key_index symbol;
         typename Reader::marker end;
 
         constexpr auto value() const

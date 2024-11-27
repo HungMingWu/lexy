@@ -213,7 +213,7 @@ public:
     template <is_production Production>
     constexpr auto parse(Production = {})
     {
-        using context_t = LEXY_DECAY_DECLTYPE(static_cast<Derived&>(*this).context());
+        using context_t = std::decay_t<decltype(static_cast<Derived&>(*this).context())>;
         using value_type =
             typename lexy::production_value_callback<Production,
                                                      typename context_t::state_type>::return_type;

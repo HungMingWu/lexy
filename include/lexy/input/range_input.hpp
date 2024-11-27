@@ -49,7 +49,7 @@ private:
 
 template <typename Iterator, typename Sentinel>
 range_input(Iterator begin, Sentinel end)
-    -> range_input<deduce_encoding<LEXY_DECAY_DECLTYPE(*begin)>, Iterator, Sentinel>;
+    -> range_input<deduce_encoding<std::decay_t<decltype(*begin)>>, Iterator, Sentinel>;
 
 template <typename Encoding, typename Iterator, typename Sentinel>
 constexpr bool input_is_view<range_input<Encoding, Iterator, Sentinel>> = true;

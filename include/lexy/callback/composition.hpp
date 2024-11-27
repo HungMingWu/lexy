@@ -50,7 +50,7 @@ struct _compose_cb
 
     template <typename... Args>
     constexpr auto operator()(Args&&... args) const
-        -> LEXY_DECAY_DECLTYPE(_first(std::forward<Args>(args)...), std::declval<return_type>())
+        -> std::decay_t<decltype(_first(std::forward<Args>(args)...), std::declval<return_type>())>
     {
         return _second(_first(std::forward<Args>(args)...));
     }
