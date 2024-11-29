@@ -30,7 +30,7 @@ struct _debug : rule_base
         template <typename Context, typename Reader, typename... Args>
         constexpr static bool parse(Context& context, Reader& reader, Args&&... args)
         {
-            constexpr auto str = lexy::_detail::type_string<Str>::template c_str();
+            constexpr auto str = lexy::_detail::type_string<Str>::c_str();
             context.on(_ev::debug{}, reader.position(), str);
             return NextParser::parse(context, reader, std::forward<Args>(args)...);
         }

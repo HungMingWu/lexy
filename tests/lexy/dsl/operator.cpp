@@ -27,7 +27,7 @@ TEST_CASE("dsl::op")
         constexpr auto rule = dsl::op(dsl::lit_c<'+'>);
         CHECK(lexy::is_branch_rule<decltype(rule)>);
 
-        constexpr auto callback = [](const char*, lexy::op<rule>) { return 0; };
+        constexpr auto callback = [=](const char*, lexy::op<rule>) { return 0; };
 
         auto empty = LEXY_VERIFY("");
         CHECK(empty.status == test_result::fatal_error);
@@ -49,7 +49,7 @@ TEST_CASE("dsl::op")
         constexpr auto rule = dsl::op(dsl::square_bracketed(dsl::lit<"0">));
         CHECK(lexy::is_branch_rule<decltype(rule)>);
 
-        constexpr auto callback = [](const char*, lexy::op<rule>) { return 0; };
+        constexpr auto callback = [=](const char*, lexy::op<rule>) { return 0; };
 
         auto empty = LEXY_VERIFY("");
         CHECK(empty.status == test_result::fatal_error);
@@ -78,7 +78,7 @@ TEST_CASE("dsl::op")
         constexpr auto rule = dsl::op<tag>(dsl::square_bracketed(dsl::lit<"0">));
         CHECK(std::is_same_v<lexy::op<rule>, tag>);
 
-        constexpr auto callback = [](const char* pos, lexy::op<rule> t) {
+        constexpr auto callback = [=](const char* pos, lexy::op<rule> t) {
             CHECK(pos == t.pos);
             return 0;
         };
@@ -103,7 +103,7 @@ TEST_CASE("dsl::op")
         constexpr auto rule = dsl::op<tag_with_state>(dsl::square_bracketed(dsl::lit<"0">));
         CHECK(std::is_same_v<lexy::op<rule>, tag_with_state>);
 
-        constexpr auto callback = [](const char* pos, lexy::op<rule> t) {
+        constexpr auto callback = [=](const char* pos, lexy::op<rule> t) {
             CHECK(pos == t.pos);
             return 0;
         };
@@ -127,7 +127,7 @@ TEST_CASE("dsl::op")
     {
         constexpr auto rule = dsl::op<42>(dsl::square_bracketed(dsl::lit<"0">));
 
-        constexpr auto callback = [](const char*, lexy::op<rule> t) {
+        constexpr auto callback = [=](const char*, lexy::op<rule> t) {
             CHECK(t == 42);
             return 0;
         };
@@ -175,8 +175,8 @@ TEST_CASE("dsl::op")
         constexpr auto rule = dsl::if_(op);
 
         constexpr auto callback
-            = lexy::callback<int>([](const char*) { return 0; },
-                                  [](const char*, lexy::op<op>) { return 1; });
+            = lexy::callback<int>([=](const char*) { return 0; },
+                                  [=](const char*, lexy::op<op>) { return 1; });
 
         auto empty = LEXY_VERIFY("");
         CHECK(empty.status == test_result::success);
@@ -206,8 +206,8 @@ TEST_CASE("dsl::op")
 
         constexpr auto rule = dsl::if_(op);
 
-        constexpr auto callback = lexy::callback<int>([](const char*) { return 0; },
-                                                      [](const char* pos, lexy::op<op> t) {
+        constexpr auto callback = lexy::callback<int>([=](const char*) { return 0; },
+                                                      [=](const char* pos, lexy::op<op> t) {
                                                           CHECK(pos == t.pos);
                                                           return 1;
                                                       });
@@ -236,10 +236,10 @@ TEST_CASE("dsl::op choice")
     constexpr auto op_minus       = dsl::op(dsl::lit_c<'-'>);
 
     constexpr auto callback
-        = lexy::callback<int>([](const char*) { return 0; },
-                              [](const char*, lexy::op<op_plus>) { return 1; },
-                              [](const char*, lexy::op<op_double_plus>) { return 2; },
-                              [](const char*, lexy::op<op_minus>) { return 3; });
+        = lexy::callback<int>([=](const char*) { return 0; },
+                              [=](const char*, lexy::op<op_plus>) { return 1; },
+                              [=](const char*, lexy::op<op_double_plus>) { return 2; },
+                              [=](const char*, lexy::op<op_minus>) { return 3; });
 
     SUBCASE("as rule")
     {
