@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_CALLBACK_BASE_HPP_INCLUDED
-#define LEXY_CALLBACK_BASE_HPP_INCLUDED
+#pragma once
 
 #include <functional>
 #include <lexy/_detail/config.hpp>
@@ -83,4 +82,3 @@ constexpr auto _make_overloaded(Op&&... op)
 }
 } // namespace lexy
 
-#endif // LEXY_CALLBACK_BASE_HPP_INCLUDED

@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_DETAIL_NTTP_STRING_HPP_INCLUDED
-#define LEXY_DETAIL_NTTP_STRING_HPP_INCLUDED
+#pragma once
 
 #include <array>
 #include <lexy/_detail/assert.hpp>
@@ -74,5 +73,4 @@ struct type_string
 
 } // namespace lexy::_detail
 
-#endif // LEXY_DETAIL_NTTP_STRING_HPP_INCLUDED
 

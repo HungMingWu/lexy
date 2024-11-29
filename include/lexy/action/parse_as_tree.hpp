@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_ACTION_PARSE_AS_TREE_HPP_INCLUDED
-#define LEXY_ACTION_PARSE_AS_TREE_HPP_INCLUDED
+#pragma once
 
 #include <lexy/action/base.hpp>
 #include <lexy/action/validate.hpp>
@@ -213,5 +212,4 @@ auto parse_as_tree(parse_tree<lexy::input_reader<Input>, TokenKind, MemoryResour
 }
 } // namespace lexy
 
-#endif // LEXY_ACTION_PARSE_AS_TREE_HPP_INCLUDED
 

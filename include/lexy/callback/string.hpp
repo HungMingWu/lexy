@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_CALLBACK_STRING_HPP_INCLUDED
-#define LEXY_CALLBACK_STRING_HPP_INCLUDED
+#pragma once
 
 #include <lexy/_detail/code_point.hpp>
 #include <lexy/callback/base.hpp>
@@ -206,5 +205,4 @@ template <typename String, typename Encoding = deduce_encoding<_string_char_type
 constexpr auto as_string = _as_string<String, Encoding>{};
 } // namespace lexy
 
-#endif // LEXY_CALLBACK_STRING_HPP_INCLUDED
 

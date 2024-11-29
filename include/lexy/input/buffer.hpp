@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_INPUT_BUFFER_HPP_INCLUDED
-#define LEXY_INPUT_BUFFER_HPP_INCLUDED
+#pragma once
 
 #include <bit>
 #include <cstring>
@@ -503,5 +502,4 @@ template <typename Encoding = default_encoding, typename MemoryResource = void>
 using buffer_error_context = error_context<buffer<Encoding, MemoryResource>>;
 } // namespace lexy
 
-#endif // LEXY_INPUT_BUFFER_HPP_INCLUDED
 

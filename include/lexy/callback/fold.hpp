@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_CALLBACK_FOLD_HPP_INCLUDED
-#define LEXY_CALLBACK_FOLD_HPP_INCLUDED
+#pragma once
 
 #include <lexy/callback/base.hpp>
 
@@ -71,5 +70,4 @@ constexpr auto count
     = fold_inplace<std::size_t>(0u, [](std::size_t& result, auto&&...) { ++result; });
 } // namespace lexy
 
-#endif // LEXY_CALLBACK_FOLD_HPP_INCLUDED
 

@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_ACTION_TRACE_HPP_INCLUDED
-#define LEXY_ACTION_TRACE_HPP_INCLUDED
+#pragma once
 
 #include <lexy/_detail/nttp_string.hpp>
 #include <lexy/action/base.hpp>
@@ -499,5 +498,4 @@ void trace(std::FILE* file, const Input& input, const State& state, visualizatio
 }
 } // namespace lexy
 
-#endif // LEXY_ACTION_TRACE_HPP_INCLUDED
 

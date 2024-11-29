@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_INPUT_STRING_INPUT_HPP_INCLUDED
-#define LEXY_INPUT_STRING_INPUT_HPP_INCLUDED
+#pragma once
 
 #include <lexy/error.hpp>
 #include <lexy/input/base.hpp>
@@ -113,5 +112,4 @@ template <typename Encoding = default_encoding>
 using string_error_context = error_context<string_input<Encoding>>;
 } // namespace lexy
 
-#endif // LEXY_INPUT_STRING_INPUT_HPP_INCLUDED
 

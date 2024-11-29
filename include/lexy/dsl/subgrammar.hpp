@@ -1,8 +1,7 @@
 // Copyright (C) 2022 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_DSL_SUBGRAMMAR_HPP_INCLUDED
-#define LEXY_DSL_SUBGRAMMAR_HPP_INCLUDED
+#pragma once
 
 #include <lexy/action/base.hpp>
 #include <lexy/dsl/base.hpp>
@@ -106,4 +105,3 @@ template <typename Production, typename T>
 constexpr auto subgrammar = _subg<Production, T>{};
 } // namespace lexyd
 
-#endif // LEXY_DSL_SUBGRAMMAR_HPP_INCLUDED

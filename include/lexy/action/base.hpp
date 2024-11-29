@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_ACTION_BASE_HPP_INCLUDED
-#define LEXY_ACTION_BASE_HPP_INCLUDED
+#pragma once
 
 #include <lexy/_detail/config.hpp>
 #include <lexy/_detail/lazy_init.hpp>
@@ -270,5 +269,4 @@ struct void_value_callback
 };
 } // namespace lexy::_detail
 
-#endif // LEXY_ACTION_BASE_HPP_INCLUDED
 

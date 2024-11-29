@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_DSL_BASE_HPP_INCLUDED
-#define LEXY_DSL_BASE_HPP_INCLUDED
+#pragma once
 
 #include <lexy/_detail/config.hpp>
 #include <lexy/_detail/lazy_init.hpp>
@@ -264,5 +263,4 @@ inline constexpr auto try_match_token(TokenRule, Reader& reader)
 }
 } // namespace lexy
 
-#endif // LEXY_DSL_BASE_HPP_INCLUDED
 

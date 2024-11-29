@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_TOKEN_HPP_INCLUDED
-#define LEXY_TOKEN_HPP_INCLUDED
+#pragma once
 
 #include <climits>
 #include <cstdint>
@@ -276,5 +275,4 @@ template <typename Input, typename TokenKind = void>
 using token_for = token<lexy::input_reader<Input>, TokenKind>;
 } // namespace lexy
 
-#endif // LEXY_TOKEN_HPP_INCLUDED
 

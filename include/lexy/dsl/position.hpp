@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_DSL_POSITION_HPP_INCLUDED
-#define LEXY_DSL_POSITION_HPP_INCLUDED
+#pragma once
 
 #include <lexy/dsl/base.hpp>
 
@@ -79,5 +78,4 @@ struct _pos_dsl : _pos
 constexpr auto position = _pos_dsl{};
 } // namespace lexyd
 
-#endif // LEXY_DSL_POSITION_HPP_INCLUDED
 

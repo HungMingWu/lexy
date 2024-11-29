@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_ACTION_SCAN_HPP_INCLUDED
-#define LEXY_ACTION_SCAN_HPP_INCLUDED
+#pragma once
 
 #include <lexy/action/base.hpp>
 #include <lexy/action/validate.hpp>
@@ -94,5 +93,4 @@ constexpr auto scan(const Input& input, const State& state, const ErrorCallback&
 }
 } // namespace lexy
 
-#endif // LEXY_ACTION_SCAN_HPP_INCLUDED
 

@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef BENCHMARKS_SWAR_SWAR_HPP_INCLUDED
-#define BENCHMARKS_SWAR_SWAR_HPP_INCLUDED
+#pragma once
 
 #include <lexy/dsl/any.hpp>
 #include <lexy/input/buffer.hpp>
@@ -72,5 +71,4 @@ lexy::buffer<lexy::utf8_encoding> random_buffer(std::size_t size, float unicode_
 
 lexy::buffer<lexy::utf8_encoding> repeat_buffer_padded(std::size_t size, const char* str);
 
-#endif // BENCHMARKS_SWAR_SWAR_HPP_INCLUDED
 

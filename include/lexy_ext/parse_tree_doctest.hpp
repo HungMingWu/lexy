@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_EXT_PARSE_TREE_DOCTEST_HPP_INCLUDED
-#define LEXY_EXT_PARSE_TREE_DOCTEST_HPP_INCLUDED
+#pragma once
 
 #include <cctype>
 #include <cstdio>
@@ -191,5 +190,4 @@ struct StringMaker<lexy::parse_tree<Reader, TokenKind, MemoryResource>>
 };
 } // namespace doctest
 
-#endif // LEXY_EXT_PARSE_TREE_DOCTEST_HPP_INCLUDED
 

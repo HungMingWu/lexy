@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_DSL_BRANCH_HPP_INCLUDED
-#define LEXY_DSL_BRANCH_HPP_INCLUDED
+#pragma once
 
 #include <lexy/dsl/base.hpp>
 #include <lexy/dsl/sequence.hpp>
@@ -143,5 +142,4 @@ struct _else_dsl
 inline constexpr auto else_ = _else_dsl{};
 } // namespace lexyd
 
-#endif // LEXY_DSL_BRANCH_HPP_INCLUDED
 

@@ -1,5 +1,4 @@
-#ifndef LEXY_DETAIL_UTIL_HPP_INCLUDED
-#define LEXY_DETAIL_UTIL_HPP_INCLUDED
+#pragma once
 
 #include <cstdint>
 #include <utility>
@@ -21,4 +20,3 @@ constexpr auto make_index_sequence_tuple()
 
 }
 
-#endif // LEXY_DETAIL_UTIL_HPP_INCLUDED

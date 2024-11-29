@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_EXT_COMPILER_EXPLORER_HPP_INCLUDED
-#define LEXY_EXT_COMPILER_EXPLORER_HPP_INCLUDED
+#pragma once
 
 #include <cstdio>
 #include <lexy/_detail/buffer_builder.hpp>
@@ -56,5 +55,4 @@ template <typename Production>
 using compiler_explorer_error_context = lexy::buffer_error_context<Production, lexy::utf8_encoding>;
 } // namespace lexy_ext
 
-#endif // LEXY_EXT_COMPILER_EXPLORER_HPP_INCLUDED
 

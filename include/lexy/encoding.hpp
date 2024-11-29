@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_ENCODING_HPP_INCLUDED
-#define LEXY_ENCODING_HPP_INCLUDED
+#pragma once
 
 #include <cstdint>
 #include <lexy/_detail/assert.hpp>
@@ -317,5 +316,4 @@ consteval auto transcode_int(CharT c) -> typename Encoding::int_type
 }
 } // namespace lexy::_detail
 
-#endif // LEXY_ENCODING_HPP_INCLUDED
 

@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_DSL_EXPRESSION_HPP_INCLUDED
-#define LEXY_DSL_EXPRESSION_HPP_INCLUDED
+#pragma once
 
 #include <lexy/action/base.hpp>
 #include <lexy/dsl/base.hpp>
@@ -597,5 +596,4 @@ struct subexpression_production : Expr
 };
 } // namespace lexy
 
-#endif // LEXY_DSL_EXPRESSION_HPP_INCLUDED
 

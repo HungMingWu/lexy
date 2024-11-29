@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_DSL_PARSE_TREE_NODE_HPP_INCLUDED
-#define LEXY_DSL_PARSE_TREE_NODE_HPP_INCLUDED
+#pragma once
 
 #include <lexy/dsl/base.hpp>
 #include <lexy/dsl/token.hpp>
@@ -247,5 +246,4 @@ template <typename Production>
 constexpr auto pnode = _pn<Production>{};
 } // namespace lexyd
 
-#endif // LEXY_DSL_PARSE_TREE_NODE_HPP_INCLUDED
 

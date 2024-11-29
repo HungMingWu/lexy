@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_EXT_REPORT_ERROR_HPP_INCLUDED
-#define LEXY_EXT_REPORT_ERROR_HPP_INCLUDED
+#pragma once
 
 #include <cstdio>
 #include <lexy/_detail/assert.hpp>
@@ -377,5 +376,4 @@ struct _report_error
 constexpr auto report_error = _report_error<lexy::stderr_output_iterator>{};
 } // namespace lexy_ext
 
-#endif // LEXY_EXT_REPORT_ERROR_HPP_INCLUDED
 

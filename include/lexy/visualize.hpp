@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_VISUALIZE_HPP_INCLUDED
-#define LEXY_VISUALIZE_HPP_INCLUDED
+#pragma once
 
 #include <cstdio>
 #include <lexy/_detail/config.hpp>
@@ -704,5 +703,4 @@ std::size_t visualization_display_width(const T& obj, visualization_options opts
 }
 } // namespace lexy
 
-#endif // LEXY_VISUALIZE_HPP_INCLUDED
 

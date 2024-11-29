@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_CODE_POINT_HPP_INCLUDED
-#define LEXY_CODE_POINT_HPP_INCLUDED
+#pragma once
 
 #include <cstdint>
 #include <lexy/_detail/assert.hpp>
@@ -302,5 +301,4 @@ bool code_point_has_properties(char32_t cp); // not implemented
 
 #endif
 
-#endif // LEXY_CODE_POINT_HPP_INCLUDED
 

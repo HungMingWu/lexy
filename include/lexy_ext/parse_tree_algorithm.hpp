@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_EXT_PARSE_TREE_ALGORITHM_HPP_INCLUDED
-#define LEXY_EXT_PARSE_TREE_ALGORITHM_HPP_INCLUDED
+#pragma once
 
 #include <lexy/parse_tree.hpp>
 #include <optional>
@@ -277,5 +276,4 @@ auto node_position(const lexy::parse_tree<Reader, TokenKind, MemoryResource>&   
 }
 } // namespace lexy_ext
 
-#endif // LEXY_EXT_PARSE_TREE_ALGORITHM_HPP_INCLUDED
 

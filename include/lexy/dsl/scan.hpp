@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_DSL_SCAN_HPP_INCLUDED
-#define LEXY_DSL_SCAN_HPP_INCLUDED
+#pragma once
 
 #include <lexy/callback/forward.hpp>
 #include <lexy/dsl/base.hpp>
@@ -510,5 +509,4 @@ struct scan_production
 };
 } // namespace lexy
 
-#endif // LEXY_DSL_SCAN_HPP_INCLUDED
 

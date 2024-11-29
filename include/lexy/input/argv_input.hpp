@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_INPUT_ARGV_INPUT_HPP_INCLUDED
-#define LEXY_INPUT_ARGV_INPUT_HPP_INCLUDED
+#pragma once
 
 #include <lexy/_detail/assert.hpp>
 #include <lexy/_detail/iterator.hpp>
@@ -211,5 +210,4 @@ template <>
 inline constexpr auto token_kind_of<lexy::dsl::_argvsep> = lexy::literal_token_kind;
 } // namespace lexy
 
-#endif // LEXY_INPUT_ARGV_INPUT_HPP_INCLUDED
 

@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_DSL_ASCII_HPP_INCLUDED
-#define LEXY_DSL_ASCII_HPP_INCLUDED
+#pragma once
 
 #include <lexy/_detail/nttp_string.hpp>
 #include <lexy/dsl/base.hpp>
@@ -514,5 +513,4 @@ constexpr auto one_of = typename _one_of<Str>::rule{};
 
 } // namespace lexyd::ascii
 
-#endif // LEXY_DSL_ASCII_HPP_INCLUDED
 

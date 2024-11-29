@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_EXT_SHELL_HPP_INCLUDED
-#define LEXY_EXT_SHELL_HPP_INCLUDED
+#pragma once
 
 #include <cstdio>
 
@@ -418,5 +417,4 @@ template <typename Prompt = default_prompt<>>
 using shell_error_context = lexy::error_context<shell<Prompt>>;
 } // namespace lexy_ext
 
-#endif // LEXY_EXT_SHELL_HPP_INCLUDED
 

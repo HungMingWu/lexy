@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_DSL_IDENTIFIER_HPP_INCLUDED
-#define LEXY_DSL_IDENTIFIER_HPP_INCLUDED
+#pragma once
 
 #include <lexy/dsl/base.hpp>
 #include <lexy/dsl/char_class.hpp>
@@ -391,5 +390,4 @@ template <typename Id, lexy::_detail::string_literal Str>
 constexpr auto token_kind_of<lexy::dsl::_kw<Id, Str>> = lexy::literal_token_kind;
 } // namespace lexy
 
-#endif // LEXY_DSL_IDENTIFIER_HPP_INCLUDED
 

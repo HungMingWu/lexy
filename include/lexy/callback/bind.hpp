@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_CALLBACK_BIND_HPP_INCLUDED
-#define LEXY_CALLBACK_BIND_HPP_INCLUDED
+#pragma once
 
 #include <tuple>
 #include <lexy/callback/base.hpp>
@@ -395,4 +394,3 @@ constexpr auto bind_sink(Sink&& sink, BoundArgs&&... args)
 }
 } // namespace lexy
 
-#endif // LEXY_CALLBACK_BIND_HPP_INCLUDED

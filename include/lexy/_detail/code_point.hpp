@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_DETAIL_CODE_POINT_HPP_INCLUDED
-#define LEXY_DETAIL_CODE_POINT_HPP_INCLUDED
+#pragma once
 
 #include <lexy/input/base.hpp>
 
@@ -364,5 +363,4 @@ constexpr void recover_code_point(Reader& reader, cp_result<Reader> result)
 }
 } // namespace lexy::_detail
 
-#endif // LEXY_DETAIL_CODE_POINT_HPP_INCLUDED
 

@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef TEST_TEST_ENCODING_HPP_INCLUDED
-#define TEST_TEST_ENCODING_HPP_INCLUDED
+#pragma once
 
 #include <lexy/input/string_input.hpp>
 
@@ -68,5 +67,4 @@ struct test_encoding
 
 using test_input = lexy::string_input<test_encoding>;
 
-#endif // TEST_TEST_ENCODING_HPP_INCLUDED
 

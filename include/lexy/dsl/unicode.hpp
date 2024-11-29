@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_DSL_UNICODE_HPP_INCLUDED
-#define LEXY_DSL_UNICODE_HPP_INCLUDED
+#pragma once
 
 #include <lexy/code_point.hpp>
 #include <lexy/dsl/ascii.hpp>
@@ -493,5 +492,4 @@ struct _xid_continue : char_class_base<_xid_continue>
 inline constexpr auto xid_continue = _xid_continue{};
 } // namespace lexyd::unicode
 
-#endif // LEXY_DSL_UNICODE_HPP_INCLUDED
 

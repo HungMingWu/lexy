@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_INPUT_LOCATION_HPP_INCLUDED
-#define LEXY_INPUT_LOCATION_HPP_INCLUDED
+#pragma once
 
 #include <lexy/dsl/code_point.hpp>
 #include <lexy/dsl/newline.hpp>
@@ -482,5 +481,4 @@ constexpr auto get_input_line_annotation(const Input&                           
 }
 } // namespace lexy
 
-#endif // LEXY_INPUT_LOCATION_HPP_INCLUDED
 

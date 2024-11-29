@@ -1,8 +1,7 @@
 // Copyright (C) 2022 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_INPUT_LEXEME_INPUT_HPP_INCLUDED
-#define LEXY_INPUT_LEXEME_INPUT_HPP_INCLUDED
+#pragma once
 
 #include <lexy/input/base.hpp>
 #include <lexy/lexeme.hpp>
@@ -62,5 +61,4 @@ private:
 };
 } // namespace lexy
 
-#endif // LEXY_INPUT_LEXEME_INPUT_HPP_INCLUDED
 

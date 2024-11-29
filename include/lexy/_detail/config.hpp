@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_DETAIL_CONFIG_HPP_INCLUDED
-#define LEXY_DETAIL_CONFIG_HPP_INCLUDED
+#pragma once
 
 #include <cstddef>
 #include <type_traits>
@@ -38,5 +37,4 @@ template <typename T, typename Fallback>
 using type_or = std::conditional_t<std::is_void_v<T>, Fallback, T>;
 } // namespace lexy::_detail
 
-#endif // LEXY_DETAIL_CONFIG_HPP_INCLUDED
 

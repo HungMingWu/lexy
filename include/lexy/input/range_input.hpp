@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_INPUT_RANGE_INPUT_HPP_INCLUDED
-#define LEXY_INPUT_RANGE_INPUT_HPP_INCLUDED
+#pragma once
 
 #include <lexy/error.hpp>
 #include <lexy/input/base.hpp>
@@ -55,5 +54,4 @@ template <typename Encoding, typename Iterator, typename Sentinel>
 constexpr bool input_is_view<range_input<Encoding, Iterator, Sentinel>> = true;
 } // namespace lexy
 
-#endif // LEXY_INPUT_RANGE_INPUT_HPP_INCLUDED
 

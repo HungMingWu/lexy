@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_PARSE_TREE_HPP_INCLUDED
-#define LEXY_PARSE_TREE_HPP_INCLUDED
+#pragma once
 
 #include <lexy/_detail/assert.hpp>
 #include <lexy/_detail/config.hpp>
@@ -1287,5 +1286,4 @@ struct parse_tree_input_traits<_pt_node<Reader, TokenKind>>
 } // namespace lexy
 #endif
 
-#endif // LEXY_PARSE_TREE_HPP_INCLUDED
 

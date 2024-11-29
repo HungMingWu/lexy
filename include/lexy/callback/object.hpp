@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_CALLBACK_OBJECT_HPP_INCLUDED
-#define LEXY_CALLBACK_OBJECT_HPP_INCLUDED
+#pragma once
 
 #include <lexy/callback/base.hpp>
 
@@ -95,5 +94,4 @@ template <typename T, typename PtrT = T*>
 constexpr auto new_ = _new<T, PtrT>{};
 } // namespace lexy
 
-#endif // LEXY_CALLBACK_OBJECT_HPP_INCLUDED
 

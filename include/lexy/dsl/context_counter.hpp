@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_DSL_CONTEXT_COUNTER_HPP_INCLUDED
-#define LEXY_DSL_CONTEXT_COUNTER_HPP_INCLUDED
+#pragma once
 
 #include <lexy/_detail/iterator.hpp>
 #include <lexy/action/base.hpp>
@@ -264,5 +263,4 @@ constexpr auto equal_counts(_ctx_counter_dsl<Ids>...)
 }
 } // namespace lexyd
 
-#endif // LEXY_DSL_CONTEXT_COUNTER_HPP_INCLUDED
 

@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_DSL_CHAR_CLASS_HPP_INCLUDED
-#define LEXY_DSL_CHAR_CLASS_HPP_INCLUDED
+#pragma once
 
 #include <lexy/_detail/code_point.hpp>
 #include <lexy/_detail/nttp_string.hpp>
@@ -647,5 +646,4 @@ constexpr auto operator&(_cand<Cs...>, _cand<Ds...>) -> _cand<Cs..., Ds...>
 }
 } // namespace lexyd
 
-#endif // LEXY_DSL_CHAR_CLASS_HPP_INCLUDED
 

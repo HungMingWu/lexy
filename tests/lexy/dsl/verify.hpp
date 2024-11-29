@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef TESTS_LEXY_DSL_VERIFY_HPP_INCLUDED
-#define TESTS_LEXY_DSL_VERIFY_HPP_INCLUDED
+#pragma once
 
 #include <doctest/doctest.h>
 #include <lexy/action/base.hpp>
@@ -714,5 +713,4 @@ auto _get_input(const lexy::parse_tree<Reader, TokenKind>& tree)
 
 #define LEXY_VERIFY(...) LEXY_VERIFY_P(lexy_test::test_production_for<decltype(rule)>, __VA_ARGS__)
 
-#endif // TESTS_LEXY_DSL_VERIFY_HPP_INCLUDED
 

@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_ERROR_HPP_INCLUDED
-#define LEXY_ERROR_HPP_INCLUDED
+#pragma once
 
 #include <lexy/_detail/config.hpp>
 #include <lexy/grammar.hpp>
@@ -267,5 +266,4 @@ private:
 };
 } // namespace lexy
 
-#endif // LEXY_ERROR_HPP_INCLUDED
 

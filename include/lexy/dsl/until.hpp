@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_DSL_UNTIL_HPP_INCLUDED
-#define LEXY_DSL_UNTIL_HPP_INCLUDED
+#pragma once
 
 #include <lexy/_detail/swar.hpp>
 #include <lexy/dsl/base.hpp>
@@ -153,5 +152,4 @@ template <typename Condition>
 constexpr auto token_kind_of<lexy::dsl::_until<Condition>> = lexy::any_token_kind;
 } // namespace lexy
 
-#endif // LEXY_DSL_UNTIL_HPP_INCLUDED
 

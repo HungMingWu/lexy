@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_DSL_LITERAL_HPP_INCLUDED
-#define LEXY_DSL_LITERAL_HPP_INCLUDED
+#pragma once
 
 #include <lexy/_detail/code_point.hpp>
 #include <lexy/_detail/iterator.hpp>
@@ -643,5 +642,4 @@ template <typename... Literals>
 constexpr auto token_kind_of<lexy::dsl::_lset<Literals...>> = lexy::literal_token_kind;
 } // namespace lexy
 
-#endif // LEXY_DSL_LITERAL_HPP_INCLUDED
 

@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_INPUT_PARSE_TREE_INPUT_HPP_INCLUDED
-#define LEXY_INPUT_PARSE_TREE_INPUT_HPP_INCLUDED
+#pragma once
 
 #include <lexy/error.hpp>
 #include <lexy/grammar.hpp>
@@ -180,5 +179,4 @@ template <typename Node>
 using parse_tree_error_context = error_context<parse_tree_input<Node>>;
 } // namespace lexy
 
-#endif // LEXY_INPUT_PARSE_TREE_INPUT_HPP_INCLUDED
 

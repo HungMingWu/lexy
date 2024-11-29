@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_CALLBACK_AGGREGATE_HPP_INCLUDED
-#define LEXY_CALLBACK_AGGREGATE_HPP_INCLUDED
+#pragma once
 
 #include <lexy/callback/base.hpp>
 #include <lexy/dsl/member.hpp>
@@ -68,5 +67,4 @@ template <typename T>
 constexpr auto as_aggregate = _as_aggregate<T>{};
 } // namespace lexy
 
-#endif // LEXY_CALLBACK_AGGREGATE_HPP_INCLUDED
 

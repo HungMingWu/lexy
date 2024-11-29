@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_DSL_COMBINATION_HPP_INCLUDED
-#define LEXY_DSL_COMBINATION_HPP_INCLUDED
+#pragma once
 
 #include <lexy/dsl/base.hpp>
 #include <lexy/dsl/choice.hpp>
@@ -148,5 +147,4 @@ constexpr auto partial_combination(R...)
 }
 } // namespace lexyd
 
-#endif // LEXY_DSL_COMBINATION_HPP_INCLUDED
 

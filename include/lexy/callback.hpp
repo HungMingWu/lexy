@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_CALLBACK_HPP_INCLUDED
-#define LEXY_CALLBACK_HPP_INCLUDED
+#pragma once
 
 #include <lexy/callback/adapter.hpp>
 #include <lexy/callback/aggregate.hpp>
@@ -18,5 +17,4 @@
 #include <lexy/callback/object.hpp>
 #include <lexy/callback/string.hpp>
 
-#endif // LEXY_CALLBACK_HPP_INCLUDED
 

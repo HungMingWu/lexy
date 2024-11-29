@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_DSL_WHITESPACE_HPP_INCLUDED
-#define LEXY_DSL_WHITESPACE_HPP_INCLUDED
+#pragma once
 
 #include <lexy/_detail/swar.hpp>
 #include <lexy/action/base.hpp>
@@ -315,5 +314,4 @@ constexpr auto no_whitespace(Rule)
 }
 } // namespace lexyd
 
-#endif // LEXY_DSL_WHITESPACE_HPP_INCLUDED
 

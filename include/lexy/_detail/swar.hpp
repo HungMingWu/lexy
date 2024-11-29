@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_DETAIL_SWAR_HPP_INCLUDED
-#define LEXY_DETAIL_SWAR_HPP_INCLUDED
+#pragma once
 
 #include <bit>
 #include <climits>
@@ -244,5 +243,4 @@ constexpr std::size_t round_size_for_swar(std::size_t size_in_bytes)
 }
 } // namespace lexy::_detail
 
-#endif // LEXY_DETAIL_SWAR_HPP_INCLUDED
 

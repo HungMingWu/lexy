@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_INPUT_BASE_HPP_INCLUDED
-#define LEXY_INPUT_BASE_HPP_INCLUDED
+#pragma once
 
 #include <lexy/_detail/config.hpp>
 #include <lexy/_detail/iterator.hpp>
@@ -144,5 +143,4 @@ constexpr auto partial_input(const Reader& reader, typename Reader::iterator end
 }
 } // namespace lexy
 
-#endif // LEXY_INPUT_BASE_HPP_INCLUDED
 

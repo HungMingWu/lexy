@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_DSL_CODE_POINT_HPP_INCLUDED
-#define LEXY_DSL_CODE_POINT_HPP_INCLUDED
+#pragma once
 
 #include <lexy/code_point.hpp>
 #include <lexy/dsl/base.hpp>
@@ -208,5 +207,4 @@ template <>
 inline constexpr auto token_kind_of<lexy::dsl::_cp<void>> = lexy::any_token_kind;
 } // namespace lexy
 
-#endif // LEXY_DSL_CODE_POINT_HPP_INCLUDED
 

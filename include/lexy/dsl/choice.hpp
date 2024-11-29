@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_DSL_CHOICE_HPP_INCLUDED
-#define LEXY_DSL_CHOICE_HPP_INCLUDED
+#pragma once
 
 #include <tuple>
 #include <lexy/_detail/util.hpp>
@@ -163,5 +162,4 @@ constexpr auto operator|(_chc<R...>, _chc<S...>)
 }
 } // namespace lexyd
 
-#endif // LEXY_DSL_CHOICE_HPP_INCLUDED
 

@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_CALLBACK_INTEGER_HPP_INCLUDED
-#define LEXY_CALLBACK_INTEGER_HPP_INCLUDED
+#pragma once
 
 #include <lexy/callback/base.hpp>
 #include <lexy/dsl/sign.hpp>
@@ -40,5 +39,4 @@ template <typename T>
 constexpr auto as_integer = _int<T>{};
 } // namespace lexy
 
-#endif // LEXY_CALLBACK_INTEGER_HPP_INCLUDED
 

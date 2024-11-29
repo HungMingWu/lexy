@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_DSL_CASE_FOLDING_HPP_INCLUDED
-#define LEXY_DSL_CASE_FOLDING_HPP_INCLUDED
+#pragma once
 
 #include <lexy/_detail/code_point.hpp>
 #include <lexy/code_point.hpp>
@@ -299,5 +298,4 @@ struct _scf_dsl
 inline constexpr auto simple_case_folding = _scf_dsl{};
 } // namespace lexyd::unicode
 
-#endif // LEXY_DSL_CASE_FOLDING_HPP_INCLUDED
 

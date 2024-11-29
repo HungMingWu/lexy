@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_DSL_RETURN_HPP_INCLUDED
-#define LEXY_DSL_RETURN_HPP_INCLUDED
+#pragma once
 
 #include <lexy/action/base.hpp>
 #include <lexy/dsl/base.hpp>
@@ -19,6 +18,4 @@ struct _ret : rule_base
 /// Finishes parsing a production without considering subsequent rules.
 constexpr auto return_ = _ret{};
 } // namespace lexyd
-
-#endif // LEXY_DSL_RETURN_HPP_INCLUDED
 

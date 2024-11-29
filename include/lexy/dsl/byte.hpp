@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_DSL_BYTE_HPP_INCLUDED
-#define LEXY_DSL_BYTE_HPP_INCLUDED
+#pragma once
 
 #include <bit>
 #include <cstdint>
@@ -398,4 +397,3 @@ inline constexpr auto little_bint64 = _bint<8, lexy::_detail::bint_little>{};
 inline constexpr auto big_bint64    = _bint<8, lexy::_detail::bint_big>{};
 } // namespace lexyd
 
-#endif // LEXY_DSL_BYTE_HPP_INCLUDED

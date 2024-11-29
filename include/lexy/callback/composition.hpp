@@ -1,8 +1,7 @@
 // Copyright (C) 2020-2024 Jonathan Müller and lexy contributors
 // SPDX-License-Identifier: BSL-1.0
 
-#ifndef LEXY_CALLBACK_COMPOSITION_HPP_INCLUDED
-#define LEXY_CALLBACK_COMPOSITION_HPP_INCLUDED
+#pragma once
 
 #include <lexy/callback/base.hpp>
 
@@ -105,5 +104,4 @@ constexpr auto operator>>(Sink sink, Callback cb)
 }
 } // namespace lexy
 
-#endif // LEXY_CALLBACK_COMPOSITION_HPP_INCLUDED
 
