@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include <lexy/_detail/stateless_lambda.hpp>
 #include <lexy/dsl/base.hpp>
 #include <lexy/dsl/branch.hpp>
 
@@ -79,9 +78,7 @@ struct _mem_dsl
     template <typename Rule>
     constexpr auto operator=(Rule) const // NOLINT: it _is_ an unconventional assignment operator
     {
-        using lambda = std::conditional_t<std::is_default_constructible_v<Fn>, Fn,
-                                          lexy::_detail::stateless_lambda<Fn>>;
-        return _mem<lambda, Rule>{};
+        return _mem<Fn, Rule>{};
     }
 };
 

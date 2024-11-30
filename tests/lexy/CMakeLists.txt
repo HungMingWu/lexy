@@ -6,7 +6,6 @@ set(tests
         detail/buffer_builder.cpp
         detail/lazy_init.cpp
         detail/nttp_string.cpp
-        detail/stateless_lambda.cpp
         detail/swar.cpp
         detail/type_name.cpp
 
