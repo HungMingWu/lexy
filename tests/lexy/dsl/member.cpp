@@ -16,7 +16,7 @@ void apply(lexy::member<Fn>, Obj& obj, T t)
 }
 } // namespace
 
-TEST_CASE("dsl::member")
+TEST_CASE("lexy::mem")
 {
     struct test_type
     {
@@ -34,7 +34,7 @@ TEST_CASE("dsl::member")
 
     SUBCASE("non-macro")
     {
-        constexpr auto rule = (dsl::member<& test_type::member> = dsl::lit<"abc">) + dsl::position;
+        constexpr auto rule = (lexy::mem<&test_type::member> = dsl::lit<"abc">) + dsl::position;
         CHECK(lexy::is_rule<decltype(rule)>);
 
         auto empty = LEXY_VERIFY("");
@@ -49,7 +49,7 @@ TEST_CASE("dsl::member")
     SUBCASE("macro")
     {
         // Note: not constexpr in C++17 due to the use of reinterpret_cast in stateless lambda.
-        constexpr auto member = LEXY_MEM(member) = dsl::lit<"abc">;
+        constexpr auto member = lexy::mem<&test_type::member> = dsl::lit<"abc">;
         constexpr auto rule                      = member + dsl::position;
         CHECK(lexy::is_rule<decltype(rule)>);
 
@@ -66,7 +66,7 @@ TEST_CASE("dsl::member")
     SUBCASE("as branch")
     {
         constexpr auto rule
-            = dsl::if_(dsl::member<& test_type::member> = dsl::lit<"abc"> >> dsl::position);
+            = dsl::if_(lexy::mem<&test_type::member> = dsl::lit<"abc"> >> dsl::position);
         CHECK(lexy::is_rule<decltype(rule)>);
 
         auto empty = LEXY_VERIFY("");

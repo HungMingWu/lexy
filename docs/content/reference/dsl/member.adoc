@@ -2,8 +2,7 @@
 header: "lexy/dsl/member.hpp"
 entities:
   "lexy::dsl::member": member
-  "lexy::member": member
-  "LEXY_MEM": member
+  "lexy::mem": member
 ---
 :toc: left
 
@@ -16,6 +15,9 @@ namespace lexy
 {
     template <typename Fn>
     struct member {};
+
+    template <auto MemberPtr>
+    constexpr _member-dsl_ mem;
 }
 
 namespace lexy::dsl
@@ -26,16 +28,12 @@ namespace lexy::dsl
         constexpr _rule_        auto operator=(_rule_        auto rule);
         constexpr _branch-rule_ auto operator=(_branch-rule_ auto rule);
     };
-
-    template <auto MemberPtr>
-    constexpr _member-dsl_ member;
 }
 
-#define LEXY_MEM(Name) lexy::dsl::member<...>
 ----
 
 [.lead]
-`member` is a rule that can be used to specify a member of an aggregate that will receive the resulting value a rule.
+`mem` is a rule that can be used to specify a member of an aggregate that will receive the resulting value a rule.
 
 A rule is formed by writing `member<MemberPtr> = rule`.
 
@@ -55,7 +53,6 @@ Values::
   When invoked, it will set the member described `MemberPtr` of the `Aggregate` object to the value of `rule`.
   The second is the value `rule` has produced.
 
-The macro version `LEXY_MEM(member) = rule` behaves identical, except that `member` is not a member pointer but the name of a member.
 The resulting `Fn` can take an arbitrary aggregate type and will assign the member with that name.
 
 It is designed to be used with {{% docref "lexy::as_aggregate" %}} as the callback.

@@ -18,8 +18,8 @@ struct production
         auto value = dsl::integer<int>;
 
         // Parse an integer into the x/y member of point.
-        auto x_coord = (dsl::member<& point::x> = value);
-        auto y_coord = (dsl::member<& point::y> = value);
+        auto x_coord = (lexy::mem<&point::x> = value);
+        auto y_coord = (lexy::mem<&point::y> = value);
 
         return x_coord + dsl::comma + y_coord;
     }();

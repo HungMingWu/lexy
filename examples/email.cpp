@@ -188,9 +188,10 @@ namespace grammar
             // arbitrary order). Some fields are mandatory, but this verification is better done
             // elsewhere.
             //
-            // With LEXY_MEM() we can assign them to a member of the given name.
-            return dsl::partial_combination(LEXY_MEM(from) = from, LEXY_MEM(to) = to,
-                                            LEXY_MEM(cc) = cc, LEXY_MEM(subject) = subject);
+            // With lexy::mem() we can assign them to a member of the given name.
+            using message = ast::message;
+            return dsl::partial_combination(lexy::mem<&message::from> = from, lexy::mem<&message::to> = to,
+                                            lexy::mem<&message::cc> = cc, lexy::mem<&message::subject> = subject);
         }();
         static constexpr auto value = lexy::as_aggregate<ast::message>;
     };
@@ -199,7 +200,7 @@ namespace grammar
     {
         // The fields followed by the body assigned to the body member.
         static constexpr auto rule
-            = dsl::p<fields> + dsl::newline + (LEXY_MEM(body) = dsl::p<body>);
+            = dsl::p<fields> + dsl::newline + (lexy::mem<&ast::message::body> = dsl::p<body>);
         static constexpr auto value = lexy::as_aggregate<ast::message>;
     };
 } // namespace grammar

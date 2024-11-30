@@ -131,11 +131,11 @@ namespace grammar
                 return name >> dsl::try_(dsl::lit_c<'='>) + rule + end;
             };
 
-            auto name_field = make_field(dsl::lit<"name">, LEXY_MEM(name) = dsl::p<name>);
+            auto name_field = make_field(dsl::lit<"name">, lexy::mem<&PackageConfig::name> = dsl::p<name>);
             auto version_field
-                = make_field(dsl::lit<"version">, LEXY_MEM(version) = dsl::p<version>);
+                = make_field(dsl::lit<"version">, lexy::mem<&PackageConfig::version> = dsl::p<version>);
             auto authors_field
-                = make_field(dsl::lit<"authors">, LEXY_MEM(authors) = dsl::p<author_list>);
+                = make_field(dsl::lit<"authors">, lexy::mem<&PackageConfig::authors> = dsl::p<author_list>);
 
             auto combination = dsl::combination(name_field, version_field, authors_field)
                                .missing_error<unknown_field>.duplicate_error<duplicate_field>;

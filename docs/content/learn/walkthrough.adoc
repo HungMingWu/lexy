@@ -409,8 +409,8 @@ This can be done using {{% docref "lexy::dsl::combination" %}}, which parses eac
 The values produced during parsing are not passed to a callback, as that will require `N!` overloads, but instead it uses a sink.
 That's a problem though: how can we know which value should be assigned to which field?
 
-The solution is to use the {{% docref "lexy::as_aggregate" %}} callback together with {{% docref "LEXY_MEM" %}}.
-Using `LEXY_MEM(name) = rule` in the DSL assigns the value of `rule` to the member `name`,
+The solution is to use the {{% docref "lexy::as_aggregate" %}} callback together with {{% docref "lexy::mem" %}}.
+Using `lexy::mem<&struct::field> = rule` in the DSL assigns the value of `rule` to the member `field` in `struct`,
 `lexy::as_aggregate<T>` then constructs `T` by collecting the values of all members:
 
 [source,cpp]
@@ -424,11 +424,11 @@ struct config
             return name >> dsl::lit_c<'='> + rule + dsl::newline; <1>
         };
 
-        auto name_field    = make_field(dsl::lit<"name">, LEXY_MEM(name) = dsl::p<name>); <2>
+        auto name_field    = make_field(dsl::lit<"name">, lexy::mem<&PackageConfig::name> = dsl::p<name>); <2>
         auto version_field
-            = make_field(dsl::lit<"version">, LEXY_MEM(version) = dsl::p<version>);
+            = make_field(dsl::lit<"version">, lexy::mem<&PackageConfig::version> = dsl::p<version>);
         auto authors_field
-            = make_field(dsl::lit<"authors">, LEXY_MEM(authors) = dsl::p<author_list>);
+            = make_field(dsl::lit<"authors">, lexy::mem<&PackageConfig::authors> = dsl::p<author_list>);
 
         return dsl::combination(name_field, version_field, authors_field) + dsl::eof; <3>
     }();
@@ -438,7 +438,7 @@ struct config
 ----
 <1> {{% docref "lexy::dsl::combination" %}} requires a {{% branch-rule %}} to know which rule to parse.
     Luckily, we can use the name of the field for that.
-<2> Each rule now contains the assignment to the appropriate member using {{% docref "LEXY_MEM" %}}.
+<2> Each rule now contains the assignment to the appropriate member using {{% docref "lexy::mem" %}}.
 <3> Instead of a sequence, we now have `dsl::combination()`.
     We also added {{% docref "lexy::dsl::eof" %}} to ensure that there are no trailing fields at the end.
 <4> We use {{% docref "lexy::as_aggregate" %}} as our sink.

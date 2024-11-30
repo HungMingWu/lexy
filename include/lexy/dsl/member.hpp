@@ -85,13 +85,13 @@ struct _mem_dsl
     }
 };
 
+} // namespace lexyd
+
+namespace lexy {
+
 /// Specifies that the output of the associated rule should be stored in the member pointer. Used
 /// with `lexy::as_aggregate`.
 template <auto MemPtr>
-constexpr auto member = _mem_dsl<lexy::_mem_ptr_fn<MemPtr>>{};
+constexpr auto mem = ::lexyd::_mem_dsl<lexy::_mem_ptr_fn<MemPtr>>{};
 
-#define LEXY_MEM(Name)                                                                             \
-    ::lexyd::_mem_dsl([](auto& obj, auto&& value) { obj.Name = std::forward<decltype(value)>(value); })
-} // namespace lexyd
-
-
+} // namespace lexy
