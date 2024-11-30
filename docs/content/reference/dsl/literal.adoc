@@ -147,7 +147,6 @@ namespace lexy::dsl
     constexpr _literal-set_ operator/(_literal-set_ lhs, _literal-set_ auto rhs);
 }
 
-#define LEXY_LITERAL_SET(...)
 ----
 
 [.lead]
@@ -173,9 +172,6 @@ It ignores their respective values.
 
 `operator/` can be used to extend a literal set and add more literal rules to it.
 The resulting literal set matches everything already matched by `lhs`, as well as `rhs`.
-
-The macro `LEXY_LITERAL_SET(args)` is equivalent to `literal_set(args)`, except the type of the individual rules is erased.
-This can shorten type names in error messages.
 
 {{% playground-example literal_set "Match one of the given literals" %}}
 

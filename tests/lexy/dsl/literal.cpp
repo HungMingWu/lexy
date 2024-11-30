@@ -528,9 +528,9 @@ TEST_CASE("dsl::literal_set")
     }
 }
 
-TEST_CASE("LEXY_LITERAL_SET")
+TEST_CASE("dsl::literal_set")
 {
-    constexpr auto rule = LEXY_LITERAL_SET(dsl::lit<"abc">, dsl::lit<"abd">);
+    constexpr auto rule = dsl::literal_set(dsl::lit<"abc">, dsl::lit<"abd">);
     CHECK(lexy::is_token_rule<decltype(rule)>);
     CHECK(lexy::is_literal_set_rule<decltype(rule)>);
 
@@ -647,12 +647,12 @@ TEST_CASE("dsl::literal_set() operator/")
                                                        dsl::lit_c<'c'>, dsl::lit_c<'d'>)));
 
     constexpr auto with_erased_sets = dsl::literal_set()
-                                      / LEXY_LITERAL_SET(dsl::lit_c<'a'>, dsl::lit_c<'b'>)
-                                      / LEXY_LITERAL_SET(dsl::lit_c<'c'>, dsl::lit_c<'d'>);
+                                      / dsl::literal_set(dsl::lit_c<'a'>, dsl::lit_c<'b'>)
+                                      / dsl::literal_set(dsl::lit_c<'c'>, dsl::lit_c<'d'>);
     CHECK(equivalent_rules(with_erased_sets, dsl::literal_set(dsl::lit_c<'a'>, dsl::lit_c<'b'>,
                                                               dsl::lit_c<'c'>, dsl::lit_c<'d'>)));
 
-    constexpr auto set_a        = LEXY_LITERAL_SET(dsl::lit_c<'a'>);
+    constexpr auto set_a        = dsl::literal_set(dsl::lit_c<'a'>);
     constexpr auto keep_erasure = dsl::literal_set() / set_a;
     CHECK(equivalent_rules(keep_erasure, set_a));
 }

@@ -626,16 +626,6 @@ constexpr auto literal_set(const lexy::_symbol_table<T, CaseFolding, Strings...>
 }
 } // namespace lexyd
 
-#define LEXY_LITERAL_SET(...)                                                                      \
-    [] {                                                                                           \
-        using impl = decltype(::lexyd::literal_set(__VA_ARGS__));                                  \
-        struct s : impl                                                                            \
-        {                                                                                          \
-            using impl::operator/;                                                                 \
-        };                                                                                         \
-        return s{};                                                                                \
-    }()
-
 namespace lexy
 {
 template <typename... Literals>

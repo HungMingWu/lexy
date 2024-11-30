@@ -110,7 +110,7 @@ TEST_CASE("dsl::lookahead()")
     SUBCASE("literal set")
     {
         constexpr auto rule = dsl::lookahead(dsl::literal_set(dsl::lit<".">, dsl::lit<",">),
-                                             LEXY_LITERAL_SET(dsl::lit<"!">, dsl::lit<"?">));
+                                             dsl::literal_set(dsl::lit<"!">, dsl::lit<"?">));
         CHECK(lexy::is_branch_rule<decltype(rule)>);
 
         auto empty = LEXY_VERIFY("");
